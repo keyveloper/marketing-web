@@ -66,3 +66,69 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* 태그 경계 구분용 스타일 */
+div {
+  border: 2px solid #8B7355;
+  padding: 5px;
+}
+
+section {
+  border: 2px solid #6B8E96;
+  padding: 5px;
+}
+
+main {
+  border: 2px solid #9B7B9E;
+  padding: 5px;
+}
+
+header {
+  border: 2px solid #7A9B6C;
+  padding: 5px;
+}
+
+footer {
+  border: 2px solid #B88B6E;
+  padding: 5px;
+}
+
+nav {
+  border: 2px solid #6E8BB8;
+  padding: 5px;
+}
+
+aside {
+  border: 2px solid #A67B8E;
+  padding: 5px;
+}
+
+article {
+  border: 2px solid #7B9BA6;
+  padding: 5px;
+}
+
+ul, ol {
+  border: 2px solid #96866B;
+  padding: 5px;
+}
+
+li {
+  border: 1px solid #A69B7B;
+  padding: 5px;
+}
+
+p {
+  border: 1px solid #7B8A96;
+  padding: 5px;
+}
+
+span {
+  border: 1px solid #967B8A;
+  padding: 5px;
+}
+
+a {
+  border: 1px solid #8A967B;
+  padding: 5px;
+}
