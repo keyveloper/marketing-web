@@ -123,26 +123,6 @@ section {
   border: 3px solid #c92a2a;
 }
 
-.banner-item-2 {
-  background-color: #4ecdc4;
-  border: 3px solid #0a9396;
-}
-
-.banner-item-3 {
-  background-color: #ffe66d;
-  border: 3px solid #d4a017;
-}
-
-.banner-item-4 {
-  background-color: #95e1d3;
-  border: 3px solid #38b2a6;
-}
-
-.banner-item-5 {
-  background-color: #f38181;
-  border: 3px solid #e63946;
-}
-
 .banner-item span {
   font-size: 18px;
   font-weight: bold;
@@ -162,7 +142,7 @@ section {
 .hero-section {
   background-color: #e8f4f8;
   min-height: 1400px;
-  padding: 10px;
+  padding: 24px 86px;
   overflow: hidden;
 }
 
@@ -172,13 +152,13 @@ section {
   min-height: 1400px;
   margin: 0 auto;
   overflow: hidden;
+
 }
 
 .hero-grid-container {
   position: relative;
   width: 100%;
   margin: 30px auto 0;
-  padding: 0;
   border: 2px solid coral;
   overflow: visible;
   display: flex;
@@ -190,7 +170,7 @@ section {
 .hero-swiper {
   width: 100%;
   max-width: 100%;
-  padding: 0 10px;
+  padding: 0;
   overflow: visible !important;
   border: 2px solid blue;
   margin: 0 auto;
@@ -204,6 +184,8 @@ section {
   padding: 10px 0;
   border: lightcoral;
   overflow: visible !important;
+  width: 14.2857% !important;
+  flex-shrink: 0;
 }
 
 .hero-grid-item {

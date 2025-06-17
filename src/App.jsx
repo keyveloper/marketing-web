@@ -50,19 +50,8 @@ function App() {
               <Swiper
                 modules={[Pagination]}
                 spaceBetween={20}
-                slidesPerView={2}
+                slidesPerView={'auto'}
                 pagination={{ clickable: true }}
-                breakpoints={{
-                  600: {
-                    slidesPerView: 4,
-                  },
-                  900: {
-                    slidesPerView: 6,
-                  },
-                  1200: {
-                    slidesPerView: 7,
-                  },
-                }}
                 className="hero-swiper"
               >
                 <SwiperSlide>
