@@ -155,12 +155,13 @@ section {
 
 }
 
-.hero-grid-container {
+.image-slider-container {
   position: relative;
   width: 100%;
+  height: 240px;
   margin: 30px auto 0;
-  border: 2px solid coral;
-  overflow: visible;
+  border: 5px solid darkcyan;
+  overflow: hidden;  /* visible → hidden 으로 변경 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -169,42 +170,34 @@ section {
 /* ===== Swiper Styles ===== */
 .hero-swiper {
   width: 100%;
+  height: 100%;
   max-width: 100%;
-  padding: 0;
-  overflow: visible !important;
-  border: 2px solid blue;
+  overflow: hidden !important;  /* visible → hidden 으로 변경 */
+  border: 2px solid indianred;
   margin: 0 auto;
-}
-
-.hero-swiper div {
   padding: 0;
 }
 
-.hero-swiper .swiper-wrapper .swiper-slide {
-  padding: 10px 0;
-  border: lightcoral;
+
+
+.hero-swiper .swiper-wrapper {
+  padding: 0;
+  border: 1px solid darkgreen;
   overflow: visible !important;
-  width: 14.2857% !important;
   flex-shrink: 0;
+  height: 100%;
+}
+
+.swiper-slide {
+  border: 5px solid coral;
+  width: 250px !important;  /* Swiper 인라인 스타일 덮어쓰기 */
+  height: 100%;
+  box-sizing: border-box;  /* border를 height에 포함 */
 }
 
 .hero-grid-item {
-  aspect-ratio: 1;
-  background-color: white;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  font-weight: bold;
-  color: #2c3e50;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 100%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid black !important;
-  padding: 0 !important;
 }
 
 .hero-grid-item:hover {

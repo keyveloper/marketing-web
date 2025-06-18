@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Images API 테스트</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .test-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .test-section h2 {
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: white;
+    }
+
+    .btn-primary {
+      background: #667eea;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-success {
+      background: #48bb78;
+    }
+
+    .btn-success:hover {
+      background: #38a169;
+    }
+
+    .btn-warning {
+      background: #ed8936;
+    }
+
+    .btn-warning:hover {
+      background: #dd6b20;
+    }
+
+    .btn-danger {
+      background: #f56565;
+    }
+
+    .btn-danger:hover {
+      background: #e53e3e;
+    }
+
+    .btn-run-all {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-size: 16px;
+      padding: 15px 30px;
+    }
+
+    .output {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      max-height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .output:empty::before {
+      content: '테스트 버튼을 클릭하여 API를 테스트하세요...';
+      color: #666;
+    }
+
+    .success {
+      color: #48bb78;
+    }
+
+    .error {
+      color: #f56565;
+    }
+
+    .info {
+      color: #4299e1;
+    }
+
+    .warning {
+      color: #ed8936;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+    }
+
+    .stat-card h3 {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .stat-card p {
+      color: #667eea;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .clear-btn {
+      background: #718096;
+      float: right;
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    .clear-btn:hover {
+      background: #4a5568;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Images API 테스트</h1>
+    <p class="subtitle">브라우저에서 API를 직접 테스트할 수 있습니다</p>
+
+    <!-- GET 요청 테스트 -->
+    <div class="test-section">
+      <h2>📥 GET 요청 테스트</h2>
+      <div class="button-group">
+        <button class="btn-primary" onclick="testGetImageUrlsByAdId(249)">전체 이미지</button>
+        <button class="btn-primary" onclick="testGetImageById()">특정 이미지 (ID: 1)</button>
+        <button class="btn-primary" onclick="testGetImagesByCategory()">카테고리별 (hero)</button>
+      </div>
+    </div>
+
+    <!-- 광고 이미지 테스트 -->
+    <div class="test-section">
+      <h2>📊 광고 이미지 API 테스트</h2>
+      <div class="button-group">
+        <button class="btn-success" onclick="testGetFreshAdImages()">Fresh 광고 (12개)</button>
+        <button class="btn-success" onclick="testGetDeadlineAdImages()">Deadline 광고 (12개)</button>
+        <button class="btn-success" onclick="testGetHotAdImages()">Hot 광고 (12개)</button>
+      </div>
+    </div>
+
+    <!-- POST/PUT/DELETE 테스트 -->
+    <div class="test-section">
+      <h2>📤 POST / PUT / DELETE 테스트</h2>
+      <div class="button-group">
+        <button class="btn-warning" onclick="testUploadImage()">이미지 업로드</button>
+        <button class="btn-warning" onclick="testUpdateImage()">이미지 수정</button>
+        <button class="btn-danger" onclick="testDeleteImage()">이미지 삭제</button>
+      </div>
+    </div>
+
+    <!-- 전체 테스트 -->
+    <div class="test-section">
+      <h2>🚀 전체 테스트</h2>
+      <div class="button-group">
+        <button class="btn-run-all" onclick="runAllTests()">모든 API 테스트 실행</button>
+        <button class="btn-success" onclick="runQuickTest()">빠른 테스트 (광고 이미지만)</button>
+      </div>
+    </div>
+
+    <!-- 출력 영역 -->
+    <div class="test-section">
+      <h2>📋 테스트 결과</h2>
+      <button class="clear-btn" onclick="clearOutput()">Clear</button>
+      <div id="output" class="output"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      testGetImageUrlsByAdId,
+      testGetImageById,
+      testGetImagesByCategory,
+      testGetFreshAdImages,
+      testGetDeadlineAdImages,
+      testGetHotAdImages,
+      testUploadImage,
+      testUpdateImage,
+      testDeleteImage,
+      runAllTests as runAll,
+      runQuickTest as runQuick
+    } from './src/api/images.test.js';
+
+    // 출력 함수
+    const output = document.getElementById('output');
+
+    const log = (message, type = 'info') => {
+      const timestamp = new Date().toLocaleTimeString();
+      const line = document.createElement('div');
+      line.className = type;
+      line.textContent = `[${timestamp}] ${message}`;
+      output.appendChild(line);
+      output.scrollTop = output.scrollHeight;
+    };
+
+    // 원래 console 메서드 백업
+    const originalLog = console.log;
+    const originalError = console.error;
+
+    // console.log/error 오버라이드
+    console.log = (...args) => {
+      const message = args.map(arg =>
+        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+      ).join(' ');
+
+      if (message.includes('✅')) {
+        log(message, 'success');
+      } else if (message.includes('→')) {
+        log(message, 'info');
+      } else {
+        log(message, 'info');
+      }
+
+      originalLog(...args);
+    };
+
+    console.error = (...args) => {
+      const message = args.map(arg =>
+        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+      ).join(' ');
+      log(message, 'error');
+      originalError(...args);
+    };
+
+    // 전역 함수로 노출
+    window.testGetImageUrlsByAdId = testGetImageUrlsByAdId;
+    window.testGetImageById = testGetImageById;
+    window.testGetImagesByCategory = testGetImagesByCategory;
+    window.testGetFreshAdImages = testGetFreshAdImages;
+    window.testGetDeadlineAdImages = testGetDeadlineAdImages;
+    window.testGetHotAdImages = testGetHotAdImages;
+    window.testUploadImage = testUploadImage;
+    window.testUpdateImage = testUpdateImage;
+    window.testDeleteImage = testDeleteImage;
+    window.runAllTests = runAll;
+    window.runQuickTest = runQuick;
+
+    window.clearOutput = () => {
+      output.innerHTML = '';
+    };
+  </script>
+</body>
+</html>
