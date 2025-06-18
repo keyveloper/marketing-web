@@ -73,7 +73,7 @@ function App() {
 
         <section className="feature-section">
           <h2>Features Section</h2>
-          <p>주요 기능 소개 섹션입니다</p>
+          <p>주요 기능 소개 섹션입니다!</p>
         </section>
 
         <section className="about-section">
