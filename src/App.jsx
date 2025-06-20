@@ -1,13 +1,18 @@
 import './App.css'
 import Image12Slider from './components/Image12Slider.jsx'
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom' // ✅ ← 이거 추가!
 import {
   getImageUrlsByAdId
 } from './api/imageApis.js'
 
 function App() {
+  // 🎮 Controller
+  const navigate = useNavigate()
+
   // main List: cut 12 items
   const [freshAdImageUrl , setFreshAdImageUrl] = useState([])
+
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -41,7 +46,9 @@ function App() {
           </nav>
           <div className="auth-buttons">
             <button className="login-btn">로그인</button>
-            <button className="signup-btn">회원가입</button>
+            <button className="signup-btn" onClick={() => navigate('/signup')}>
+              회원가입
+            </button>
           </div>
         </header>
 

@@ -1,0 +1,29 @@
+[33mcommit 2803649151906ac4c5ea482beeba978748da2500[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: zen <didehdrb21@naver.com>
+Date:   Wed Jun 18 09:10:01 2025 +0900
+
+    fetch presigned urls from front-server
+
+[33mcommit 913e9d7e04db14feb72c2cb6d0a79b19e4c659ea[m
+Author: zen <didehdrb21@naver.com>
+Date:   Thu Oct 23 13:00:01 2025 +0900
+
+    fetch presigned urls from front-server
+
+[33mcommit 89450986915fbf224515a37b4c0b96e884ff1e89[m
+Author: zen <didehdrb21@naver.com>
+Date:   Tue Jun 17 11:00:23 2025 +0900
+
+    fix slide row!!
+
+[33mcommit a27befcfb4ff6b151f9e98097535b8bf6da35d97[m
+Author: zen <didehdrb21@naver.com>
+Date:   Mon Jun 16 14:11:20 2025 +0900
+
+    header, banner, hero section prototype added
+
+[33mcommit 00543005134df1ae0cb080acf639c515ebf6228e[m
+Author: zen <didehdrb21@naver.com>
+Date:   Sun Jun 15 09:00:13 2025 +0900
+
+    start building web application!
