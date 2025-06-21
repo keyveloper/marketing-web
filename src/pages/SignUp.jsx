@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./SignUp.css";
+import "../config/cognito"; // Amplify 설정 초기화
+import { registerUser, getErrorMessage } from "../services/auth";
 
 export default function SignUp() {
   const [form, setForm] = useState({
-    name: "",
+    username: "",
+    phoneNumber: "",
     email: "",
+    name: "",
     password: "",
-    confirm: "",
+    confirmPassword: "",
     agree: false,
   });
   const [showPw, setShowPw] = useState(false);
@@ -21,10 +25,43 @@ export default function SignUp() {
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim()) e.name = "이름을 입력해주세요.";
+
+    // Username validation
+    if (!form.username.trim()) e.username = "아이디를 입력해주세요.";
+
+    // Phone number validation
+    if (!form.phoneNumber.trim()) {
+      e.phoneNumber = "전화번호를 입력해주세요.";
+    } else if (!/^[0-9-+()]*$/.test(form.phoneNumber)) {
+      e.phoneNumber = "올바른 전화번호 형식이 아닙니다.";
+    }
+
+    // Email validation
     if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "이메일 형식이 올바르지 않습니다.";
-    if (form.password.length < 8) e.password = "비밀번호는 8자 이상이어야 합니다.";
-    if (form.password !== form.confirm) e.confirm = "비밀번호가 일치하지 않습니다.";
+
+    // Name validation
+    if (!form.name.trim()) e.name = "이름을 입력해주세요.";
+
+    // Password validation with detailed rules
+    if (form.password.length < 8) {
+      e.password = "Password must be at least 8 characters";
+    } else {
+      const hasNumber = /\d/.test(form.password);
+      const hasLowercase = /[a-z]/.test(form.password);
+      const hasUppercase = /[A-Z]/.test(form.password);
+      const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(form.password);
+
+      if (!hasNumber) e.password = "Use a number";
+      else if (!hasLowercase) e.password = "Use a lowercase letter";
+      else if (!hasUppercase) e.password = "Use an uppercase letter";
+      else if (!hasSymbol) e.password = "Use a symbol";
+    }
+
+    // Confirm password validation
+    if (form.password !== form.confirmPassword) {
+      e.confirmPassword = "비밀번호가 일치하지 않습니다.";
+    }
+
     if (!form.agree) e.agree = "약관에 동의해주세요.";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -33,14 +70,53 @@ export default function SignUp() {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+
     setSubmitting(true);
     try {
-      // TODO: 실제 회원가입 API 호출
-      // await api.signUp(form)
-      await new Promise((r) => setTimeout(r, 800));
-      alert("회원가입이 완료되었습니다!");
+      // AWS Cognito 회원가입 호출
+      const result = await registerUser({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        phoneNumber: form.phoneNumber,
+        name: form.name,
+      });
+
+      if (result.success) {
+        // 회원가입 성공
+        alert(
+          `회원가입이 완료되었습니다!\n\n` +
+          `이메일(${form.email})로 인증 코드가 전송되었습니다.\n` +
+          `이메일을 확인하여 계정을 활성화해주세요.`
+        );
+
+        // 폼 초기화
+        setForm({
+          username: "",
+          phoneNumber: "",
+          email: "",
+          name: "",
+          password: "",
+          confirmPassword: "",
+          agree: false,
+        });
+
+        // TODO: 인증 페이지로 이동하려면 아래 주석 해제
+        // navigate('/verify-email', { state: { username: form.username, email: form.email } });
+      } else {
+        // 회원가입 실패
+        const errorMsg = getErrorMessage(result.code);
+        alert(
+          `회원가입 실패\n\n` +
+          `에러 코드: ${result.code}\n` +
+          `메시지: ${errorMsg}\n\n` +
+          `상세 내용: ${result.error}`
+        );
+        console.error('Signup error:', result);
+      }
     } catch (err) {
-      alert("회원가입 중 오류가 발생했습니다.");
+      alert("회원가입 중 예상치 못한 오류가 발생했습니다.");
+      console.error('Unexpected error:', err);
     } finally {
       setSubmitting(false);
     }
@@ -57,20 +133,34 @@ export default function SignUp() {
 
         <form className="su-form" onSubmit={onSubmit} noValidate>
           <div className="su-field">
-            <label htmlFor="name">이름</label>
+            <label htmlFor="username">Username</label>
             <input
-              id="name"
-              name="name"
-              value={form.name}
+              id="username"
+              name="username"
+              value={form.username}
               onChange={onChange}
-              placeholder="홍길동"
-              autoComplete="name"
+              placeholder="아이디를 입력하세요"
+              autoComplete="username"
             />
-            {errors.name && <span className="su-error">{errors.name}</span>}
+            {errors.username && <span className="su-error">{errors.username}</span>}
           </div>
 
           <div className="su-field">
-            <label htmlFor="email">이메일</label>
+            <label htmlFor="phoneNumber">Phone Number</label>
+            <input
+              id="phoneNumber"
+              name="phoneNumber"
+              type="tel"
+              value={form.phoneNumber}
+              onChange={onChange}
+              placeholder="010-1234-5678"
+              autoComplete="tel"
+            />
+            {errors.phoneNumber && <span className="su-error">{errors.phoneNumber}</span>}
+          </div>
+
+          <div className="su-field">
+            <label htmlFor="email">Email Address</label>
             <input
               id="email"
               name="email"
@@ -83,44 +173,55 @@ export default function SignUp() {
             {errors.email && <span className="su-error">{errors.email}</span>}
           </div>
 
-          <div className="su-grid">
-            <div className="su-field">
-              <label htmlFor="password">비밀번호</label>
-              <div className="su-password">
-                <input
-                  id="password"
-                  name="password"
-                  type={showPw ? "text" : "password"}
-                  value={form.password}
-                  onChange={onChange}
-                  placeholder="8자 이상 입력"
-                  autoComplete="new-password"
-                />
-                <button
-                  type="button"
-                  className="su-eye"
-                  aria-label={showPw ? "비밀번호 숨기기" : "비밀번호 표시"}
-                  onClick={() => setShowPw((s) => !s)}
-                >
-                  {showPw ? "🙈" : "👁️"}
-                </button>
-              </div>
-              {errors.password && <span className="su-error">{errors.password}</span>}
-            </div>
+          <div className="su-field">
+            <label htmlFor="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              value={form.name}
+              onChange={onChange}
+              placeholder="홍길동"
+              autoComplete="name"
+            />
+            {errors.name && <span className="su-error">{errors.name}</span>}
+          </div>
 
-            <div className="su-field">
-              <label htmlFor="confirm">비밀번호 확인</label>
+          <div className="su-field">
+            <label htmlFor="password">Password</label>
+            <div className="su-password">
               <input
-                id="confirm"
-                name="confirm"
+                id="password"
+                name="password"
                 type={showPw ? "text" : "password"}
-                value={form.confirm}
+                value={form.password}
                 onChange={onChange}
-                placeholder="다시 입력"
+                placeholder="8자 이상, 숫자/소문자/대문자/특수문자 포함"
                 autoComplete="new-password"
               />
-              {errors.confirm && <span className="su-error">{errors.confirm}</span>}
+              <button
+                type="button"
+                className="su-eye"
+                aria-label={showPw ? "비밀번호 숨기기" : "비밀번호 표시"}
+                onClick={() => setShowPw((s) => !s)}
+              >
+                {showPw ? "🙈" : "👁️"}
+              </button>
             </div>
+            {errors.password && <span className="su-error">{errors.password}</span>}
+          </div>
+
+          <div className="su-field">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type={showPw ? "text" : "password"}
+              value={form.confirmPassword}
+              onChange={onChange}
+              placeholder="비밀번호를 다시 입력하세요"
+              autoComplete="new-password"
+            />
+            {errors.confirmPassword && <span className="su-error">{errors.confirmPassword}</span>}
           </div>
 
           <label className="su-check">
