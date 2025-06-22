@@ -1,4 +1,4 @@
-import { signUp, confirmSignUp, signIn, signOut } from 'aws-amplify/auth';
+import { signUp, confirmSignUp, resendSignUpCode, signIn, signOut } from 'aws-amplify/auth';
 
 /**
  * 전화번호를 국제 형식으로 변환

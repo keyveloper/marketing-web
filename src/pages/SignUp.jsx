@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./SignUp.css";
 import "../config/cognito"; // Amplify 설정 초기화
 import { registerUser, getErrorMessage } from "../services/auth";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     username: "",
     phoneNumber: "",
@@ -83,12 +85,9 @@ export default function SignUp() {
       });
 
       if (result.success) {
-        // 회원가입 성공
-        alert(
-          `회원가입이 완료되었습니다!\n\n` +
-          `이메일(${form.email})로 인증 코드가 전송되었습니다.\n` +
-          `이메일을 확인하여 계정을 활성화해주세요.`
-        );
+        // 회원가입 성공 - 인증 페이지로 이동
+        const username = form.username;
+        const email = form.email;
 
         // 폼 초기화
         setForm({
@@ -101,8 +100,8 @@ export default function SignUp() {
           agree: false,
         });
 
-        // TODO: 인증 페이지로 이동하려면 아래 주석 해제
-        // navigate('/verify-email', { state: { username: form.username, email: form.email } });
+        // 인증 페이지로 이동
+        navigate('/verify-email', { state: { username, email } });
       } else {
         // 회원가입 실패
         const errorMsg = getErrorMessage(result.code);
