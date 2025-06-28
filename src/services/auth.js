@@ -1,4 +1,4 @@
-import { signUp, confirmSignUp, resendSignUpCode, signIn, signOut } from 'aws-amplify/auth';
+import { signUp, confirmSignUp, signIn, signOut } from 'aws-amplify/auth';
 
 /**
  * 전화번호를 국제 형식으로 변환
@@ -27,7 +27,7 @@ export function formatPhoneNumber(phone) {
 /**
  * Cognito 회원가입
  */
-export async function registerUser({ username, email, password, phoneNumber, name }) {
+export async function registerUser({ username, email, password, phoneNumber, name, userType }) {
   try {
     const formattedPhone = formatPhoneNumber(phoneNumber);
 
@@ -39,6 +39,7 @@ export async function registerUser({ username, email, password, phoneNumber, nam
           email,
           phone_number: formattedPhone,
           name,
+          'custom:userType': userType,
         },
       },
     });

@@ -53,7 +53,8 @@
 }
 
 .login-btn,
-.signup-btn {
+.signup-btn,
+.logout-btn {
   padding: 8px 20px;
   border-radius: 4px;
   cursor: pointer;
@@ -80,6 +81,22 @@
 
 .signup-btn:hover {
   background-color: #2980b9;
+}
+
+.logout-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+}
+
+.user-info {
+  font-size: 14px;
+  color: #2c3e50;
+  font-weight: 500;
 }
 
 /* ===== Section Base ===== */

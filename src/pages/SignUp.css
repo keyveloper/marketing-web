@@ -97,6 +97,41 @@
     .su-grid{ grid-template-columns: 1fr; }
 }
 
+.su-usertype-buttons{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.su-usertype-btn{
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--su-text);
+    background: #fff;
+    border: 1.5px solid var(--su-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.su-usertype-btn:hover{
+    border-color: var(--su-blue);
+    background: #f8fbff;
+}
+
+.su-usertype-btn.active{
+    color: #fff;
+    background: var(--su-blue);
+    border-color: var(--su-blue);
+    box-shadow: 0 4px 12px rgba(15,76,129,.2);
+}
+
+.su-usertype-btn.active:hover{
+    background: var(--su-blue);
+    filter: brightness(1.05);
+}
+
 .su-check{
     display: flex; align-items: center; gap: 10px;
     font-size: 13px; color: var(--su-muted);

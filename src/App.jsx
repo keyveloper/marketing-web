@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom' // ✅ ← 이거 추가!
 import {
   getImageUrlsByAdId
 } from './api/imageApis.js'
+import { getCurrentUser } from 'aws-amplify/auth'
+import { logoutUser } from './services/auth'
+import './config/cognito'
 
 function App() {
   // 🎮 Controller
@@ -13,6 +16,29 @@ function App() {
   // main List: cut 12 items
   const [freshAdImageUrl , setFreshAdImageUrl] = useState([])
 
+  // 인증 상태 관리
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [user, setUser] = useState(null)
+
+
+  // 인증 상태 확인
+  useEffect(() => {
+    const checkAuthState = async () => {
+      try {
+        const currentUser = await getCurrentUser()
+        setUser(currentUser)
+        setIsAuthenticated(true)
+        console.log('✅ 인증된 사용자:', currentUser)
+      } catch (error) {
+        // 인증되지 않은 상태
+        setUser(null)
+        setIsAuthenticated(false)
+        console.log('❌ 인증되지 않은 사용자')
+      }
+    }
+
+    checkAuthState()
+  }, [])
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -33,6 +59,21 @@ function App() {
     fetchImages()
   }, [])
 
+  // 로그아웃 핸들러
+  const handleLogout = async () => {
+    try {
+      const result = await logoutUser()
+      if (result.success) {
+        setIsAuthenticated(false)
+        setUser(null)
+        alert('로그아웃되었습니다.')
+      }
+    } catch (error) {
+      console.error('로그아웃 실패:', error)
+      alert('로그아웃 중 오류가 발생했습니다.')
+    }
+  }
+
   return (
     <>
       <div className="project-root">
@@ -45,12 +86,23 @@ function App() {
             <a href="#contact">Contact</a>
           </nav>
           <div className="auth-buttons">
-            <button className="login-btn" onClick={() => navigate('/login')}>
-              로그인
-            </button>
-            <button className="signup-btn" onClick={() => navigate('/signup')}>
-              회원가입
-            </button>
+            {isAuthenticated ? (
+              <>
+                <span className="user-info">{user?.username}님</span>
+                <button className="logout-btn" onClick={handleLogout}>
+                  로그아웃
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="login-btn" onClick={() => navigate('/login')}>
+                  로그인
+                </button>
+                <button className="signup-btn" onClick={() => navigate('/signup')}>
+                  회원가입
+                </button>
+              </>
+            )}
           </div>
         </header>
 

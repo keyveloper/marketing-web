@@ -15,6 +15,7 @@ export default function SignUp() {
     password: "",
     confirmPassword: "",
     agree: false,
+    userType: "", // INFLUENCER or ADVERTISER_COMMON
   });
   const [showPw, setShowPw] = useState(false);
   const [errors, setErrors] = useState({});
@@ -27,6 +28,9 @@ export default function SignUp() {
 
   const validate = () => {
     const e = {};
+
+    // UserType validation
+    if (!form.userType) e.userType = "회원 유형을 선택해주세요.";
 
     // Username validation
     if (!form.username.trim()) e.username = "아이디를 입력해주세요.";
@@ -82,6 +86,7 @@ export default function SignUp() {
         password: form.password,
         phoneNumber: form.phoneNumber,
         name: form.name,
+        userType: form.userType,
       });
 
       if (result.success) {
@@ -98,6 +103,7 @@ export default function SignUp() {
           password: "",
           confirmPassword: "",
           agree: false,
+          userType: "",
         });
 
         // 인증 페이지로 이동
@@ -131,6 +137,27 @@ export default function SignUp() {
         </div>
 
         <form className="su-form" onSubmit={onSubmit} noValidate>
+          <div className="su-field">
+            <label>회원 유형</label>
+            <div className="su-usertype-buttons">
+              <button
+                type="button"
+                className={`su-usertype-btn ${form.userType === "INFLUENCER" ? "active" : ""}`}
+                onClick={() => setForm((f) => ({ ...f, userType: "INFLUENCER" }))}
+              >
+                인플루언서로 가입
+              </button>
+              <button
+                type="button"
+                className={`su-usertype-btn ${form.userType === "ADVERTISER_COMMON" ? "active" : ""}`}
+                onClick={() => setForm((f) => ({ ...f, userType: "ADVERTISER_COMMON" }))}
+              >
+                광고주로 가입
+              </button>
+            </div>
+            {errors.userType && <span className="su-error">{errors.userType}</span>}
+          </div>
+
           <div className="su-field">
             <label htmlFor="username">Username</label>
             <input
