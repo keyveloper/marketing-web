@@ -1,4 +1,4 @@
-import { signUp, confirmSignUp, signIn, signOut } from 'aws-amplify/auth';
+import { signUp, confirmSignUp, signIn, signOut, fetchUserAttributes } from 'aws-amplify/auth';
 
 /**
  * 전화번호를 국제 형식으로 변환
@@ -102,6 +102,23 @@ export async function loginUser(username, password) {
       password,
     });
 
+    // 로그인 성공 시 사용자 속성 가져오기
+    if (isSignedIn) {
+      try {
+        const userAttributes = await fetchUserAttributes();
+        const userType = userAttributes['custom:userType'];
+
+        // userType을 localStorage에 저장
+        if (userType) {
+          localStorage.setItem('userType', userType);
+          console.log('✅ userType 저장됨:', userType);
+        }
+      } catch (attrError) {
+        console.error('사용자 속성 가져오기 실패:', attrError);
+        // 속성 가져오기 실패해도 로그인은 성공으로 처리
+      }
+    }
+
     return {
       success: true,
       isSignedIn,
@@ -123,6 +140,11 @@ export async function loginUser(username, password) {
 export async function logoutUser() {
   try {
     await signOut();
+
+    // localStorage에서 userType 삭제
+    localStorage.removeItem('userType');
+    console.log('✅ userType 삭제됨');
+
     return { success: true };
   } catch (error) {
     console.error('Sign out error:', error);
