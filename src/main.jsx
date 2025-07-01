@@ -5,6 +5,8 @@ import App from './App.jsx'
 import SignUp from './pages/SignUp.jsx'
 import Login from './pages/Login.jsx'
 import VerifyEmail from './pages/VerifyEmail.jsx'
+import CreateAd from './pages/CreateAd.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,6 +17,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route
+          path="/create-ad"
+          element={
+            <ProtectedRoute requiredUserType="ADVERTISER">
+              <CreateAd />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

@@ -7,6 +7,7 @@ import {
 } from './api/imageApis.js'
 import { getCurrentUser } from 'aws-amplify/auth'
 import { logoutUser } from './services/auth'
+import { issueDraft } from './api/advertisementApi.js'
 import './config/cognito'
 
 function App() {
@@ -82,10 +83,28 @@ function App() {
   }
 
   // 글쓰기 버튼 핸들러
-  const handleWriteClick = () => {
-    // TODO: 글쓰기 페이지로 이동하거나 모달 열기
-    console.log('글쓰기 버튼 클릭')
-    alert('글쓰기 기능은 곧 구현될 예정입니다!')
+  const handleWriteClick = async () => {
+    try {
+      console.log('🟦 Draft 발급 요청 중...')
+      const result = await issueDraft()
+
+      if (result.success) {
+        console.log('✅ Draft 발급 성공, draftId:', result.draftId)
+        // draftId를 state로 전달하여 CreateAd 페이지로 이동
+        navigate('/create-ad', {
+          state: {
+            draftId: result.draftId,
+            draft: result.draft,
+          }
+        })
+      } else {
+        console.error('❌ Draft 발급 실패:', result.error)
+        alert(`Draft 발급 실패\n\n${result.error}`)
+      }
+    } catch (error) {
+      console.error('❌ 예상치 못한 오류:', error)
+      alert('Draft 발급 중 오류가 발생했습니다.')
+    }
   }
 
   return (
@@ -155,16 +174,6 @@ function App() {
 
             <div className="slider-container">
               <h2 className="slider-title">⌛ 마감임박</h2>
-              <Image12Slider imageUrls={freshAdImageUrl} />
-            </div>
-
-            <div className="slider-container">
-              <h2 className="slider-title">최신 광고</h2>
-              <Image12Slider imageUrls={freshAdImageUrl} />
-            </div>
-
-            <div className="slider-container">
-              <h2 className="slider-title">특별 광고</h2>
               <Image12Slider imageUrls={freshAdImageUrl} />
             </div>
           </div>
