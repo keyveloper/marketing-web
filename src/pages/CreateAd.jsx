@@ -20,11 +20,6 @@ export default function CreateAd() {
     recruitmentStartAt: "",
     siteUrl: "",
     itemInfo: "",
-    recruitmentEndAt: "",
-    announcementAt: "",
-    reviewStartAt: "",
-    reviewEndAt: "",
-    endAt: "",
   });
 
   const [images, setImages] = useState([]); // 업로드된 이미지 정보 (서버 응답 포함)
@@ -185,12 +180,6 @@ export default function CreateAd() {
     // itemInfo 검증
     if (!form.itemInfo.trim()) e.itemInfo = "상품 정보를 입력해주세요.";
 
-    if (!form.recruitmentEndAt) e.recruitmentEndAt = "모집 종료일을 선택해주세요.";
-    if (!form.announcementAt) e.announcementAt = "발표일을 선택해주세요.";
-    if (!form.reviewStartAt) e.reviewStartAt = "리뷰 시작일을 선택해주세요.";
-    if (!form.reviewEndAt) e.reviewEndAt = "리뷰 종료일을 선택해주세요.";
-    if (!form.endAt) e.endAt = "종료일을 선택해주세요.";
-
     if (images.length === 0) e.images = "최소 1개의 이미지를 업로드해주세요.";
 
     setErrors(e);
@@ -199,9 +188,12 @@ export default function CreateAd() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("🔵 onSubmit 함수 호출됨!");
+    console.log("Form 데이터:", form);
 
     // 검증 실패 시
     if (!validate()) {
+      console.log("❌ Validation 실패:", errors);
       // 이미지가 없는 경우 특별히 alert 표시
       if (images.length === 0) {
         alert("⚠️ 최소 1개의 이미지를 업로드해주세요!");
@@ -211,9 +203,12 @@ export default function CreateAd() {
 
     setSubmitting(true);
     try {
-      // draftId를 포함한 광고 데이터 준비
+      // recruitmentStartAt을 epoch time milliseconds로 변환
       const advertisementData = {
         ...form,
+        recruitmentStartAt: form.recruitmentStartAt
+          ? new Date(form.recruitmentStartAt).getTime()
+          : null,
         draftId, // draft ID 포함
       };
 
@@ -221,13 +216,13 @@ export default function CreateAd() {
       console.log("이미지:", images);
 
       // 실제 API 호출로 광고 생성
-      const result = await createAdvertisement(advertisementData, draftId);
+      const result = await createAdvertisement(advertisementData);
 
       if (!result.success) {
         throw new Error(result.error);
       }
 
-      console.log("✅ 광고 생성 성공:", result.data);
+      console.log("✅ 광고 생성 성공:", result.result);
       alert("광고가 성공적으로 등록되었습니다!");
       navigate("/");
     } catch (err) {
@@ -451,76 +446,6 @@ export default function CreateAd() {
                 />
                 {errors.recruitmentStartAt && (
                   <span className="error-text">{errors.recruitmentStartAt}</span>
-                )}
-              </div>
-
-              <div className="form-field">
-                <label htmlFor="recruitmentEndAt">모집 종료일 *</label>
-                <input
-                  id="recruitmentEndAt"
-                  name="recruitmentEndAt"
-                  type="datetime-local"
-                  value={form.recruitmentEndAt}
-                  onChange={onChange}
-                />
-                {errors.recruitmentEndAt && (
-                  <span className="error-text">{errors.recruitmentEndAt}</span>
-                )}
-              </div>
-
-              <div className="form-field">
-                <label htmlFor="announcementAt">발표일 *</label>
-                <input
-                  id="announcementAt"
-                  name="announcementAt"
-                  type="datetime-local"
-                  value={form.announcementAt}
-                  onChange={onChange}
-                />
-                {errors.announcementAt && (
-                  <span className="error-text">{errors.announcementAt}</span>
-                )}
-              </div>
-
-              <div className="form-field">
-                <label htmlFor="reviewStartAt">리뷰 시작일 *</label>
-                <input
-                  id="reviewStartAt"
-                  name="reviewStartAt"
-                  type="datetime-local"
-                  value={form.reviewStartAt}
-                  onChange={onChange}
-                />
-                {errors.reviewStartAt && (
-                  <span className="error-text">{errors.reviewStartAt}</span>
-                )}
-              </div>
-
-              <div className="form-field">
-                <label htmlFor="reviewEndAt">리뷰 종료일 *</label>
-                <input
-                  id="reviewEndAt"
-                  name="reviewEndAt"
-                  type="datetime-local"
-                  value={form.reviewEndAt}
-                  onChange={onChange}
-                />
-                {errors.reviewEndAt && (
-                  <span className="error-text">{errors.reviewEndAt}</span>
-                )}
-              </div>
-
-              <div className="form-field">
-                <label htmlFor="endAt">종료일 *</label>
-                <input
-                  id="endAt"
-                  name="endAt"
-                  type="datetime-local"
-                  value={form.endAt}
-                  onChange={onChange}
-                />
-                {errors.endAt && (
-                  <span className="error-text">{errors.endAt}</span>
                 )}
               </div>
             </div>

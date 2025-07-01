@@ -53,13 +53,13 @@ export const issueDraft = async () => {
 };
 
 /**
- * 광고 생성 (draft 사용)
+ * 일반 광고 등록
  * @param {object} advertisementData - 광고 데이터
- * @param {number} draftId - draft ID
- * @returns {Promise<{success: boolean, data?: object, error?: string}>}
+ * @returns {Promise<{success: boolean, result?: object, error?: string}>}
  */
-export const createAdvertisement = async (advertisementData, draftId) => {
+export const createAdvertisement = async (advertisementData) => {
   try {
+    // Cognito에서 idToken 가져오기
     const session = await fetchAuthSession();
     const idToken = session.tokens?.idToken?.toString();
 
@@ -67,15 +67,27 @@ export const createAdvertisement = async (advertisementData, draftId) => {
       throw new Error('인증 토큰을 찾을 수 없습니다. 다시 로그인해주세요.');
     }
 
-    console.log('✅ 광고 생성 요청 시작...', { draftId, advertisementData });
+    console.log('✅ 광고 등록 요청 시작...', advertisementData);
 
-    // API 호출 (실제 엔드포인트에 맞게 수정 필요)
+    // MakeNewAdvertisementGeneralRequest 형식으로 요청 준비
+    const requestBody = {
+      title: advertisementData.title,
+      reviewType: advertisementData.reviewType,
+      channelType: advertisementData.channelType,
+      recruitmentNumber: parseInt(advertisementData.recruitmentNumber, 10),
+      itemName: advertisementData.itemName,
+      recruitmentStartAt: advertisementData.recruitmentStartAt, // epoch time
+      siteUrl: advertisementData.siteUrl || null,
+      itemInfo: advertisementData.itemInfo || null,
+      draftId: advertisementData.draftId,
+    };
+
+    console.log('📤 Request body:', requestBody);
+
+    // API 호출
     const response = await apiClient.post(
-      '/advertisement',
-      {
-        ...advertisementData,
-        draftId,
-      },
+      '/advertisement/general',
+      requestBody,
       {
         headers: {
           'Authorization': `Bearer ${idToken}`,
@@ -83,17 +95,31 @@ export const createAdvertisement = async (advertisementData, draftId) => {
       }
     );
 
-    console.log('✅ 광고 생성 성공:', response);
+    console.log('✅ 광고 등록 성공:', response);
+
+    // response는 이미 data만 추출된 상태 (interceptor 때문)
+    const { frontErrorCode, errorMessage, result } = response;
+
+    // frontErrorCode 20000이 성공 코드
+    if (frontErrorCode !== 20000) {
+      throw new Error(errorMessage || '광고 등록에 실패했습니다.');
+    }
+
+    // result: { entityId, connectingResultFromApiServer }
+    console.log('📋 광고 등록 결과:', {
+      entityId: result.entityId,
+      connectingResult: result.connectingResultFromApiServer,
+    });
 
     return {
       success: true,
-      data: response,
+      result: result,
     };
   } catch (error) {
-    console.error('❌ 광고 생성 실패:', error);
+    console.error('❌ 광고 등록 실패:', error);
     return {
       success: false,
-      error: error.response?.data?.errorMessage || error.message || '광고 생성 중 오류가 발생했습니다.',
+      error: error.response?.data?.errorMessage || error.message || '광고 등록 중 오류가 발생했습니다.',
     };
   }
 };
