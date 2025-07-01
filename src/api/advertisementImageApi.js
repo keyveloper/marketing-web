@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { fetchAuthSession } from 'aws-amplify/auth';
-
-const API_BASE_URL = 'http://localhost:8080';
+import { API_BASE_URL } from '../config/client.js';
 
 /**
  * 광고 이미지 업로드

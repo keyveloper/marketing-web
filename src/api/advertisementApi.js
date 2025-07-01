@@ -1,4 +1,4 @@
-import apiClient from './imageApis.js';
+import apiClient from '../config/client.js';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 /**
