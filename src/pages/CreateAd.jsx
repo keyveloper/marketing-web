@@ -17,6 +17,7 @@ export default function CreateAd() {
     recruitmentNumber: "",
     channelType: "",
     reviewType: "",
+    deliveryCategories: [],
     recruitmentStartAt: "",
     siteUrl: "",
     itemInfo: "",
@@ -59,9 +60,44 @@ export default function CreateAd() {
     { value: "SHORT_FROM", label: "숏폼", code: 6 },
   ];
 
+  // 배송 카테고리 옵션
+  const deliveryCategories = [
+    { value: "ALL", label: "전체", code: -1 },
+    { value: "LIFE", label: "생활", code: 0 },
+    { value: "SERVICE", label: "서비스", code: 1 },
+    { value: "DIGITAL", label: "디지털", code: 2 },
+    { value: "BEAUTY", label: "뷰티", code: 3 },
+    { value: "FASSION", label: "패션", code: 4 },
+    { value: "BOOK", label: "도서", code: 5 },
+    { value: "FOOD", label: "식품", code: 6 },
+    { value: "PET", label: "반려동물", code: 7 },
+  ];
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
+  };
+
+  // 배송 카테고리 다중 선택 핸들러
+  const handleDeliveryCategoryChange = (categoryValue) => {
+    setForm((prevForm) => {
+      const currentCategories = prevForm.deliveryCategories || [];
+      const isSelected = currentCategories.includes(categoryValue);
+
+      if (isSelected) {
+        // 이미 선택된 경우 제거
+        return {
+          ...prevForm,
+          deliveryCategories: currentCategories.filter(c => c !== categoryValue),
+        };
+      } else {
+        // 선택되지 않은 경우 추가
+        return {
+          ...prevForm,
+          deliveryCategories: [...currentCategories, categoryValue],
+        };
+      }
+    });
   };
 
   const handleImageChange = async (e) => {
@@ -164,6 +200,12 @@ export default function CreateAd() {
     }
     if (!form.channelType) e.channelType = "채널 타입을 선택해주세요.";
     if (!form.reviewType) e.reviewType = "리뷰 타입을 선택해주세요.";
+
+    // 배송형인 경우 배송 카테고리 필수 검증 (최소 1개 이상 선택)
+    if (form.reviewType === "DELIVERY" && (!form.deliveryCategories || form.deliveryCategories.length === 0)) {
+      e.deliveryCategories = "배송 카테고리를 최소 1개 이상 선택해주세요.";
+    }
+
     if (!form.recruitmentStartAt) e.recruitmentStartAt = "모집 시작일을 선택해주세요.";
 
     // siteUrl 검증 (URL 형식 체크)
@@ -428,6 +470,46 @@ export default function CreateAd() {
                   <span className="error-text">{errors.reviewType}</span>
                 )}
               </div>
+
+              {/* 배송형인 경우 카테고리 선택 필드 표시 */}
+              {form.reviewType === "DELIVERY" && (
+                <div className="form-field" style={{ gridColumn: '1 / -1' }}>
+                  <label>배송 카테고리 * (복수 선택 가능)</label>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+                    gap: '12px',
+                    marginTop: '8px',
+                  }}>
+                    {deliveryCategories.map((category) => (
+                      <label
+                        key={category.value}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          cursor: 'pointer',
+                          padding: '8px 12px',
+                          border: '1px solid #ddd',
+                          borderRadius: '6px',
+                          backgroundColor: form.deliveryCategories.includes(category.value) ? '#e3f2fd' : '#fff',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={form.deliveryCategories.includes(category.value)}
+                          onChange={() => handleDeliveryCategoryChange(category.value)}
+                          style={{ marginRight: '8px' }}
+                        />
+                        <span>{category.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.deliveryCategories && (
+                    <span className="error-text">{errors.deliveryCategories}</span>
+                  )}
+                </div>
+              )}
             </div>
           </section>
 

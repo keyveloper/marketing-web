@@ -79,6 +79,7 @@ export const createAdvertisement = async (advertisementData) => {
       recruitmentStartAt: advertisementData.recruitmentStartAt, // epoch time
       siteUrl: advertisementData.siteUrl || null,
       itemInfo: advertisementData.itemInfo || null,
+      deliveryCategories: advertisementData.deliveryCategories || null,
       draftId: advertisementData.draftId,
     };
 
