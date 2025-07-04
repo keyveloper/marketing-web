@@ -25,6 +25,7 @@ export default function CreateAd() {
 
   const [images, setImages] = useState([]); // 업로드된 이미지 정보 (서버 응답 포함)
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [thumbnailImageId, setThumbnailImageId] = useState(null); // 썸네일로 선택된 이미지 ID
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -126,8 +127,8 @@ export default function CreateAd() {
         };
         reader.readAsDataURL(file);
 
-        // 첫 번째 이미지는 썸네일로 설정
-        const isThumbnail = images.length === 0;
+        // 모든 이미지는 기본적으로 썸네일이 아님
+        const isThumbnail = false;
 
         console.log(`📤 이미지 업로드 중... (썸네일: ${isThumbnail})`);
 
@@ -137,6 +138,13 @@ export default function CreateAd() {
         if (result.success) {
           console.log('✅ 이미지 업로드 성공:', result.imageInfo);
           // imageInfo: { id, s3Key, bucketName, contentType, size, originalFileName }
+
+          // 첫 번째 이미지를 기본 썸네일로 설정
+          const isFirstImage = images.length === 0;
+          if (isFirstImage) {
+            setThumbnailImageId(result.imageInfo.id);
+          }
+
           setImages(prev => [...prev, {
             file,
             imageInfo: result.imageInfo,
@@ -158,8 +166,25 @@ export default function CreateAd() {
   };
 
   const removeImage = (index) => {
+    // 삭제할 이미지가 썸네일인 경우 처리
+    const removedImage = images[index];
+    if (removedImage?.imageInfo?.id === thumbnailImageId) {
+      // 남은 이미지 중 첫 번째를 썸네일로 설정
+      const remainingImages = images.filter((_, i) => i !== index);
+      if (remainingImages.length > 0) {
+        setThumbnailImageId(remainingImages[0].imageInfo.id);
+      } else {
+        setThumbnailImageId(null);
+      }
+    }
+
     setImages(prev => prev.filter((_, i) => i !== index));
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // 썸네일 선택 핸들러
+  const handleThumbnailChange = (imageId) => {
+    setThumbnailImageId(imageId);
   };
 
   // Drag & Drop 핸들러
@@ -251,11 +276,13 @@ export default function CreateAd() {
         recruitmentStartAt: form.recruitmentStartAt
           ? new Date(form.recruitmentStartAt).getTime()
           : null,
+        thumbnailImageMetaId: thumbnailImageId, // 썸네일 이미지 ID 포함
         draftId, // draft ID 포함
       };
 
       console.log("광고 생성:", advertisementData);
       console.log("이미지:", images);
+      console.log("썸네일 이미지 ID:", thumbnailImageId);
 
       // 실제 API 호출로 광고 생성
       const result = await createAdvertisement(advertisementData);
@@ -330,18 +357,54 @@ export default function CreateAd() {
 
             {imagePreviews.length > 0 && (
               <div className="image-preview-grid">
-                {imagePreviews.map((preview, index) => (
-                  <div key={index} className="preview-item">
-                    <img src={preview} alt={`preview-${index}`} />
-                    <button
-                      type="button"
-                      className="remove-image-btn"
-                      onClick={() => removeImage(index)}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
+                {imagePreviews.map((preview, index) => {
+                  const imageInfo = images[index]?.imageInfo;
+                  const isThumbnail = imageInfo?.id === thumbnailImageId;
+
+                  return (
+                    <div key={index} className="preview-item" style={{
+                      border: isThumbnail ? '3px solid #1976d2' : '1px solid #ddd',
+                      position: 'relative',
+                    }}>
+                      <img src={preview} alt={`preview-${index}`} />
+
+                      {/* 썸네일 선택 체크박스 */}
+                      <label
+                        style={{
+                          position: 'absolute',
+                          top: '8px',
+                          left: '8px',
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          fontSize: '12px',
+                          fontWeight: isThumbnail ? 'bold' : 'normal',
+                          color: isThumbnail ? '#1976d2' : '#666',
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isThumbnail}
+                          onChange={() => imageInfo && handleThumbnailChange(imageInfo.id)}
+                          disabled={!imageInfo}
+                          style={{ marginRight: '4px' }}
+                        />
+                        썸네일
+                      </label>
+
+                      <button
+                        type="button"
+                        className="remove-image-btn"
+                        onClick={() => removeImage(index)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </section>

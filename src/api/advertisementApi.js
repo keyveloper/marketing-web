@@ -80,6 +80,7 @@ export const createAdvertisement = async (advertisementData) => {
       siteUrl: advertisementData.siteUrl || null,
       itemInfo: advertisementData.itemInfo || null,
       deliveryCategories: advertisementData.deliveryCategories || null,
+      thumbnailImageMetaId: advertisementData.thumbnailImageMetaId || null,
       draftId: advertisementData.draftId,
     };
 
