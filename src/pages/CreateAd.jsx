@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { uploadAdvertisementImage } from "../api/advertisementImageApi.js";
 import { createAdvertisement } from "../api/advertisementApi.js";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 import "./CreateAd.css";
 
 export default function CreateAd() {
@@ -197,7 +201,12 @@ export default function CreateAd() {
   const handleDragLeave = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragging(false);
+    // currentTarget이 실제 이벤트가 등록된 요소 (image-upload-area)
+    // relatedTarget이 마우스가 이동한 요소
+    // 자식 요소로 이동한 경우는 무시
+    if (e.currentTarget === e.target) {
+      setIsDragging(false);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -313,15 +322,17 @@ export default function CreateAd() {
         </div>
 
         <form className="create-ad-form" onSubmit={onSubmit} noValidate>
-          {/* 이미지 업로드 섹션 */}
-          <section className="form-section">
+          {/* 왼쪽: 이미지 업로드 섹션 */}
+          <section
+            className="form-section-left"
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          >
             <h2 className="section-title">이미지 업로드 *</h2>
             <div
               className={`image-upload-area ${errors.images ? 'error' : ''} ${isDragging ? 'dragging' : ''}`}
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
             >
               <input
                 type="file"
@@ -332,22 +343,24 @@ export default function CreateAd() {
                 style={{ display: 'none' }}
                 disabled={uploading}
               />
-              <label htmlFor="image-upload" className="upload-label">
-                <div className="upload-placeholder">
-                  {uploading ? (
-                    <>
-                      <span className="upload-icon">⏳</span>
-                      <p>이미지 업로드 중...</p>
-                    </>
-                  ) : (
-                    <>
-                      <span className="upload-icon">📷</span>
-                      <p>이미지를 선택하거나 드래그하세요</p>
-                      <span className="upload-hint">최대 10개까지 업로드 가능</span>
-                    </>
-                  )}
-                </div>
-              </label>
+              {isDragging && (
+                <label htmlFor="image-upload" className="upload-label">
+                  <div className="upload-placeholder">
+                    {uploading ? (
+                      <>
+                        <span className="upload-icon">⏳</span>
+                        <p>이미지 업로드 중...</p>
+                      </>
+                    ) : (
+                      <>
+                        <span className="upload-icon">📷</span>
+                        <p>이미지를 선택하거나 드래그하세요</p>
+                        <span className="upload-hint">최대 10개까지 업로드 가능</span>
+                      </>
+                    )}
+                  </div>
+                </label>
+              )}
             </div>
             {errors.images && (
               <div className="error-message-box">
@@ -356,61 +369,72 @@ export default function CreateAd() {
             )}
 
             {imagePreviews.length > 0 && (
-              <div className="image-preview-grid">
-                {imagePreviews.map((preview, index) => {
-                  const imageInfo = images[index]?.imageInfo;
-                  const isThumbnail = imageInfo?.id === thumbnailImageId;
+              <div className={`image-preview-swiper ${isDragging ? 'dragging' : ''}`}>
+                <Swiper
+                  modules={[Pagination]}
+                  spaceBetween={0}
+                  slidesPerView={1}
+                  pagination={{ clickable: true }}
+                  style={{ width: '100%', height: '100%' }}
+                >
+                  {imagePreviews.map((preview, index) => {
+                    const imageInfo = images[index]?.imageInfo;
+                    const isThumbnail = imageInfo?.id === thumbnailImageId;
 
-                  return (
-                    <div key={index} className="preview-item" style={{
-                      border: isThumbnail ? '3px solid #1976d2' : '1px solid #ddd',
-                      position: 'relative',
-                    }}>
-                      <img src={preview} alt={`preview-${index}`} />
+                    return (
+                      <SwiperSlide key={index} style={{ width: '100%', height: '100%' }}>
+                        <div
+                          className={`preview-item ${isThumbnail ? 'thumbnail' : ''}`}
+                        >
+                          <img src={preview} alt={`preview-${index}`} />
 
-                      {/* 썸네일 선택 체크박스 */}
-                      <label
-                        style={{
-                          position: 'absolute',
-                          top: '8px',
-                          left: '8px',
-                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          fontSize: '12px',
-                          fontWeight: isThumbnail ? 'bold' : 'normal',
-                          color: isThumbnail ? '#1976d2' : '#666',
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isThumbnail}
-                          onChange={() => imageInfo && handleThumbnailChange(imageInfo.id)}
-                          disabled={!imageInfo}
-                          style={{ marginRight: '4px' }}
-                        />
-                        썸네일
-                      </label>
+                          {/* 썸네일 선택 체크박스 */}
+                          <label
+                            style={{
+                              position: 'absolute',
+                              top: '8px',
+                              left: '8px',
+                              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                              padding: '4px 8px',
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              fontSize: '12px',
+                              fontWeight: isThumbnail ? 'bold' : 'normal',
+                              color: isThumbnail ? '#1976d2' : '#666',
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isThumbnail}
+                              onChange={() => imageInfo && handleThumbnailChange(imageInfo.id)}
+                              disabled={!imageInfo}
+                              style={{ marginRight: '4px' }}
+                            />
+                            썸네일
+                          </label>
 
-                      <button
-                        type="button"
-                        className="remove-image-btn"
-                        onClick={() => removeImage(index)}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  );
-                })}
+                          <button
+                            type="button"
+                            className="remove-image-btn"
+                            onClick={() => removeImage(index)}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
               </div>
             )}
           </section>
 
-          {/* 기본 정보 섹션 */}
-          <section className="form-section">
+          {/* 오른쪽: 나머지 정보 섹션들 */}
+          <section className="form-section-right">
+            {/* 기본 정보 섹션 */}
+            <div className="form-section">
             <h2 className="section-title">기본 정보</h2>
             <div className="form-grid">
               <div className="form-field">
@@ -472,10 +496,10 @@ export default function CreateAd() {
                 {errors.itemInfo && <span className="error-text">{errors.itemInfo}</span>}
               </div>
             </div>
-          </section>
+            </div>
 
-          {/* 모집 정보 섹션 */}
-          <section className="form-section">
+            {/* 모집 정보 섹션 */}
+            <div className="form-section">
             <h2 className="section-title">모집 정보</h2>
             <div className="form-grid">
               <div className="form-field">
@@ -574,10 +598,10 @@ export default function CreateAd() {
                 </div>
               )}
             </div>
-          </section>
+            </div>
 
-          {/* 일정 정보 섹션 */}
-          <section className="form-section">
+            {/* 일정 정보 섹션 */}
+            <div className="form-section">
             <h2 className="section-title">일정 정보</h2>
             <div className="form-grid">
               <div className="form-field">
@@ -593,6 +617,7 @@ export default function CreateAd() {
                   <span className="error-text">{errors.recruitmentStartAt}</span>
                 )}
               </div>
+            </div>
             </div>
           </section>
 
