@@ -4,6 +4,22 @@
   padding: 20px;
 }
 
+/* 모든 자식 요소에서 외부 border 제거 */
+.create-ad-page *,
+.create-ad-page *::before,
+.create-ad-page *::after {
+  border-color: transparent !important;
+}
+
+/* CreateAd 페이지 내부에서만 적용될 border 재정의 */
+.create-ad-page .create-ad-header {
+  border-bottom: 2px solid #e0e0e0 !important;
+}
+
+.create-ad-page .form-actions {
+  border-top: 2px solid #e0e0e0 !important;
+}
+
 .create-ad-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -32,7 +48,6 @@
   grid-template-rows: 1fr auto;
   gap: 30px;
   min-height: calc(100vh - 200px);
-  border: 2px solid blue;
 }
 
 .form-section-left {
@@ -57,19 +72,17 @@
 }
 
 .form-section-left {
-  flex: 1;
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 15px;
-  border: 2px solid red;
   position: relative;
 }
 
 .form-section-right {
-  flex: 0 0 600px;
   display: flex;
   flex-direction: column;
   gap: 30px;
+  text-align: left;
 }
 
 .form-section {
@@ -114,10 +127,9 @@
 
 /* 이미지 업로드 영역 */
 .image-upload-area {
-  border: 2px dashed #d0d0d0;
   border-radius: 8px;
   padding: 20px;
-  background-color: #fafafa;
+  background-color: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
   position: absolute;
@@ -132,24 +144,20 @@
 }
 
 .image-upload-area:hover {
-  border-color: #999;
-  background-color: #f5f5f5;
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 .image-upload-area.dragging {
-  border-color: #4CAF50;
-  background-color: #e8f5e9;
+  background-color: rgba(76, 175, 80, 0.1);
   z-index: 10;
-  opacity: 0.3;
+  opacity: 0.95;
 }
 
 .image-upload-area.error {
-  border-color: #f44336;
   background-color: #ffebee;
 }
 
 .image-upload-area.error:hover {
-  border-color: #d32f2f;
   background-color: #ffcdd2;
 }
 
@@ -380,33 +388,61 @@
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   width: 100%;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.form-field:hover {
+  border-color: #d0d0d0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.form-field:focus-within {
+  border-color: #333;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .form-field label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #555;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
 }
 
 .form-field input,
 .form-field select,
 .form-field textarea {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 12px 16px;
+  border: none;
+  background: #f8f8f8;
+  border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
-  transition: border-color 0.2s;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.form-field input:hover,
+.form-field select:hover,
+.form-field textarea:hover {
+  background: #f0f0f0;
 }
 
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
   outline: none;
-  border-color: #333;
+  background: #fff;
+  box-shadow: inset 0 0 0 2px #333;
 }
 
 /* 에러 메시지 */
@@ -415,6 +451,7 @@
   font-size: 12px;
   display: block;
   margin-top: 4px;
+  text-align: right;
 }
 
 .error-message-box {
@@ -512,7 +549,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  border: 2px solid green;
   z-index: 2;
   pointer-events: none;
 }
