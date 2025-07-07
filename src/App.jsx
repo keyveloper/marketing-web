@@ -10,7 +10,8 @@ import { logoutUser } from './services/auth'
 import {
   issueDraft,
   getInitFreshAdvertisements,
-  getInitDeadlineAdvertisements
+  getInitDeadlineAdvertisements,
+  getAdvertisementById
 } from './api/advertisementApi.js'
 import './config/cognito'
 
@@ -21,6 +22,10 @@ function App() {
   // main List: cut 12 items
   const [freshAdImageUrl , setFreshAdImageUrl] = useState([])
   const [deadlineAdImageUrl, setDeadlineAdImageUrl] = useState([])
+
+  // 광고 카드 전체 데이터 (ID 포함)
+  const [freshAdCards, setFreshAdCards] = useState([])
+  const [deadlineAdCards, setDeadlineAdCards] = useState([])
 
   // 인증 상태 관리
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -61,8 +66,11 @@ function App() {
         // Fresh 광고 데이터 로드
         const freshRes = await getInitFreshAdvertisements()
         if (freshRes.success) {
+          const cards = freshRes.result?.thumbnailAdCards || []
+          // 전체 카드 데이터 저장 (ID 포함)
+          setFreshAdCards(cards)
           // presignedUrl만 추출하여 imageUrls에 저장
-          const freshUrls = freshRes.result?.thumbnailAdCards?.map(card => card.presignedUrl) || []
+          const freshUrls = cards.map(card => card.presignedUrl)
           console.log('✅ Fresh 광고 URLs:', freshUrls)
           setFreshAdImageUrl(freshUrls)
         } else {
@@ -72,8 +80,11 @@ function App() {
         // Deadline 광고 데이터 로드
         const deadlineRes = await getInitDeadlineAdvertisements()
         if (deadlineRes.success) {
+          const cards = deadlineRes.result?.thumbnailAdCards || []
+          // 전체 카드 데이터 저장 (ID 포함)
+          setDeadlineAdCards(cards)
           // presignedUrl만 추출하여 imageUrls에 저장
-          const deadlineUrls = deadlineRes.result?.thumbnailAdCards?.map(card => card.presignedUrl) || []
+          const deadlineUrls = cards.map(card => card.presignedUrl)
           console.log('✅ Deadline 광고 URLs:', deadlineUrls)
           setDeadlineAdImageUrl(deadlineUrls)
         } else {
@@ -86,6 +97,12 @@ function App() {
 
     fetchInitAdvertisements()
   }, [])
+
+  // 광고 클릭 핸들러
+  const handleAdClick = (advertisementId) => {
+    console.log(`🟦 광고 클릭 - ID: ${advertisementId}`)
+    navigate(`/advertisement/${advertisementId}`)
+  }
 
   // 로그아웃 핸들러
   const handleLogout = async () => {
@@ -182,17 +199,29 @@ function App() {
           <div className="hero-content">
             <div className="slider-container">
               <h2 className="slider-title">🆕 최신 등록된</h2>
-              <Image12Slider imageUrls={freshAdImageUrl} />
+              <Image12Slider
+                imageUrls={freshAdImageUrl}
+                adCards={freshAdCards}
+                onAdClick={handleAdClick}
+              />
             </div>
 
             <div className="slider-container">
               <h2 className="slider-title">🔥 인기있는</h2>
-              <Image12Slider imageUrls={freshAdImageUrl} />
+              <Image12Slider
+                imageUrls={freshAdImageUrl}
+                adCards={freshAdCards}
+                onAdClick={handleAdClick}
+              />
             </div>
 
             <div className="slider-container">
               <h2 className="slider-title">⌛ 마감임박</h2>
-              <Image12Slider imageUrls={deadlineAdImageUrl} />
+              <Image12Slider
+                imageUrls={deadlineAdImageUrl}
+                adCards={deadlineAdCards}
+                onAdClick={handleAdClick}
+              />
             </div>
           </div>
         </section>

@@ -127,6 +127,41 @@ export const createAdvertisement = async (advertisementData) => {
 };
 
 /**
+ * 광고 상세 정보 조회 (ID로)
+ * @param {number} advertisementId - 광고 ID
+ * @returns {Promise<{success: boolean, result?: object, error?: string}>}
+ */
+export const getAdvertisementById = async (advertisementId) => {
+  try {
+    console.log(`✅ 광고 상세 조회 요청 시작... ID: ${advertisementId}`);
+
+    // API 호출 (인증 불필요)
+    const response = await apiClient.get(`/advertisement/${advertisementId}`);
+
+    console.log('✅ 광고 상세 조회 성공:', response);
+
+    // response는 이미 data만 추출된 상태 (interceptor 때문)
+    const { frontErrorCode, errorMessage, result } = response;
+
+    // frontErrorCode 20000이 성공 코드
+    if (frontErrorCode !== 20000) {
+      throw new Error(errorMessage || '광고 상세 조회에 실패했습니다.');
+    }
+
+    return {
+      success: true,
+      result: result, // 광고 상세 정보
+    };
+  } catch (error) {
+    console.error('❌ 광고 상세 조회 실패:', error);
+    return {
+      success: false,
+      error: error.response?.data?.errorMessage || error.message || '광고 상세 조회 중 오류가 발생했습니다.',
+    };
+  }
+};
+
+/**
  * 초기화 - Fresh 광고 목록 조회
  * @returns {Promise<{success: boolean, result?: object, error?: string}>}
  */
