@@ -7,7 +7,11 @@ import {
 } from './api/imageApis.js'
 import { getCurrentUser } from 'aws-amplify/auth'
 import { logoutUser } from './services/auth'
-import { issueDraft } from './api/advertisementApi.js'
+import {
+  issueDraft,
+  getInitFreshAdvertisements,
+  getInitDeadlineAdvertisements
+} from './api/advertisementApi.js'
 import './config/cognito'
 
 function App() {
@@ -16,6 +20,7 @@ function App() {
 
   // main List: cut 12 items
   const [freshAdImageUrl , setFreshAdImageUrl] = useState([])
+  const [deadlineAdImageUrl, setDeadlineAdImageUrl] = useState([])
 
   // 인증 상태 관리
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -47,23 +52,39 @@ function App() {
     checkAuthState()
   }, [])
 
+  // 초기화 - Fresh & Deadline 광고 데이터 로드
   useEffect(() => {
-    const fetchImages = async () => {
+    const fetchInitAdvertisements = async () => {
       try {
-        console.log('🟦 getImageUrlsByAdId 호출 중...')
-        const res = await getImageUrlsByAdId(249)
+        console.log('🟦 초기화 데이터 로드 중...')
 
-        // ✅ presignedUrl만 추출
-        const urls = res?.result?.map(item => item.presignedUrl) || []
+        // Fresh 광고 데이터 로드
+        const freshRes = await getInitFreshAdvertisements()
+        if (freshRes.success) {
+          // presignedUrl만 추출하여 imageUrls에 저장
+          const freshUrls = freshRes.result?.thumbnailAdCards?.map(card => card.presignedUrl) || []
+          console.log('✅ Fresh 광고 URLs:', freshUrls)
+          setFreshAdImageUrl(freshUrls)
+        } else {
+          console.error('❌ Fresh 광고 로드 실패:', freshRes.error)
+        }
 
-        console.log('✅ 추출된 presignedUrl 리스트:', urls)
-        setFreshAdImageUrl(urls)
+        // Deadline 광고 데이터 로드
+        const deadlineRes = await getInitDeadlineAdvertisements()
+        if (deadlineRes.success) {
+          // presignedUrl만 추출하여 imageUrls에 저장
+          const deadlineUrls = deadlineRes.result?.thumbnailAdCards?.map(card => card.presignedUrl) || []
+          console.log('✅ Deadline 광고 URLs:', deadlineUrls)
+          setDeadlineAdImageUrl(deadlineUrls)
+        } else {
+          console.error('❌ Deadline 광고 로드 실패:', deadlineRes.error)
+        }
       } catch (error) {
-        console.error('❌ 이미지 로드 실패:', error)
+        console.error('❌ 초기화 데이터 로드 실패:', error)
       }
     }
 
-    fetchImages()
+    fetchInitAdvertisements()
   }, [])
 
   // 로그아웃 핸들러
@@ -159,9 +180,6 @@ function App() {
 
         <section className="hero-section">
           <div className="hero-content">
-            <h1>Hero Section</h1>
-            <p>메인 히어로 섹션입니다</p>
-
             <div className="slider-container">
               <h2 className="slider-title">🆕 최신 등록된</h2>
               <Image12Slider imageUrls={freshAdImageUrl} />
@@ -174,7 +192,7 @@ function App() {
 
             <div className="slider-container">
               <h2 className="slider-title">⌛ 마감임박</h2>
-              <Image12Slider imageUrls={freshAdImageUrl} />
+              <Image12Slider imageUrls={deadlineAdImageUrl} />
             </div>
           </div>
         </section>
