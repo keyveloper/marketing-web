@@ -7,6 +7,7 @@ import Login from './pages/Login.jsx'
 import VerifyEmail from './pages/VerifyEmail.jsx'
 import CreateAd from './pages/CreateAd.jsx'
 import Advertisement from './pages/Advertisement.jsx'
+import ProfileAdvertiser from './pages/ProfileAdvertiser.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import './index.css'
 
@@ -27,6 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           }
         />
         <Route path="/advertisement/:id" element={<Advertisement />} />
+        <Route path="/profile-advertiser/:id" element={<ProfileAdvertiser />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

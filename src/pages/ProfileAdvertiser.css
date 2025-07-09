@@ -1,0 +1,469 @@
+.profile-advertiser-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f3f2ef;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.profile-advertiser-card {
+  width: 100%;
+  max-width: 1400px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 로딩 및 에러 메시지 */
+.loading-message,
+.error-message {
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: #666666;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
+/* 백그라운드 이미지 영역 */
+.background-section {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
+}
+
+.background-images {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.background-images img {
+  flex: 1;
+  width: 20%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  filter: brightness(0.95);
+  transition: all 0.3s ease;
+}
+
+.background-images img:hover {
+  opacity: 1;
+  filter: brightness(1.05);
+  transform: scale(1.05);
+}
+
+.background-images img:nth-child(1) {
+  object-position: center;
+}
+
+.background-images img:nth-child(2) {
+  object-position: center;
+}
+
+.background-images img:nth-child(3) {
+  object-position: center;
+}
+
+.background-images img:nth-child(4) {
+  object-position: center;
+}
+
+.background-images img:nth-child(5) {
+  object-position: center;
+}
+
+.company-icon {
+  position: absolute;
+  bottom: 16px;
+  right: 24px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 프로필 콘텐츠 영역 */
+.profile-advertiser-content {
+  position: relative;
+  padding: 0 24px 24px;
+}
+
+/* 프로필 이미지 */
+.profile-advertiser-image {
+  position: relative;
+  margin-top: -80px;
+  width: 160px;
+  height: 160px;
+  margin-left: 24px;
+}
+
+.profile-advertiser-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  border: 4px solid #ffffff;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 프로필 정보 */
+.profile-advertiser-info {
+  margin-top: 16px;
+  padding: 0 24px;
+}
+
+.advertiser-name {
+  font-size: 32px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.advertiser-title {
+  font-size: 18px;
+  font-weight: 400;
+  color: #666666;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+  max-width: 600px;
+}
+
+/* 인증 배지 */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #d1fae5;
+  border: 1px solid #86efac;
+  border-radius: 16px;
+  padding: 6px 12px;
+  margin-bottom: 16px;
+}
+
+.verified-badge span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #059669;
+}
+
+/* 회사 정보 */
+.company-info {
+  margin-bottom: 20px;
+}
+
+.company-info p {
+  font-size: 14px;
+  color: #333333;
+  margin: 6px 0;
+  line-height: 1.6;
+}
+
+.company-info strong {
+  font-weight: 600;
+  color: #000000;
+  margin-right: 8px;
+}
+
+.contact-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+  color: #5568d3;
+}
+
+.website-link {
+  display: inline-block;
+  font-size: 14px;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.website-link:hover {
+  text-decoration: underline;
+  color: #5568d3;
+}
+
+/* 통계 섹션 */
+.stats-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 24px 0;
+  padding: 20px 0;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 40px;
+  background-color: #e5e7eb;
+}
+
+/* 액션 버튼들 */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 24px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background-color: #667eea;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #5568d3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-secondary:hover {
+  background-color: #f0f3ff;
+  border-color: #5568d3;
+  color: #5568d3;
+}
+
+.btn-more {
+  background-color: transparent;
+  border: 2px solid #d1d5db;
+  color: #6b7280;
+  padding: 12px 16px;
+  min-width: 48px;
+}
+
+.btn-more:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+/* 회사 소개 섹션 */
+.about-section {
+  padding: 32px 48px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #fafafa;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 16px 0;
+}
+
+.about-description {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* 인증 섹션 */
+.certifications-section {
+  padding: 32px 48px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.certifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.certification-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.certification-item:hover {
+  background-color: #f0f3ff;
+  border-color: #667eea;
+}
+
+.certification-item span {
+  font-size: 15px;
+  color: #374151;
+  font-weight: 500;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .profile-advertiser-container {
+    padding: 20px 0;
+  }
+
+  .profile-advertiser-card {
+    border-radius: 0;
+  }
+
+  .background-section {
+    height: 160px;
+  }
+
+  .profile-advertiser-image {
+    width: 120px;
+    height: 120px;
+    margin-top: -60px;
+    margin-left: 12px;
+  }
+
+  .profile-advertiser-info {
+    padding: 0 12px;
+  }
+
+  .advertiser-name {
+    font-size: 24px;
+  }
+
+  .advertiser-title {
+    font-size: 16px;
+  }
+
+  .stats-section {
+    gap: 16px;
+  }
+
+  .stat-value {
+    font-size: 20px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
+
+  .btn-more {
+    width: auto;
+    align-self: flex-start;
+  }
+
+  .about-section,
+  .certifications-section {
+    padding: 24px 20px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .about-description {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .background-images {
+    flex-wrap: wrap;
+  }
+
+  .background-images img {
+    width: 33.333%;
+    height: 50%;
+  }
+
+  .profile-advertiser-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .advertiser-name {
+    font-size: 20px;
+  }
+
+  .advertiser-title {
+    font-size: 14px;
+  }
+
+  .stats-section {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .stat-divider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .about-section,
+  .certifications-section {
+    padding: 20px 16px;
+  }
+}
