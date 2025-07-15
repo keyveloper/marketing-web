@@ -15,12 +15,11 @@ export const issueDraft = async () => {
       throw new Error('인증 토큰을 찾을 수 없습니다. 다시 로그인해주세요.');
     }
 
-    console.log('✅ Draft 발급 요청 시작...');
+    console.log(`✅ Draft 발급 요청 시작... idTokenL: ${idToken}`);
 
     // API 호출
-    const response = await apiClient.post(
+    const response = await apiClient.get(
       '/advertisement/new-draft',
-      {}, // body는 비어있음
       {
         headers: {
           'Authorization': `Bearer ${idToken}`,

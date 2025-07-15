@@ -2,9 +2,6 @@ import './App.css'
 import Image12Slider from './components/Image12Slider.jsx'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom' // ✅ ← 이거 추가!
-import {
-  getImageUrlsByAdId
-} from './api/imageApis.js'
 import { getCurrentUser } from 'aws-amplify/auth'
 import { logoutUser } from './services/auth'
 import {
@@ -40,6 +37,11 @@ function App() {
         setUser(currentUser)
         setIsAuthenticated(true)
         console.log('✅ 인증된 사용자:', currentUser)
+
+        // localStorage에 userId 저장
+        if (currentUser.userId) {
+          localStorage.setItem('userId', currentUser.userId)
+        }
 
         // localStorage에서 userType 가져오기
         const storedUserType = localStorage.getItem('userType')
@@ -159,7 +161,21 @@ function App() {
           <div className="auth-buttons">
             {isAuthenticated ? (
               <>
-                <span className="user-info">{user?.username}님</span>
+                <button
+                  className="user-info-btn"
+                  onClick={() => {
+                    const userId = user?.userId || localStorage.getItem('userId')
+                    if (userId) {
+                      if (userType && userType.startsWith('ADVERTISER')) {
+                        navigate(`/dashboard-advertiser/${userId}`)
+                      } else if (userType && userType.startsWith('SERVICER')) {
+                        navigate(`/profile-servicer/${userId}`)
+                      }
+                    }
+                  }}
+                >
+                  {user?.username}님
+                </button>
                 <button className="logout-btn" onClick={handleLogout}>
                   로그아웃
                 </button>

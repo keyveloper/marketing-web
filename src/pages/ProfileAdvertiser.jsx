@@ -15,13 +15,7 @@ export default function ProfileAdvertiser() {
     advertiserId: 'ADV12345',
     name: '스마트 마케팅',
     title: '디지털 마케팅 전문 기업',
-    backgroundImages: [
-      'https://via.placeholder.com/300x200/FF6B6B/FFFFFF?text=Campaign+1',
-      'https://via.placeholder.com/300x200/4ECDC4/FFFFFF?text=Campaign+2',
-      'https://via.placeholder.com/300x200/45B7D1/FFFFFF?text=Campaign+3',
-      'https://via.placeholder.com/300x200/96CEB4/FFFFFF?text=Campaign+4',
-      'https://via.placeholder.com/300x200/FFEAA7/FFFFFF?text=Campaign+5',
-    ],
+    backgroundImage: 'https://via.placeholder.com/1400x220/667eea/FFFFFF?text=Company+Banner',
     profileImage: 'https://via.placeholder.com/200x200/667eea/FFFFFF?text=Logo',
     companyInfo: {
       industry: '마케팅 및 광고',
@@ -39,11 +33,6 @@ export default function ProfileAdvertiser() {
       10년 이상의 경험을 바탕으로 다양한 업종의 고객사와 함께 성공적인 캠페인을 진행해왔습니다.
       인플루언서 마케팅부터 디지털 광고까지, 통합적인 마케팅 전략을 제공합니다.
     `,
-    certifications: [
-      '구글 파트너 인증',
-      '메타 비즈니스 파트너',
-      '네이버 광고 대행사 인증',
-    ],
   };
 
   useEffect(() => {
@@ -94,11 +83,7 @@ export default function ProfileAdvertiser() {
       <div className="profile-advertiser-card">
         {/* 백그라운드 이미지 영역 */}
         <div className="background-section">
-          <div className="background-images">
-            {advertiserData.backgroundImages.map((img, index) => (
-              <img key={index} src={img} alt={`campaign ${index + 1}`} />
-            ))}
-          </div>
+          <img src={advertiserData.backgroundImage} alt="Company Background" className="background-image" />
           <div className="company-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
               <path
@@ -210,28 +195,6 @@ export default function ProfileAdvertiser() {
         <div className="about-section">
           <h2 className="section-title">회사 소개</h2>
           <p className="about-description">{advertiserData.description}</p>
-        </div>
-
-        {/* 인증 및 수상 섹션 */}
-        <div className="certifications-section">
-          <h2 className="section-title">인증 및 파트너십</h2>
-          <div className="certifications-list">
-            {advertiserData.certifications.map((cert, index) => (
-              <div key={index} className="certification-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20">
-                  <path
-                    fill="#667eea"
-                    d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0z"
-                  />
-                  <path
-                    fill="#667eea"
-                    d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"
-                  />
-                </svg>
-                <span>{cert}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>

@@ -94,7 +94,6 @@ export default function Advertisement() {
   // 데이터 추출
   const advertisement = adData.advertisementWithCategoriesV2;
   const images = adData.advertisementImages || [];
-  const thumbnailIndex = images.findIndex(img => img.isThumbnail);
 
   // 날짜 포맷 함수
   const formatDate = (timestamp) => {
