@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
+import { getCurrentUser } from 'aws-amplify/auth';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import "./Advertisement.css";
@@ -14,6 +15,29 @@ export default function Advertisement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [adData, setAdData] = useState(null);
+  const [userType, setUserType] = useState(null);
+  const [reviewMemo, setReviewMemo] = useState('');
+
+  // 사용자 타입 확인
+  useEffect(() => {
+    const checkUserType = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        const attributes = currentUser.signInDetails?.loginId;
+
+        // Cognito의 custom:userType 속성에서 userType 가져오기
+        // 또는 다른 방법으로 userType 확인
+        // 임시로 localStorage에서 가져오는 방식 사용
+        const storedUserType = localStorage.getItem('userType');
+        setUserType(storedUserType);
+        console.log('✅ 사용자 타입:', storedUserType);
+      } catch (error) {
+        console.error('❌ 사용자 타입 확인 실패:', error);
+      }
+    };
+
+    checkUserType();
+  }, []);
 
   // 광고 데이터 로드
   useEffect(() => {
@@ -47,6 +71,19 @@ export default function Advertisement() {
 
     fetchAdvertisement();
   }, [id]);
+
+  // 리뷰 신청 핸들러
+  const handleReviewSubmit = () => {
+    if (!reviewMemo.trim()) {
+      alert('메모를 입력해주세요.');
+      return;
+    }
+
+    console.log('🔵 리뷰 신청:', { advertisementId: id, memo: reviewMemo });
+    // TODO: 리뷰 신청 API 호출
+    alert('리뷰 신청이 완료되었습니다!\n\n' + reviewMemo);
+    setReviewMemo('');
+  };
 
   // 로딩 중
   if (loading) {
@@ -271,6 +308,29 @@ export default function Advertisement() {
             </div>
           </section>
 
+          {/* INFLUENCER 전용: 리뷰 신청 메모 */}
+          {userType === 'INFLUENCER' && (
+            <section className="form-section">
+              <h2 className="section-title">리뷰 신청 메모</h2>
+              <textarea
+                className="review-memo-input"
+                placeholder="리뷰 신청 시 광고주에게 전달할 메모를 작성하세요..."
+                value={reviewMemo}
+                onChange={(e) => setReviewMemo(e.target.value)}
+                rows="4"
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  fontSize: '15px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  resize: 'vertical',
+                  fontFamily: 'inherit'
+                }}
+              />
+            </section>
+          )}
+
           {/* 버튼 영역 */}
           <div className="form-actions">
             <button
@@ -280,12 +340,22 @@ export default function Advertisement() {
             >
               목록으로
             </button>
-            <button
-              type="button"
-              className="submit-btn"
-            >
-              지원하기
-            </button>
+            {userType === 'INFLUENCER' ? (
+              <button
+                type="button"
+                className="submit-btn"
+                onClick={handleReviewSubmit}
+              >
+                리뷰 신청하기
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="submit-btn"
+              >
+                지원하기
+              </button>
+            )}
           </div>
         </div>
       </div>

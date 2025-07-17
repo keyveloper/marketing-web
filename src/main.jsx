@@ -10,6 +10,8 @@ import Advertisement from './pages/Advertisement.jsx'
 import ProfileAdvertiser from './pages/ProfileAdvertiser.jsx'
 import CreateProfileAdvertiser from './pages/CreateProfileAdvertiser.jsx'
 import DashboardAdvertiser from './pages/DashboardAdvertiser.jsx'
+import DashboardInfluencer from './pages/DashboardInfluencer.jsx'
+import CreateProfileInfluencer from './pages/CreateProfileInfluencer.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import './index.css'
 
@@ -44,6 +46,22 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           element={
             <ProtectedRoute requiredUserType="ADVERTISER">
               <DashboardAdvertiser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-influencer/:id"
+          element={
+            <ProtectedRoute requiredUserType="INFLUENCER">
+              <DashboardInfluencer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-profile-influencer"
+          element={
+            <ProtectedRoute requiredUserType="INFLUENCER">
+              <CreateProfileInfluencer />
             </ProtectedRoute>
           }
         />

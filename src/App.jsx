@@ -168,6 +168,8 @@ function App() {
                     if (userId) {
                       if (userType && userType.startsWith('ADVERTISER')) {
                         navigate(`/dashboard-advertiser/${userId}`)
+                      } else if (userType && userType.startsWith('INFLUENCER')) {
+                        navigate(`/dashboard-influencer/${userId}`)
                       } else if (userType && userType.startsWith('SERVICER')) {
                         navigate(`/profile-servicer/${userId}`)
                       }
