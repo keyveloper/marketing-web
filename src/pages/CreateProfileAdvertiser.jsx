@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { uploadAdvertiserProfileImage } from '../api/userProfileImageApi.js';
+import { uploadAdvertiserProfileInfo } from '../api/userProfileApi.js';
 import './ProfileAdvertiser.css';
 import './CreateProfileAdvertiser.css';
 
-export default function CreateProfileAdvertiser() {
+export default function CreateProfileAdvertiser({ draftId: propDraftId, draft: propDraft }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { draftId, draft } = location.state || {};
+  const { draftId: stateDraftId, draft: stateDraft } = location.state || {};
+
+  // props에서 받거나 location.state에서 받기 (props 우선)
+  const draftId = propDraftId || stateDraftId;
+  const draft = propDraft || stateDraft;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -50,23 +56,106 @@ export default function CreateProfileAdvertiser() {
   const handleImageChange = (e, imageType) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (imageType === 'background') {
-          setFormData(prev => ({
-            ...prev,
-            backgroundImage: file,
-            backgroundImagePreview: reader.result
-          }));
-        } else if (imageType === 'profile') {
-          setFormData(prev => ({
-            ...prev,
-            profileImage: file,
-            profileImagePreview: reader.result
-          }));
+      processImageFile(file, imageType);
+    }
+  };
+
+  // 이미지 파일 처리 함수
+  const processImageFile = async (file, imageType) => {
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드할 수 있습니다.');
+      return;
+    }
+
+    // 먼저 미리보기 표시
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (imageType === 'background') {
+        setFormData(prev => ({
+          ...prev,
+          backgroundImage: file,
+          backgroundImagePreview: reader.result
+        }));
+      } else if (imageType === 'profile') {
+        setFormData(prev => ({
+          ...prev,
+          profileImage: file,
+          profileImagePreview: reader.result
+        }));
+      }
+    };
+    reader.readAsDataURL(file);
+
+    // draftId가 있으면 서버에 업로드
+    if (draftId) {
+      try {
+        setLoading(true);
+
+        // ProfileImageType enum 값 매핑
+        const profileImageType = imageType === 'background' ? 'BACKGROUND' : 'PROFILE';
+
+        console.log(`🔵 ${imageType} 이미지 업로드 시작...`);
+        const result = await uploadAdvertiserProfileImage(draftId, profileImageType, file);
+
+        if (result.success) {
+          console.log(`✅ ${imageType} 이미지 업로드 성공:`, result.result);
+          alert(`${imageType === 'background' ? '배경' : '프로필'} 이미지가 업로드되었습니다.`);
+        } else {
+          console.error(`❌ ${imageType} 이미지 업로드 실패:`, result.error);
+          alert(`이미지 업로드 실패\n\n${result.error}`);
+
+          // 실패 시 미리보기도 제거
+          if (imageType === 'background') {
+            setFormData(prev => ({
+              ...prev,
+              backgroundImage: null,
+              backgroundImagePreview: ''
+            }));
+          } else if (imageType === 'profile') {
+            setFormData(prev => ({
+              ...prev,
+              profileImage: null,
+              profileImagePreview: ''
+            }));
+          }
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error(`❌ ${imageType} 이미지 업로드 중 오류:`, error);
+        alert('이미지 업로드 중 오류가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      console.warn('⚠️ Draft ID가 없어 이미지를 서버에 업로드할 수 없습니다.');
+    }
+  };
+
+  // 드래그 앤 드롭 핸들러
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.add('drag-over');
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.remove('drag-over');
+  };
+
+  const handleDrop = (e, imageType) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.remove('drag-over');
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      processImageFile(files[0], imageType);
     }
   };
 
@@ -74,22 +163,37 @@ export default function CreateProfileAdvertiser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // TODO: API 연동하여 프로필 저장
+    if (!draftId) {
+      alert('Draft ID가 없습니다. 프로필을 저장할 수 없습니다.');
+      return;
+    }
+
     console.log('🟦 프로필 저장 시작...', formData);
 
     try {
       setLoading(true);
 
-      // TODO: 실제 API 호출
-      // const result = await saveAdvertiserProfile(draftId, formData);
-      // if (result.success) {
-      //   navigate(`/profile-advertiser/${userId}`);
-      // }
+      // Advertiser Profile Info API 호출
+      const result = await uploadAdvertiserProfileInfo(
+        draftId,                      // userProfileDraftId
+        formData.industry,            // serviceInfo (업종)
+        formData.location,            // locationBrief (위치)
+        formData.description || null  // introduction (회사 소개)
+      );
 
-      alert('프로필 생성 기능은 아직 구현되지 않았습니다.');
+      if (result.success) {
+        console.log('✅ 프로필 저장 성공:', result);
+        alert('프로필이 성공적으로 저장되었습니다!');
+
+        // 대시보드로 돌아가기
+        navigate(-1);
+      } else {
+        console.error('❌ 프로필 저장 실패:', result.error);
+        alert(`프로필 저장 실패\n\n${result.error}`);
+      }
     } catch (error) {
-      console.error('❌ 프로필 저장 실패:', error);
-      setError('프로필 저장 중 오류가 발생했습니다.');
+      console.error('❌ 프로필 저장 중 오류:', error);
+      alert('프로필 저장 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
@@ -115,7 +219,13 @@ export default function CreateProfileAdvertiser() {
       <div className="profile-advertiser-card">
         <form onSubmit={handleSubmit}>
           {/* 백그라운드 이미지 영역 */}
-          <div className="background-section">
+          <div
+            className="background-section"
+            onDragOver={handleDragOver}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={(e) => handleDrop(e, 'background')}
+          >
             {formData.backgroundImagePreview ? (
               <img
                 src={formData.backgroundImagePreview}
@@ -150,7 +260,13 @@ export default function CreateProfileAdvertiser() {
           {/* 프로필 정보 영역 */}
           <div className="profile-advertiser-content">
             {/* 프로필 이미지 */}
-            <div className="profile-advertiser-image">
+            <div
+              className="profile-advertiser-image"
+              onDragOver={handleDragOver}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, 'profile')}
+            >
               {formData.profileImagePreview ? (
                 <img src={formData.profileImagePreview} alt="Profile Preview" />
               ) : (
