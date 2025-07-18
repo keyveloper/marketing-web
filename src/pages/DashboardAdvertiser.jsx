@@ -231,9 +231,6 @@ function DashboardAdvertiser() {
       {/* Sidebar */}
       <aside className="ad-dashboard-sidebar">
         <div className="ad-sidebar-header">
-          <button className="ad-back-btn" onClick={() => navigate('/')}>
-            ← 홈으로
-          </button>
           <div className="ad-user-profile">
             <div className="ad-user-avatar">{user?.username?.[0]?.toUpperCase() || 'U'}</div>
             <div className="ad-user-info">

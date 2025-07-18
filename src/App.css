@@ -44,22 +44,47 @@
   width: 100%;
 }
 
-/* ===== Navigation ===== */
-.nav-menu {
+/* ===== Search ===== */
+.search-container {
   display: flex;
-  gap: 30px;
   align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  transition: all 0.6s ease-in-out;
+  width: 40px;
+  overflow: hidden;
 }
 
-.nav-menu a {
-  font-size: 16px;
+.search-container:hover {
+  width: 300px;
+  background-color: #e8e8e8;
+}
+
+.search-icon {
+  flex-shrink: 0;
+  color: #666;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 0;
+  opacity: 0;
+  font-size: 14px;
   color: #2c3e50;
-  text-decoration: none;
-  transition: color 0.3s;
+  transition: all 0.6s ease-in-out;
 }
 
-.nav-menu a:hover {
-  color: #3498db;
+.search-container:hover .search-input {
+  width: 250px;
+  opacity: 1;
+}
+
+.search-input::placeholder {
+  color: #999;
 }
 
 /* ===== Auth Buttons ===== */
@@ -71,7 +96,8 @@
 
 .login-btn,
 .signup-btn,
-.logout-btn {
+.logout-btn,
+.my-service-btn {
   padding: 8px 20px;
   border-radius: 4px;
   cursor: pointer;
@@ -101,10 +127,23 @@
 .logout-btn:hover {
 }
 
-.user-info {
-  font-size: 14px;
+.my-service-btn {
   color: #2c3e50;
-  font-weight: 500;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.my-service-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.my-service-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 
@@ -115,44 +154,167 @@
   min-height: auto;
 }
 
-/* ===== Floating Write Button ===== */
-.floating-write-btn {
+/* ===== Floating Button ===== */
+.floating-btn-container {
   position: fixed;
   bottom: 40px;
   right: 40px;
+  z-index: 1000;
+  width: 400px;
+  height: 400px;
+  pointer-events: none;
+}
+
+/* 원형 hover 영역 */
+.floating-hover-area {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  bottom: -170px;
+  right: -170px;
+  pointer-events: all;
+  z-index: 998;
+}
+
+.floating-btn {
   width: 60px;
   height: 60px;
   border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
   transition: all 0.3s ease;
-  z-index: 1000;
+  border: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 1001;
+  pointer-events: all;
 }
 
-.floating-write-btn:hover {
+.floating-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(52, 152, 219, 0.6);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
 }
 
-.floating-write-btn:active {
+.floating-btn:active {
   transform: scale(0.95);
 }
 
-.floating-write-btn svg {
+.floating-btn.logout-mode {
+  background: linear-gradient(135deg, #ffb3ba 0%, #ff8a94 100%);
+  box-shadow: 0 4px 12px rgba(255, 138, 148, 0.4);
+}
+
+.floating-btn.logout-mode:hover {
+  background: linear-gradient(135deg, #ff8a94 0%, #ff6b7a 100%);
+  box-shadow: 0 6px 16px rgba(255, 107, 122, 0.6);
+}
+
+.floating-btn svg {
   width: 24px;
   height: 24px;
 }
 
+/* Floating Menu */
+.floating-menu {
+  position: absolute;
+  bottom: 170px;
+  right: 170px;
+  width: 60px;
+  height: 60px;
+  cursor: grab;
+  transition: transform 0.1s linear;
+  user-select: none;
+}
+
+.floating-menu:active {
+  cursor: grabbing;
+}
+
+.floating-menu-item {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: white;
+  color: #2c3e50;
+  border: 2px solid #667eea;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.3s ease,
+              color 0.3s ease,
+              box-shadow 0.3s ease,
+              opacity 0.5s ease;
+  padding: 8px;
+}
+
+.floating-menu-item:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: white;
+  z-index: 10;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.menu-item-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.menu-item-label {
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+/* Menu Item Animation */
+@keyframes menuItemAppear {
+  from {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg) scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: translate(var(--target-x), var(--target-y)) rotate(var(--target-rotation)) scale(1);
+  }
+}
+
 /* ===== Media Queries ===== */
 @media (max-width: 768px) {
-  .floating-write-btn {
+  .floating-btn-container {
     bottom: 20px;
     right: 20px;
+  }
+
+  .floating-btn {
     width: 56px;
     height: 56px;
+  }
+
+  .floating-menu-item {
+    width: 60px;
+    height: 60px;
+  }
+
+  .menu-item-label {
+    font-size: 9px;
   }
 }

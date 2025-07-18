@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from 'aws-amplify/auth'
 import { issueInfluencerProfileDraft } from '../api/userProfileApi.js'
 import CreateProfileInfluencer from './CreateProfileInfluencer.jsx'
-import './DashboardAdvertiser.css'
+import './DashboardInfluencer.css'
 
 function DashboardInfluencer() {
   const { id: userId } = useParams()
@@ -80,78 +80,78 @@ function DashboardInfluencer() {
     switch (activeMenu) {
       case 'overview':
         return (
-          <div className="dashboard-overview">
-            <h2 className="dashboard-title">대시보드 개요</h2>
+          <div className="influ-dashboard-overview">
+            <h2 className="influ-dashboard-title">대시보드 개요</h2>
 
-            <div className="stats-grid">
-              <div className="stat-card stat-card-1">
-                <div className="stat-icon">📋</div>
-                <div className="stat-content">
-                  <div className="stat-label">총 신청</div>
-                  <div className="stat-value">{dashboardData.totalApplications}</div>
+            <div className="influ-stats-grid">
+              <div className="influ-stat-card influ-stat-card-1">
+                <div className="influ-stat-icon">📋</div>
+                <div className="influ-stat-content">
+                  <div className="influ-stat-label">총 신청</div>
+                  <div className="influ-stat-value">{dashboardData.totalApplications}</div>
                 </div>
               </div>
 
-              <div className="stat-card stat-card-2">
-                <div className="stat-icon">🟢</div>
-                <div className="stat-content">
-                  <div className="stat-label">진행 중 리뷰</div>
-                  <div className="stat-value">{dashboardData.activeReviews}</div>
+              <div className="influ-stat-card influ-stat-card-2">
+                <div className="influ-stat-icon">🟢</div>
+                <div className="influ-stat-content">
+                  <div className="influ-stat-label">진행 중 리뷰</div>
+                  <div className="influ-stat-value">{dashboardData.activeReviews}</div>
                 </div>
               </div>
 
-              <div className="stat-card stat-card-3">
-                <div className="stat-icon">✅</div>
-                <div className="stat-content">
-                  <div className="stat-label">완료된 리뷰</div>
-                  <div className="stat-value">{dashboardData.completedReviews}</div>
+              <div className="influ-stat-card influ-stat-card-3">
+                <div className="influ-stat-icon">✅</div>
+                <div className="influ-stat-content">
+                  <div className="influ-stat-label">완료된 리뷰</div>
+                  <div className="influ-stat-value">{dashboardData.completedReviews}</div>
                 </div>
               </div>
 
-              <div className="stat-card stat-card-4">
-                <div className="stat-icon">💬</div>
-                <div className="stat-content">
-                  <div className="stat-label">읽지 않은 메시지</div>
-                  <div className="stat-value">{dashboardData.unreadMessages}</div>
+              <div className="influ-stat-card influ-stat-card-4">
+                <div className="influ-stat-icon">💬</div>
+                <div className="influ-stat-content">
+                  <div className="influ-stat-label">읽지 않은 메시지</div>
+                  <div className="influ-stat-value">{dashboardData.unreadMessages}</div>
                 </div>
               </div>
             </div>
 
-            <div className="main-content-grid">
-              <div className="content-card performance-card">
+            <div className="influ-main-content-grid">
+              <div className="influ-content-card influ-performance-card">
                 <h3>활동 지표</h3>
-                <div className="performance-stats">
-                  <div className="performance-item">
-                    <span className="performance-label">총 좋아요</span>
-                    <span className="performance-value">{dashboardData.totalLikes.toLocaleString()}</span>
+                <div className="influ-performance-stats">
+                  <div className="influ-performance-item">
+                    <span className="influ-performance-label">총 좋아요</span>
+                    <span className="influ-performance-value">{dashboardData.totalLikes.toLocaleString()}</span>
                   </div>
-                  <div className="performance-item">
-                    <span className="performance-label">다가오는 일정</span>
-                    <span className="performance-value">{dashboardData.upcomingEvents}건</span>
+                  <div className="influ-performance-item">
+                    <span className="influ-performance-label">다가오는 일정</span>
+                    <span className="influ-performance-value">{dashboardData.upcomingEvents}건</span>
                   </div>
-                  <div className="performance-item">
-                    <span className="performance-label">완료율</span>
-                    <span className="performance-value">
+                  <div className="influ-performance-item">
+                    <span className="influ-performance-label">완료율</span>
+                    <span className="influ-performance-value">
                       {((dashboardData.completedReviews / (dashboardData.completedReviews + dashboardData.activeReviews)) * 100).toFixed(1)}%
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="content-card recent-activity-card">
+              <div className="influ-content-card influ-recent-activity-card">
                 <h3>최근 활동</h3>
-                <div className="activity-list">
-                  <div className="activity-item">
-                    <span className="activity-time">1시간 전</span>
-                    <span className="activity-desc">새로운 광고 신청이 승인되었습니다</span>
+                <div className="influ-activity-list">
+                  <div className="influ-activity-item">
+                    <span className="influ-activity-time">1시간 전</span>
+                    <span className="influ-activity-desc">새로운 광고 신청이 승인되었습니다</span>
                   </div>
-                  <div className="activity-item">
-                    <span className="activity-time">3시간 전</span>
-                    <span className="activity-desc">리뷰 작성 마감일이 2일 남았습니다</span>
+                  <div className="influ-activity-item">
+                    <span className="influ-activity-time">3시간 전</span>
+                    <span className="influ-activity-desc">리뷰 작성 마감일이 2일 남았습니다</span>
                   </div>
-                  <div className="activity-item">
-                    <span className="activity-time">1일 전</span>
-                    <span className="activity-desc">새로운 DM 메시지 2건</span>
+                  <div className="influ-activity-item">
+                    <span className="influ-activity-time">1일 전</span>
+                    <span className="influ-activity-desc">새로운 DM 메시지 2건</span>
                   </div>
                 </div>
               </div>
@@ -161,11 +161,11 @@ function DashboardInfluencer() {
 
       case 'myprofile':
         return (
-          <div className="dashboard-section">
+          <div className="influ-dashboard-section">
             {profileDraft ? (
               <CreateProfileInfluencer draftId={profileDraft.id} draft={profileDraft} />
             ) : (
-              <div className="content-card">
+              <div className="influ-content-card">
                 <p>프로필 정보를 불러오는 중...</p>
               </div>
             )}
@@ -174,9 +174,9 @@ function DashboardInfluencer() {
 
       case 'applications':
         return (
-          <div className="dashboard-section">
-            <h2 className="dashboard-title">신청 현황</h2>
-            <div className="content-card">
+          <div className="influ-dashboard-section">
+            <h2 className="influ-dashboard-title">신청 현황</h2>
+            <div className="influ-content-card">
               <p>신청한 광고 목록이 여기에 표시됩니다.</p>
             </div>
           </div>
@@ -184,9 +184,9 @@ function DashboardInfluencer() {
 
       case 'calendar':
         return (
-          <div className="dashboard-section">
-            <h2 className="dashboard-title">달력</h2>
-            <div className="content-card">
+          <div className="influ-dashboard-section">
+            <h2 className="influ-dashboard-title">달력</h2>
+            <div className="influ-content-card">
               <p>일정 달력이 여기에 표시됩니다.</p>
             </div>
           </div>
@@ -194,9 +194,9 @@ function DashboardInfluencer() {
 
       case 'favorites':
         return (
-          <div className="dashboard-section">
-            <h2 className="dashboard-title">좋아요</h2>
-            <div className="content-card">
+          <div className="influ-dashboard-section">
+            <h2 className="influ-dashboard-title">좋아요</h2>
+            <div className="influ-content-card">
               <p>좋아요한 광고 목록이 여기에 표시됩니다.</p>
             </div>
           </div>
@@ -204,9 +204,9 @@ function DashboardInfluencer() {
 
       case 'timeline':
         return (
-          <div className="dashboard-section">
-            <h2 className="dashboard-title">타임라인</h2>
-            <div className="content-card">
+          <div className="influ-dashboard-section">
+            <h2 className="influ-dashboard-title">타임라인</h2>
+            <div className="influ-content-card">
               <p>활동 타임라인이 여기에 표시됩니다.</p>
             </div>
           </div>
@@ -214,9 +214,9 @@ function DashboardInfluencer() {
 
       case 'messages':
         return (
-          <div className="dashboard-section">
-            <h2 className="dashboard-title">DM 메시지</h2>
-            <div className="content-card">
+          <div className="influ-dashboard-section">
+            <h2 className="influ-dashboard-title">DM 메시지</h2>
+            <div className="influ-content-card">
               <p>DM 메시지 목록이 여기에 표시됩니다.</p>
             </div>
           </div>
@@ -224,9 +224,9 @@ function DashboardInfluencer() {
 
       case 'settings':
         return (
-          <div className="dashboard-section">
-            <h2 className="dashboard-title">설정</h2>
-            <div className="content-card">
+          <div className="influ-dashboard-section">
+            <h2 className="influ-dashboard-title">설정</h2>
+            <div className="influ-content-card">
               <p>계정 설정이 여기에 표시됩니다.</p>
             </div>
           </div>
@@ -238,39 +238,39 @@ function DashboardInfluencer() {
   }
 
   return (
-    <div className="dashboard-container">
+    <div className="influ-dashboard-container">
       {/* Sidebar */}
-      <aside className="dashboard-sidebar">
-        <div className="sidebar-header">
-          <button className="back-btn" onClick={() => navigate('/')}>
+      <aside className="influ-dashboard-sidebar">
+        <div className="influ-sidebar-header">
+          <button className="influ-back-btn" onClick={() => navigate('/')}>
             ← 홈으로
           </button>
-          <div className="user-profile">
-            <div className="user-avatar">{user?.username?.[0]?.toUpperCase() || 'U'}</div>
-            <div className="user-info">
-              <div className="user-name">{user?.username || '사용자'}</div>
-              <div className="user-type">인플루언서</div>
+          <div className="influ-user-profile">
+            <div className="influ-user-avatar">{user?.username?.[0]?.toUpperCase() || 'U'}</div>
+            <div className="influ-user-info">
+              <div className="influ-user-name">{user?.username || '사용자'}</div>
+              <div className="influ-user-type">인플루언서</div>
             </div>
           </div>
         </div>
 
-        <nav className="sidebar-menu">
+        <nav className="influ-sidebar-menu">
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className={`menu-item ${activeMenu === item.id ? 'active' : ''}`}
+              className={`influ-menu-item ${activeMenu === item.id ? 'influ-active' : ''}`}
               onClick={() => handleMenuClick(item.id)}
             >
-              <span className="menu-icon">{item.icon}</span>
-              <span className="menu-label">{item.label}</span>
+              <span className="influ-menu-icon">{item.icon}</span>
+              <span className="influ-menu-label">{item.label}</span>
             </button>
           ))}
         </nav>
       </aside>
 
       {/* Main Content */}
-      <main className="dashboard-main">
-        <div className="dashboard-content">
+      <main className="influ-dashboard-main">
+        <div className="influ-dashboard-content">
           {renderContent()}
         </div>
       </main>

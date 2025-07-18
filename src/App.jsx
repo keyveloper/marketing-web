@@ -26,6 +26,11 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState(null)
   const [userType, setUserType] = useState(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [rotation, setRotation] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const [startAngle, setStartAngle] = useState(0)
+  const [menuExpanded, setMenuExpanded] = useState(false)
 
   // 인증 상태 확인
   useEffect(() => {
@@ -73,6 +78,121 @@ function App() {
     }
   }
 
+  // 메뉴 항목들
+  const menuItems = [
+    { id: 'write', label: '광고 작성', icon: '✍️', action: async () => {
+      try {
+        console.log('🟦 Draft 발급 요청 중...')
+        const result = await issueDraft()
+        if (result.success) {
+          console.log('✅ Draft 발급 성공, draftId:', result.draftId)
+          navigate('/create-ad', {
+            state: {
+              draftId: result.draftId,
+              draft: result.draft,
+            }
+          })
+        } else {
+          console.error('❌ Draft 발급 실패:', result.error)
+          alert(`Draft 발급 실패\n\n${result.error}`)
+        }
+      } catch (error) {
+        console.error('❌ 예상치 못한 오류:', error)
+        alert('Draft 발급 중 오류가 발생했습니다.')
+      }
+    }},
+    { id: 'dashboard', label: '대시보드', icon: '📊', action: () => {
+      const userId = user?.userId || localStorage.getItem('userId')
+      if (userId && userType) {
+        navigate(`/dashboard-advertiser/${userId}`)
+      }
+    }},
+    { id: 'myads', label: '내 광고', icon: '📋', action: () => alert('내 광고 페이지') },
+    { id: 'stats', label: '통계', icon: '📈', action: () => alert('통계 페이지') },
+    { id: 'messages', label: '메시지', icon: '💬', action: () => alert('메시지 페이지') },
+    { id: 'calendar', label: '달력', icon: '📅', action: () => alert('달력 페이지') },
+    { id: 'favorites', label: '즐겨찾기', icon: '⭐', action: () => alert('즐겨찾기 페이지') },
+    { id: 'settings', label: '설정', icon: '⚙️', action: () => alert('설정 페이지') },
+  ]
+
+  // 각도 계산 함수
+  const getAngle = (clientX, clientY, centerX, centerY) => {
+    const dx = clientX - centerX
+    const dy = clientY - centerY
+    return Math.atan2(dy, dx) * (180 / Math.PI)
+  }
+
+  // 드래그 시작
+  const handleDragStart = (e) => {
+    setIsDragging(true)
+    const rect = e.currentTarget.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    const angle = getAngle(e.clientX, e.clientY, centerX, centerY)
+    setStartAngle(angle - rotation)
+  }
+
+  // 드래그 중
+  const handleDragMove = (e) => {
+    if (!isDragging) return
+    const floatingBtn = document.querySelector('.floating-btn')
+    if (!floatingBtn) return
+    const rect = floatingBtn.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    const angle = getAngle(e.clientX, e.clientY, centerX, centerY)
+    setRotation(angle - startAngle)
+  }
+
+  // 드래그 종료
+  const handleDragEnd = () => {
+    setIsDragging(false)
+  }
+
+  // 휠 스크롤 핸들러 (아래 스크롤 = 왼쪽 회전)
+  const handleWheel = (e) => {
+    e.preventDefault()
+    const delta = e.deltaY
+    // 아래로 스크롤(deltaY > 0) = 왼쪽으로 회전(rotation 증가)
+    // 위로 스크롤(deltaY < 0) = 오른쪽으로 회전(rotation 감소)
+    setRotation(prev => prev + delta * 0.2)
+  }
+
+  // 전역 마우스 이벤트
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleDragMove)
+      window.addEventListener('mouseup', handleDragEnd)
+      return () => {
+        window.removeEventListener('mousemove', handleDragMove)
+        window.removeEventListener('mouseup', handleDragEnd)
+      }
+    }
+  }, [isDragging, startAngle, rotation])
+
+  // floating-hover-area에 wheel 이벤트 등록
+  useEffect(() => {
+    if (isMenuOpen) {
+      const hoverArea = document.querySelector('.floating-hover-area')
+      if (hoverArea) {
+        hoverArea.addEventListener('wheel', handleWheel, { passive: false })
+        return () => {
+          hoverArea.removeEventListener('wheel', handleWheel)
+        }
+      }
+    }
+  }, [isMenuOpen, rotation])
+
+  // 메뉴 펼치기 애니메이션
+  useEffect(() => {
+    if (isMenuOpen) {
+      setMenuExpanded(false)
+      setTimeout(() => setMenuExpanded(true), 50)
+    } else {
+      setMenuExpanded(false)
+    }
+  }, [isMenuOpen])
+
   // 글쓰기 버튼 핸들러
   const handleWriteClick = async () => {
     try {
@@ -103,32 +223,63 @@ function App() {
       {/* ===== Header (전체 페이지 공용) ===== */}
       <header className="Header-container">
         <div className="logo" onClick={() => navigate('/')}>Logo</div>
-        <nav className="nav-menu">
-        </nav>
+        <div className="search-container">
+          <svg
+            className="search-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="검색..."
+          />
+        </div>
         <div className="auth-buttons">
           {isAuthenticated ? (
-            <>
-              <button
-                className="user-info-btn"
-                onClick={() => {
-                  const userId = user?.userId || localStorage.getItem('userId')
-                  if (userId) {
-                    if (userType && userType.startsWith('ADVERTISER')) {
-                      navigate(`/dashboard-advertiser/${userId}`)
-                    } else if (userType && userType.startsWith('INFLUENCER')) {
-                      navigate(`/dashboard-influencer/${userId}`)
-                    } else if (userType && userType.startsWith('SERVICER')) {
-                      navigate(`/profile-servicer/${userId}`)
-                    }
+            <button
+              className="my-service-btn"
+              onClick={() => {
+                const userId = user?.userId || localStorage.getItem('userId')
+                if (userId) {
+                  if (userType && userType.startsWith('ADVERTISER')) {
+                    navigate(`/dashboard-advertiser/${userId}`)
+                  } else if (userType && userType.startsWith('INFLUENCER')) {
+                    navigate(`/dashboard-influencer/${userId}`)
+                  } else if (userType && userType.startsWith('SERVICER')) {
+                    navigate(`/profile-servicer/${userId}`)
                   }
-                }}
+                }
+              }}
+              aria-label="내 서비스"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                {user?.username}님
-              </button>
-              <button className="logout-btn" onClick={handleLogout}>
-                로그아웃
-              </button>
-            </>
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="9" r="3"></circle>
+                <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
+              </svg>
+              <span>내 서비스</span>
+            </button>
           ) : (
             <>
               <button className="login-btn" onClick={() => navigate('/login')}>
@@ -164,28 +315,95 @@ function App() {
         <p>Footer - 연락처 및 정보</p>
       </footer>
 
-      {/* ADVERTISER 사용자를 위한 Floating 글쓰기 버튼 */}
+      {/* ADVERTISER 사용자를 위한 Floating 버튼 */}
       {userType && userType.startsWith('ADVERTISER') && (
-        <button
-          className="floating-write-btn"
-          onClick={handleWriteClick}
-          aria-label="글쓰기"
+        <div
+          className="floating-btn-container"
+          onMouseEnter={() => setIsMenuOpen(true)}
+          onMouseLeave={() => setIsMenuOpen(false)}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <button
+            className={`floating-btn ${isMenuOpen ? 'logout-mode' : ''}`}
+            onClick={isMenuOpen ? handleLogout : () => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "로그아웃" : "메뉴"}
           >
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-        </button>
+            {isMenuOpen ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+            )}
+          </button>
+
+          {/* 원형 hover 영역 - floating-menu 포함 */}
+          {isMenuOpen && (
+            <div className="floating-hover-area">
+              <div
+                className="floating-menu"
+                style={{ transform: `rotate(${rotation}deg)` }}
+                onMouseDown={handleDragStart}
+              >
+                {menuItems.map((item, index) => {
+                  const angle = (360 / menuItems.length) * index
+                  const radius = 120
+                  const x = Math.cos((angle - 90) * Math.PI / 180) * radius
+                  const y = Math.sin((angle - 90) * Math.PI / 180) * radius
+                  const itemRotation = -rotation
+
+                  return (
+                    <button
+                      key={item.id}
+                      className="floating-menu-item"
+                      style={{
+                        transform: menuExpanded
+                          ? `translate(${x}px, ${y}px) rotate(${itemRotation}deg) scale(1)`
+                          : `translate(0px, 0px) rotate(${itemRotation}deg) scale(0.3)`,
+                        opacity: menuExpanded ? 1 : 0,
+                        transitionDelay: `${index * 0.05}s`,
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        item.action()
+                        setIsMenuOpen(false)
+                      }}
+                      title={item.label}
+                    >
+                      <span className="menu-item-icon">{item.icon}</span>
+                      <span className="menu-item-label">{item.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   )
