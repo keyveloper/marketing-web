@@ -23,6 +23,23 @@
 
 .banner-item-1 {
   flex: 4;
+  background-color: #FFB3BA; /* 파스텔 핑크 */
+}
+
+.banner-item-2 {
+  background-color: #FFDFBA; /* 파스텔 오렌지 */
+}
+
+.banner-item-3 {
+  background-color: #FFFFBA; /* 파스텔 옐로우 */
+}
+
+.banner-item-4 {
+  background-color: #BAFFC9; /* 파스텔 그린 */
+}
+
+.banner-item-5 {
+  background-color: #BAE1FF; /* 파스텔 블루 */
 }
 
 .banner-item span {
@@ -86,7 +103,7 @@
 .image-slider-container {
   position: relative;
   width: 100%;
-  height: 240px;
+  height: 445px;
   margin: 0 auto;
   overflow: hidden;
   display: flex;
