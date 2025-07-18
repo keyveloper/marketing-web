@@ -21,6 +21,7 @@ export default function Advertisement() {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [applications, setApplications] = useState([]);
+  const [activeTab, setActiveTab] = useState('detail'); // 'detail', 'applications', 'reviews'
 
   // 사용자 타입 확인
   useEffect(() => {
@@ -165,15 +166,15 @@ export default function Advertisement() {
   // 로딩 중
   if (loading) {
     return (
-      <div className="view-ad-page">
-        <div className="view-ad-container">
-          <div className="view-ad-header">
-            <button className="back-btn" onClick={() => navigate(-1)}>
+      <div className="ad-view-page">
+        <div className="ad-view-container">
+          <div className="ad-view-header">
+            <button className="ad-view-back-btn" onClick={() => navigate(-1)}>
               ← 뒤로
             </button>
             <h1>광고 상세</h1>
           </div>
-          <div className="loading-message">
+          <div className="ad-view-loading-message">
             <p>로딩 중...</p>
           </div>
         </div>
@@ -184,15 +185,15 @@ export default function Advertisement() {
   // 에러 발생
   if (error) {
     return (
-      <div className="view-ad-page">
-        <div className="view-ad-container">
-          <div className="view-ad-header">
-            <button className="back-btn" onClick={() => navigate(-1)}>
+      <div className="ad-view-page">
+        <div className="ad-view-container">
+          <div className="ad-view-header">
+            <button className="ad-view-back-btn" onClick={() => navigate(-1)}>
               ← 뒤로
             </button>
             <h1>광고 상세</h1>
           </div>
-          <div className="error-message">
+          <div className="ad-view-error-message">
             <p>{error}</p>
           </div>
         </div>
@@ -209,35 +210,24 @@ export default function Advertisement() {
   const advertisement = adData.advertisementWithCategoriesV2;
   const images = adData.advertisementImages || [];
 
-  // 날짜 포맷 함수
+  // 날짜 포맷 함수 (시간 제외)
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
-    return date.toLocaleString('ko-KR', {
+    return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
       month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
+      day: '2-digit'
     });
   };
 
   return (
-    <div className="view-ad-page">
-      <div className="view-ad-container">
-        <div className="view-ad-header">
-          <button className="back-btn" onClick={() => navigate(-1)}>
-            ← 뒤로
-          </button>
-          <h1>광고 상세</h1>
-        </div>
-
-        <div className="view-ad-content">
+    <div className="ad-view-page">
+      <div className="ad-view-container">
+        <div className="ad-view-content">
           {/* 왼쪽: 이미지 영역 */}
-          <section className="view-section-left">
-            <h2 className="section-title">이미지</h2>
-
+          <section className="ad-view-section-left">
             {images.length > 0 && (
-              <div className="image-preview-swiper">
+              <div className="ad-view-image-preview-swiper">
                 <Swiper
                   modules={[Pagination]}
                   spaceBetween={0}
@@ -250,13 +240,13 @@ export default function Advertisement() {
                     return (
                       <SwiperSlide key={index}>
                         <div
-                          className={`preview-item ${isThumbnail ? 'thumbnail' : ''}`}
+                          className={`ad-view-preview-item ${isThumbnail ? 'ad-view-thumbnail' : ''}`}
                         >
                           <img src={image.presignedUrl} alt={`preview-${index}`} />
 
                           {/* 썸네일 표시 */}
                           {isThumbnail && (
-                            <div className="thumbnail-badge">
+                            <div className="ad-view-thumbnail-badge">
                               썸네일
                             </div>
                           )}
@@ -270,172 +260,170 @@ export default function Advertisement() {
           </section>
 
           {/* 오른쪽: 광고 정보 */}
-          <section className="view-section-right">
-            {/* 기본 정보 */}
-            <div className="view-section">
-              <h2 className="section-title">기본 정보</h2>
-              <div className="form-grid">
-                <div className="info-display">
-                  <span className="info-label">광고 제목</span>
-                  <span className="info-value">{advertisement.title}</span>
-                </div>
+          <section className="ad-view-section-right">
+            {/* 제목 */}
+            <h2 className="ad-view-title">{advertisement.title}</h2>
 
-                <div className="info-display">
-                  <span className="info-label">상품명</span>
-                  <span className="info-value">{advertisement.itemName}</span>
-                </div>
-
-                {advertisement.siteUrl && (
-                  <div className="info-display">
-                    <span className="info-label">사이트 URL</span>
-                    <span className="info-value">
-                      <a href={advertisement.siteUrl} target="_blank" rel="noopener noreferrer">
-                        {advertisement.siteUrl}
-                      </a>
-                    </span>
-                  </div>
-                )}
-
-                {advertisement.itemInfo && (
-                  <div className="info-display">
-                    <span className="info-label">상품 정보</span>
-                    <span className="info-value">{advertisement.itemInfo}</span>
-                  </div>
-                )}
-              </div>
+            {/* 채널 타입, 리뷰 타입 */}
+            <div className="ad-view-badges">
+              <span className="ad-view-badge ad-view-badge-channel">{advertisement.channelType}</span>
+              <span className="ad-view-badge ad-view-badge-review">{advertisement.reviewType}</span>
             </div>
 
-            {/* 모집 정보 */}
-            <div className="view-section">
-              <h2 className="section-title">모집 정보</h2>
-              <div className="form-grid">
-                <div className="info-display">
-                  <span className="info-label">모집 인원</span>
-                  <span className="info-value">{advertisement.recruitmentNumber}명</span>
-                </div>
-
-                <div className="info-display">
-                  <span className="info-label">채널 타입</span>
-                  <span className="info-value">{advertisement.channelType}</span>
-                </div>
-
-                <div className="info-display">
-                  <span className="info-label">리뷰 타입</span>
-                  <span className="info-value">{advertisement.reviewType}</span>
-                </div>
-
-                {advertisement.categories && advertisement.categories.length > 0 && (
-                  <div className="info-display">
-                    <span className="info-label">배송 카테고리</span>
-                    <span className="info-value">
-                      {advertisement.categories.join(', ')}
-                    </span>
-                  </div>
-                )}
-              </div>
+            {/* 제공내역 */}
+            <div className="ad-view-info-display">
+              <span className="ad-view-info-label">제공내역</span>
+              <span className="ad-view-info-value">{advertisement.itemName}</span>
             </div>
 
-            {/* 일정 정보 */}
-            <div className="view-section">
-              <h2 className="section-title">일정 정보</h2>
-              <div className="form-grid">
-                <div className="info-display">
-                  <span className="info-label">모집 시작일</span>
-                  <span className="info-value">{formatDate(advertisement.recruitmentStartAt)}</span>
-                </div>
-
-                <div className="info-display">
-                  <span className="info-label">모집 종료일</span>
-                  <span className="info-value">{formatDate(advertisement.recruitmentEndAt)}</span>
-                </div>
-
-                <div className="info-display">
-                  <span className="info-label">당첨자 발표일</span>
-                  <span className="info-value">{formatDate(advertisement.announcementAt)}</span>
-                </div>
-
-                <div className="info-display">
-                  <span className="info-label">리뷰 시작일</span>
-                  <span className="info-value">{formatDate(advertisement.reviewStartAt)}</span>
-                </div>
-
-                <div className="info-display">
-                  <span className="info-label">리뷰 종료일</span>
-                  <span className="info-value">{formatDate(advertisement.reviewEndAt)}</span>
-                </div>
-
-                <div className="info-display">
-                  <span className="info-label">캠페인 종료일</span>
-                  <span className="info-value">{formatDate(advertisement.endAt)}</span>
-                </div>
-              </div>
+            {/* 모집 인원 */}
+            <div className="ad-view-info-display">
+              <span className="ad-view-info-label">모집 인원</span>
+              <span className="ad-view-info-value">{advertisement.recruitmentNumber}명</span>
             </div>
-          </section>
 
-          {/* 버튼 영역 */}
-          <div className="view-actions">
-            <button
-              type="button"
-              className="cancel-btn"
-              onClick={() => navigate(-1)}
-            >
-              목록으로
-            </button>
-            {userType === 'INFLUENCER' && (
-              <button
-                type="button"
-                className="submit-btn"
-                onClick={handleReviewButtonClick}
-              >
-                리뷰 신청하기
-              </button>
+            {advertisement.itemInfo && (
+              <div className="ad-view-info-display">
+                <span className="ad-view-info-label">상품 정보</span>
+                <span className="ad-view-info-value">{advertisement.itemInfo}</span>
+              </div>
             )}
-          </div>
+
+            {advertisement.siteUrl && (
+              <div className="ad-view-info-display">
+                <span className="ad-view-info-label">사이트 URL</span>
+                <span className="ad-view-info-value">
+                  <a href={advertisement.siteUrl} target="_blank" rel="noopener noreferrer">
+                    {advertisement.siteUrl}
+                  </a>
+                </span>
+              </div>
+            )}
+
+            {/* 모집일정 */}
+            <div className="ad-view-info-display">
+              <span className="ad-view-info-label">모집일정</span>
+              <span className="ad-view-info-value">
+                {formatDate(advertisement.recruitmentStartAt)} - {formatDate(advertisement.recruitmentEndAt)}
+              </span>
+            </div>
+
+            {/* 당첨 발표일 */}
+            <div className="ad-view-info-display">
+              <span className="ad-view-info-label">당첨 발표일</span>
+              <span className="ad-view-info-value">{formatDate(advertisement.announcementAt)}</span>
+            </div>
+
+            {/* 리뷰일정 */}
+            <div className="ad-view-info-display">
+              <span className="ad-view-info-label">리뷰일정</span>
+              <span className="ad-view-info-value">
+                {formatDate(advertisement.reviewStartAt)} - {formatDate(advertisement.reviewEndAt)}
+              </span>
+            </div>
+
+            {/* 배송 카테고리 (있을 경우) */}
+            {advertisement.categories && advertisement.categories.length > 0 && (
+              <div className="ad-view-info-display">
+                <span className="ad-view-info-label">배송 카테고리</span>
+                <span className="ad-view-info-value">
+                  {advertisement.categories.join(', ')}
+                </span>
+              </div>
+            )}
+
+
+          </section>
         </div>
 
-        {/* 리뷰 신청 목록 */}
-        {applications.length > 0 && (
-          <section className="review-applications-section">
-            <h2 className="section-title">리뷰 신청 목록 ({applications.length})</h2>
-            <div className="review-applications-list">
-              {applications.map((app) => (
-                <div key={app.id} className="review-application-item">
-                  {/* 프로필 이미지 플레이스홀더 */}
-                  <div className="review-application-avatar">
-                    {app.influencerUsername?.[0]?.toUpperCase() || 'U'}
-                  </div>
+        {/* 서브 네비게이션 */}
+        <div className="ad-view-sub-nav">
+          <button
+            className={`ad-view-sub-nav-item ${activeTab === 'detail' ? 'ad-view-sub-nav-active' : ''}`}
+            onClick={() => setActiveTab('detail')}
+          >
+            상세정보
+          </button>
+          <button
+            className={`ad-view-sub-nav-item ${activeTab === 'applications' ? 'ad-view-sub-nav-active' : ''}`}
+            onClick={() => setActiveTab('applications')}
+          >
+            신청 목록
+          </button>
+          <button
+            className={`ad-view-sub-nav-item ${activeTab === 'reviews' ? 'ad-view-sub-nav-active' : ''}`}
+            onClick={() => setActiveTab('reviews')}
+          >
+            리뷰 현황
+          </button>
+        </div>
 
-                  {/* 신청 정보 */}
-                  <div className="review-application-content">
-                    <p className="review-application-username">
-                      {app.influencerUsername}
-                    </p>
-                    <p className="review-application-memo">
-                      {app.applyMemo}
-                    </p>
-                  </div>
-                  <span className="review-application-date">
-                      {formatKoreanDate(app.createdAt)}
-                    </span>
-                </div>
-              ))}
+        {/* 탭 콘텐츠 영역 */}
+        <div className="ad-view-nav-content">
+          {/* 상세정보 탭 */}
+          {activeTab === 'detail' && (
+            <div className="ad-view-tab-panel">
+              <p>상세정보 내용이 여기에 표시됩니다.</p>
             </div>
-          </section>
-        )}
+          )}
+
+          {/* 신청 목록 탭 */}
+          {activeTab === 'applications' && (
+            <div className="ad-view-tab-panel">
+              {applications.length > 0 ? (
+                <section className="ad-view-review-applications-section">
+                  <h2 className="ad-view-section-title">리뷰 신청 목록 ({applications.length})</h2>
+                  <div className="ad-view-review-applications-list">
+                    {applications.map((app) => (
+                      <div key={app.id} className="ad-view-review-application-item">
+                        {/* 프로필 이미지 플레이스홀더 */}
+                        <div className="ad-view-review-application-avatar">
+                          {app.influencerUsername?.[0]?.toUpperCase() || 'U'}
+                        </div>
+
+                        {/* 신청 정보 */}
+                        <div className="ad-view-review-application-content">
+                          <p className="ad-view-review-application-username">
+                            {app.influencerUsername}
+                          </p>
+                          <p className="ad-view-review-application-memo">
+                            {app.applyMemo}
+                          </p>
+                        </div>
+                        <span className="ad-view-review-application-date">
+                          {formatKoreanDate(app.createdAt)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ) : (
+                <p>아직 신청한 리뷰가 없습니다.</p>
+              )}
+            </div>
+          )}
+
+          {/* 리뷰 현황 탭 */}
+          {activeTab === 'reviews' && (
+            <div className="ad-view-tab-panel">
+              <p>리뷰 현황 내용이 여기에 표시됩니다.</p>
+            </div>
+          )}
+        </div>
 
         {/* INFLUENCER 전용: 리뷰 신청 폼 모달 */}
         {userType === 'INFLUENCER' && showReviewForm && (
-        <div className="modal-overlay" onClick={handleReviewFormClose}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2 className="modal-title">리뷰 신청</h2>
+        <div className="ad-view-modal-overlay" onClick={handleReviewFormClose}>
+          <div className="ad-view-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2 className="ad-view-modal-title">리뷰 신청</h2>
 
-            <div className="modal-form-group">
-              <label htmlFor="review-memo" className="modal-label">
+            <div className="ad-view-modal-form-group">
+              <label htmlFor="review-memo" className="ad-view-modal-label">
                 신청 메모 *
               </label>
               <textarea
                 id="review-memo"
-                className="modal-textarea"
+                className="ad-view-modal-textarea"
                 placeholder="광고주에게 전달할 메모를 작성하세요..."
                 value={reviewMemo}
                 onChange={(e) => setReviewMemo(e.target.value)}
@@ -443,12 +431,12 @@ export default function Advertisement() {
               />
             </div>
 
-            <div className="modal-actions">
+            <div className="ad-view-modal-actions">
               <button
                 type="button"
                 onClick={handleReviewFormClose}
                 disabled={isSubmitting}
-                className="modal-cancel-btn"
+                className="ad-view-modal-cancel-btn"
               >
                 취소
               </button>
@@ -456,7 +444,7 @@ export default function Advertisement() {
                 type="button"
                 onClick={handleReviewSubmit}
                 disabled={isSubmitting}
-                className="modal-submit-btn"
+                className="ad-view-modal-submit-btn"
               >
                 {isSubmitting ? '신청 중...' : '리뷰 신청 완료하기'}
               </button>

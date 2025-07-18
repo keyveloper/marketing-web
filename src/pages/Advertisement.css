@@ -1,28 +1,28 @@
 /* Advertisement view page styles */
 
-.view-ad-page {
+.ad-view-page {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding: 20px;
 }
 
 /* 모든 자식 요소에서 외부 border 제거 */
-.view-ad-page *,
-.view-ad-page *::before,
-.view-ad-page *::after {
+.ad-view-page *,
+.ad-view-page *::before,
+.ad-view-page *::after {
   border-color: transparent !important;
 }
 
 /* ViewAd 페이지 내부에서만 적용될 border 재정의 */
-.view-ad-page .view-ad-header {
+.ad-view-page .ad-view-header {
   border-bottom: 2px solid #e0e0e0 !important;
 }
 
-.view-ad-page .view-actions {
+.ad-view-page .ad-view-actions {
   border-top: 2px solid #e0e0e0 !important;
 }
 
-.view-ad-container {
+.ad-view-container {
   max-width: 1400px;
   margin: 0 auto;
   background-color: #ffffff;
@@ -31,46 +31,90 @@
   padding: 30px;
 }
 
-.view-ad-header {
-  margin-bottom: 30px;
+.ad-view-header {
+  margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 2px solid #e0e0e0;
 }
 
-.view-ad-header h1 {
+/* 서브 네비게이션 */
+.ad-view-sub-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ad-view-sub-nav-item {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+
+.ad-view-sub-nav-item:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.ad-view-sub-nav-item.ad-view-sub-nav-active {
+  background-color: #333;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 탭 콘텐츠 영역 */
+.ad-view-nav-content {
+  min-height: 300px;
+  padding: 20px 0;
+}
+
+.ad-view-tab-panel {
+  width: 100%;
+}
+
+.ad-view-header h1 {
   font-size: 24px;
   font-weight: 700;
   color: #333;
   margin: 0;
 }
 
-.view-ad-content {
+.ad-view-content {
   display: grid;
   grid-template-columns: 1fr 600px;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto auto;
   gap: 30px;
-  min-height: calc(100vh - 200px);
+  margin-bottom: 60px;
 }
 
-.view-section-left {
+.ad-view-section-left {
   grid-column: 1;
   grid-row: 1;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   position: relative;
+  align-self: start;
 }
 
-.view-section-right {
+.ad-view-section-right {
   grid-column: 2;
   grid-row: 1;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 12px;
   text-align: left;
+  align-self: start;
 }
 
-.view-ad-content > .view-actions {
+.ad-view-content > .ad-view-actions {
   grid-column: 1 / -1;
   grid-row: 2;
   display: flex;
@@ -81,21 +125,56 @@
   width: 100%;
 }
 
-.view-section {
+.ad-view-section {
   display: flex;
   flex-direction: column;
   gap: 15px;
   width: 100%;
 }
 
-.section-title {
+.ad-view-section-title {
   font-size: 18px;
   font-weight: 600;
   color: #333;
   margin: 0;
 }
 
-.back-btn {
+/* 제목 스타일 */
+.ad-view-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  margin-bottom: 16px;
+}
+
+/* 배지 컨테이너 */
+.ad-view-badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* 배지 스타일 */
+.ad-view-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.ad-view-badge-channel {
+  background-color: #E3F2FD;
+  color: #1976D2;
+}
+
+.ad-view-badge-review {
+  background-color: #F3E5F5;
+  color: #7B1FA2;
+}
+
+.ad-view-back-btn {
   background: none;
   border: none;
   color: #666;
@@ -106,22 +185,20 @@
   transition: color 0.2s;
 }
 
-.back-btn:hover {
+.ad-view-back-btn:hover {
   color: #333;
 }
 
 /* 이미지 프리뷰 Swiper */
-.image-preview-swiper {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.ad-view-image-preview-swiper {
+  width: 100%;
+  height: 575px;
+  position: relative;
   z-index: 2;
   pointer-events: auto;
 }
 
-.image-preview-swiper .swiper {
+.ad-view-image-preview-swiper .swiper {
   pointer-events: auto;
   width: 100% !important;
   height: 100% !important;
@@ -129,14 +206,14 @@
   z-index: auto;
 }
 
-.image-preview-swiper .swiper-wrapper {
+.ad-view-image-preview-swiper .swiper-wrapper {
   width: 100%;
   height: 100%;
   position: relative;
   z-index: auto;
 }
 
-.image-preview-swiper .swiper-slide {
+.ad-view-image-preview-swiper .swiper-slide {
   width: 100% !important;
   height: 100% !important;
   display: flex;
@@ -146,7 +223,7 @@
   z-index: auto;
 }
 
-.image-preview-swiper .preview-item {
+.ad-view-image-preview-swiper .ad-view-preview-item {
   pointer-events: auto;
   position: relative;
   width: 100%;
@@ -156,7 +233,7 @@
   justify-content: center;
 }
 
-.preview-item {
+.ad-view-preview-item {
   position: relative;
   border-radius: 0;
   overflow: hidden;
@@ -167,23 +244,23 @@
   justify-content: center;
 }
 
-.preview-item.thumbnail {
+.ad-view-preview-item.ad-view-thumbnail {
   border: 3px solid #1976d2;
 }
 
-.preview-item:not(.thumbnail) {
+.ad-view-preview-item:not(.ad-view-thumbnail) {
   border: 1px solid #ddd;
 }
 
-.preview-item img {
+.ad-view-preview-item img {
   max-width: 100%;
   max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-.thumbnail-badge {
+.ad-view-thumbnail-badge {
   position: absolute;
   top: 8px;
   left: 8px;
@@ -196,19 +273,19 @@
 }
 
 /* Swiper 페이지네이션 커스텀 */
-.image-preview-swiper .swiper-pagination {
+.ad-view-image-preview-swiper .swiper-pagination {
   pointer-events: auto;
   bottom: 10px;
 }
 
-.image-preview-swiper .swiper-pagination-bullet {
+.ad-view-image-preview-swiper .swiper-pagination-bullet {
   background-color: #fff;
   opacity: 0.7;
   width: 8px;
   height: 8px;
 }
 
-.image-preview-swiper .swiper-pagination-bullet-active {
+.ad-view-image-preview-swiper .swiper-pagination-bullet-active {
   opacity: 1;
   background-color: #1976d2;
   width: 10px;
@@ -216,26 +293,26 @@
 }
 
 /* 정보 표시 영역 */
-.form-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-}
-
-.info-display {
+.ad-view-form-grid {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  padding: 20px;
+}
+
+.ad-view-info-display {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 3px;
   background: #ffffff;
   border: 1px solid #e8e8e8;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.info-label {
+.ad-view-info-label {
   font-size: 13px;
   font-weight: 600;
   color: #666;
@@ -244,7 +321,7 @@
   text-align: left;
 }
 
-.info-value {
+.ad-view-info-value {
   font-size: 15px;
   font-weight: 400;
   color: #333;
@@ -254,7 +331,7 @@
 }
 
 /* 제출 버튼 */
-.view-actions {
+.ad-view-actions {
   display: flex;
   justify-content: center;
   gap: 15px;
@@ -263,7 +340,7 @@
   width: 100%;
 }
 
-.cancel-btn {
+.ad-view-cancel-btn {
   flex: 1;
   max-width: 200px;
   padding: 15px 30px;
@@ -277,12 +354,12 @@
   transition: all 0.2s;
 }
 
-.cancel-btn:hover {
+.ad-view-cancel-btn:hover {
   background-color: #f5f5f5;
   border-color: #999;
 }
 
-.submit-btn {
+.ad-view-submit-btn {
   flex: 1;
   max-width: 200px;
   padding: 15px 30px;
@@ -296,68 +373,68 @@
   transition: background-color 0.2s;
 }
 
-.submit-btn:hover:not(:disabled) {
+.ad-view-submit-btn:hover:not(:disabled) {
   background-color: #555;
 }
 
-.submit-btn:disabled {
+.ad-view-submit-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
 /* 반응형 */
 @media (max-width: 1024px) {
-  .view-ad-content {
+  .ad-view-content {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
   }
 
-  .view-section-left {
+  .ad-view-section-left {
     grid-column: 1;
     grid-row: 1;
     min-height: 400px;
   }
 
-  .view-section-right {
+  .ad-view-section-right {
     grid-column: 1;
     grid-row: 2;
   }
 
-  .view-actions {
+  .ad-view-actions {
     grid-column: 1;
     grid-row: 3;
   }
 }
 
 @media (max-width: 768px) {
-  .view-ad-page {
+  .ad-view-page {
     padding: 10px;
   }
 
-  .view-ad-container {
+  .ad-view-container {
     padding: 20px;
   }
 
-  .view-ad-header h1 {
+  .ad-view-header h1 {
     font-size: 20px;
   }
 
-  .section-title {
+  .ad-view-section-title {
     font-size: 16px;
   }
 
-  .view-actions {
+  .ad-view-actions {
     flex-direction: column;
   }
 
-  .submit-btn,
-  .cancel-btn {
+  .ad-view-submit-btn,
+  .ad-view-cancel-btn {
     max-width: 100%;
   }
 }
 
 /* 리뷰 신청 목록 스타일 */
-.review-applications-section {
+.ad-view-review-applications-section {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -367,7 +444,7 @@
   border-top: 2px solid #e0e0e0;
 }
 
-.review-applications-list {
+.ad-view-review-applications-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -375,7 +452,7 @@
   width: 100%;
 }
 
-.review-application-item {
+.ad-view-review-application-item {
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -385,7 +462,7 @@
   background-color: #ffffff;
 }
 
-.review-application-avatar {
+.ad-view-review-application-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -399,7 +476,7 @@
   flex-shrink: 0;
 }
 
-.review-application-content {
+.ad-view-review-application-content {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -408,19 +485,19 @@
   align-items: center;
 }
 
-.review-application-username {
+.ad-view-review-application-username {
   margin: 0;
   font-weight: 600;
   font-size: 16px;
   color: #1f2937;
 }
 
-.review-application-date {
+.ad-view-review-application-date {
   font-size: 12px;
   color: #9ca3af;
 }
 
-.review-application-memo {
+.ad-view-review-application-memo {
   margin: 0;
   margin-top: 4px;
   font-size: 16px;
@@ -434,7 +511,7 @@
 }
 
 /* 모달 스타일 */
-.modal-overlay {
+.ad-view-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -447,7 +524,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.ad-view-modal-content {
   background-color: white;
   border-radius: 12px;
   padding: 32px;
@@ -458,18 +535,18 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.modal-title {
+.ad-view-modal-title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 24px;
   color: #1f2937;
 }
 
-.modal-form-group {
+.ad-view-modal-form-group {
   margin-bottom: 24px;
 }
 
-.modal-label {
+.ad-view-modal-label {
   display: block;
   font-size: 14px;
   font-weight: 600;
@@ -477,7 +554,7 @@
   margin-bottom: 8px;
 }
 
-.modal-textarea {
+.ad-view-modal-textarea {
   width: 100%;
   padding: 12px;
   font-size: 15px;
@@ -488,18 +565,18 @@
   outline: none;
 }
 
-.modal-textarea:focus {
+.ad-view-modal-textarea:focus {
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.modal-actions {
+.ad-view-modal-actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
 }
 
-.modal-cancel-btn {
+.ad-view-modal-cancel-btn {
   padding: 10px 24px;
   font-size: 16px;
   font-weight: 600;
@@ -512,17 +589,17 @@
   transition: all 0.2s;
 }
 
-.modal-cancel-btn:hover:not(:disabled) {
+.ad-view-modal-cancel-btn:hover:not(:disabled) {
   background-color: #f9fafb;
   border-color: #9ca3af;
 }
 
-.modal-cancel-btn:disabled {
+.ad-view-modal-cancel-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.modal-submit-btn {
+.ad-view-modal-submit-btn {
   padding: 10px 24px;
   font-size: 16px;
   font-weight: 600;
@@ -535,25 +612,25 @@
   transition: all 0.2s;
 }
 
-.modal-submit-btn:hover:not(:disabled) {
+.ad-view-modal-submit-btn:hover:not(:disabled) {
   background-color: #5568d3;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
 }
 
-.modal-submit-btn:disabled {
+.ad-view-modal-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }
 
 /* 로딩 및 에러 메시지 */
-.loading-message,
-.error-message {
+.ad-view-loading-message,
+.ad-view-error-message {
   padding: 40px;
   text-align: center;
 }
 
-.error-message {
+.ad-view-error-message {
   color: red;
 }
