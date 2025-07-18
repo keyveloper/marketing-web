@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// API 기본 URL 설정
-export const API_BASE_URL = 'http://localhost:8080'; // 실제 서버 주소로 변경
+// API 기본 URL 설정 (환경에 따라 자동 변경)
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
 // axios 인스턴스 생성
 const apiClient = axios.create({
