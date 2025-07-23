@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from 'aws-amplify/auth'
 import { issueInfluencerProfileDraft } from '../api/userProfileApi.js'
 import CreateProfileInfluencer from './CreateProfileInfluencer.jsx'
+import MyReviews from '../components/MyReviews.jsx'
+import TimelineInsta from '../components/TimelineInsta.jsx'
 import './DashboardInfluencer.css'
 
 function DashboardInfluencer() {
@@ -22,6 +24,91 @@ function DashboardInfluencer() {
     upcomingEvents: 2
   })
 
+  // 좋아요 Mock 데이터 (다양한 크기)
+  const favoritesData = [
+    { id: 1, imageUrl: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=400&fit=crop', size: '1x1', title: '카페 리뷰' },
+    { id: 2, imageUrl: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=400&fit=crop', size: '2x1', title: '뷰티 제품' },
+    { id: 3, imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=400&fit=crop', size: '1x1', title: '패션 아이템' },
+    { id: 4, imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=800&fit=crop', size: '1x2', title: '레스토랑' },
+    { id: 5, imageUrl: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400&h=400&fit=crop', size: '1x1', title: '햄버거' },
+    { id: 6, imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=400&fit=crop', size: '2x1', title: '헤드폰' },
+    { id: 7, imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop', size: '1x1', title: '시계' },
+    { id: 8, imageUrl: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=400&fit=crop', size: '1x1', title: '카메라' },
+    { id: 9, imageUrl: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=800&fit=crop', size: '1x2', title: '선글라스' },
+    { id: 10, imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop', size: '1x1', title: '운동화' },
+    { id: 11, imageUrl: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800&h=400&fit=crop', size: '2x1', title: '와인' },
+    { id: 12, imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=400&fit=crop', size: '1x1', title: '스니커즈' },
+  ]
+
+  // 타임라인 Mock 데이터
+  const timelinePosts = [
+    {
+      id: 1,
+      username: '카페_브랜드',
+      userAvatar: 'https://i.pravatar.cc/150?img=1',
+      location: '서울 강남구',
+      imageUrl: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&h=800&fit=crop',
+      caption: '새로운 메뉴가 출시되었습니다! 많은 관심 부탁드립니다 ☕✨',
+      likes: 234,
+      isLiked: false,
+      isSaved: false,
+      timestamp: Date.now() - 2 * 60 * 60 * 1000, // 2시간 전
+      comments: [
+        { username: 'user1', text: '너무 맛있어 보여요!' },
+        { username: 'user2', text: '저도 가보고 싶네요 👍' },
+        { username: 'user3', text: '위치가 어디인가요?' },
+      ],
+    },
+    {
+      id: 2,
+      username: '뷰티_브랜드',
+      userAvatar: 'https://i.pravatar.cc/150?img=5',
+      location: '부산 해운대구',
+      imageUrl: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=800&fit=crop',
+      caption: '신상품 립스틱 컬렉션 💄 다양한 컬러로 만나보세요!',
+      likes: 567,
+      isLiked: true,
+      isSaved: false,
+      timestamp: Date.now() - 5 * 60 * 60 * 1000, // 5시간 전
+      comments: [
+        { username: 'beauty_lover', text: '색상이 너무 예뻐요' },
+        { username: 'makeup_fan', text: '가격은 얼마인가요?' },
+      ],
+    },
+    {
+      id: 3,
+      username: '패션_스토어',
+      userAvatar: 'https://i.pravatar.cc/150?img=8',
+      location: '제주도',
+      imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&h=800&fit=crop',
+      caption: '여름 시즌 신상 의류 입고 🌞 편안한 착용감과 트렌디한 디자인!',
+      likes: 892,
+      isLiked: false,
+      isSaved: true,
+      timestamp: Date.now() - 24 * 60 * 60 * 1000, // 1일 전
+      comments: [
+        { username: 'fashion_queen', text: '사이즈는 어떻게 되나요?' },
+      ],
+    },
+    {
+      id: 4,
+      username: '레스토랑_공식',
+      userAvatar: 'https://i.pravatar.cc/150?img=12',
+      location: '서울 종로구',
+      imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=800&fit=crop',
+      caption: '오늘의 추천 메뉴 🍝 신선한 재료로 만든 파스타!',
+      likes: 445,
+      isLiked: false,
+      isSaved: false,
+      timestamp: Date.now() - 3 * 24 * 60 * 60 * 1000, // 3일 전
+      comments: [
+        { username: 'foodie123', text: '진짜 맛있겠다' },
+        { username: 'pasta_lover', text: '예약 가능한가요?' },
+        { username: 'yummy_food', text: '다음 주에 가볼게요!' },
+      ],
+    },
+  ]
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -38,8 +125,7 @@ function DashboardInfluencer() {
   const menuItems = [
     { id: 'overview', label: '대시보드 개요', icon: '📊' },
     { id: 'myprofile', label: '내 프로필', icon: '👤' },
-    { id: 'applications', label: '신청 현황', icon: '📋' },
-    { id: 'calendar', label: '달력', icon: '📅' },
+    { id: 'applications', label: '나의 리뷰', icon: '📋' },
     { id: 'favorites', label: '좋아요', icon: '❤️' },
     { id: 'timeline', label: '타임라인', icon: '⏰' },
     { id: 'messages', label: 'DM 메시지', icon: '💬' },
@@ -175,10 +261,7 @@ function DashboardInfluencer() {
       case 'applications':
         return (
           <div className="influ-dashboard-section">
-            <h2 className="influ-dashboard-title">신청 현황</h2>
-            <div className="influ-content-card">
-              <p>신청한 광고 목록이 여기에 표시됩니다.</p>
-            </div>
+            <MyReviews onAdClick={(adId) => navigate(`/advertisement/${adId}`)} />
           </div>
         )
 
@@ -196,8 +279,19 @@ function DashboardInfluencer() {
         return (
           <div className="influ-dashboard-section">
             <h2 className="influ-dashboard-title">좋아요</h2>
-            <div className="influ-content-card">
-              <p>좋아요한 광고 목록이 여기에 표시됩니다.</p>
+            <div className="influ-favorites-grid">
+              {favoritesData.map((item) => (
+                <div
+                  key={item.id}
+                  className={`influ-favorite-item influ-favorite-${item.size}`}
+                  onClick={() => navigate(`/advertisement/${item.id}`)}
+                >
+                  <img src={item.imageUrl} alt={item.title} />
+                  <div className="influ-favorite-overlay">
+                    <span className="influ-favorite-title">{item.title}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )
@@ -205,9 +299,10 @@ function DashboardInfluencer() {
       case 'timeline':
         return (
           <div className="influ-dashboard-section">
-            <h2 className="influ-dashboard-title">타임라인</h2>
-            <div className="influ-content-card">
-              <p>활동 타임라인이 여기에 표시됩니다.</p>
+            <div className="influ-timeline-container">
+              {timelinePosts.map((post) => (
+                <TimelineInsta key={post.id} post={post} />
+              ))}
             </div>
           </div>
         )

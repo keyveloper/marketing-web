@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import './MyReviews.css'
 
 // 남은 일수 계산 함수
@@ -15,6 +18,7 @@ const calculateDaysLeft = (recruitmentEndAt) => {
 
 function MyReviews({ onAdClick }) {
   const [activeTab, setActiveTab] = useState('applied') // applied, ongoing, completed, calendar
+  const [calendarSubTab, setCalendarSubTab] = useState('start') // start, end
 
   // Mock 데이터 - 실제로는 API로 가져와야 함
   const mockReviews = {
@@ -132,9 +136,97 @@ function MyReviews({ onAdClick }) {
   }
 
   const renderCalendarView = () => {
+    // Mock 일정 데이터 - FullCalendar 형식
+    const events = [
+      {
+        id: '1',
+        title: '카페 리뷰 작성',
+        start: '2025-12-10',
+        end: '2025-12-15',
+        backgroundColor: '#667eea',
+        borderColor: '#667eea',
+        extendedProps: {
+          status: '진행중',
+        },
+      },
+      {
+        id: '2',
+        title: '뷰티 제품 체험',
+        start: '2025-12-12',
+        end: '2025-12-18',
+        backgroundColor: '#764ba2',
+        borderColor: '#764ba2',
+        extendedProps: {
+          status: '진행중',
+        },
+      },
+      {
+        id: '3',
+        title: '패션 의류 리뷰',
+        start: '2025-12-20',
+        end: '2025-12-25',
+        backgroundColor: '#10b981',
+        borderColor: '#10b981',
+        extendedProps: {
+          status: '완료',
+        },
+      },
+      {
+        id: '4',
+        title: '레스토랑 방문 리뷰',
+        start: '2025-12-22',
+        backgroundColor: '#f59e0b',
+        borderColor: '#f59e0b',
+        extendedProps: {
+          status: '신청',
+        },
+      },
+    ]
+
+    // 시작일/종료일 기준에 따라 이벤트 필터링 (여기서는 동일한 데이터 사용)
+    const filteredEvents = calendarSubTab === 'start' ? events : events
+
+    const handleEventClick = (info) => {
+      alert(`일정: ${info.event.title}\n상태: ${info.event.extendedProps.status}`)
+    }
+
     return (
       <div className="my-reviews-calendar">
-        <p>달력 뷰 (추후 구현)</p>
+        {/* 달력 서브 네비게이션 */}
+        <div className="calendar-sub-nav">
+          <button
+            className={`calendar-sub-tab ${calendarSubTab === 'start' ? 'active' : ''}`}
+            onClick={() => setCalendarSubTab('start')}
+          >
+            시작일 기준
+          </button>
+          <button
+            className={`calendar-sub-tab ${calendarSubTab === 'end' ? 'active' : ''}`}
+            onClick={() => setCalendarSubTab('end')}
+          >
+            종료일 기준
+          </button>
+        </div>
+
+        {/* FullCalendar */}
+        <div className="fullcalendar-wrapper">
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={filteredEvents}
+            eventClick={handleEventClick}
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,dayGridWeek',
+            }}
+            locale="ko"
+            height="auto"
+            eventDisplay="block"
+            dayMaxEvents={3}
+            moreLinkText="개 더보기"
+          />
+        </div>
       </div>
     )
   }

@@ -318,6 +318,13 @@
   animation: fadeIn 0.5s ease;
 }
 
+/* Timeline Container */
+.influ-timeline-container {
+  max-width: 614px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
