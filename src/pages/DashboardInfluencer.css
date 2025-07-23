@@ -325,6 +325,82 @@
   padding: 20px 0;
 }
 
+/* Favorites Grid (Masonry Style) */
+.influ-favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 200px;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.influ-favorite-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.influ-favorite-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.influ-favorite-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.influ-favorite-item:hover img {
+  transform: scale(1.05);
+}
+
+.influ-favorite-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.influ-favorite-item:hover .influ-favorite-overlay {
+  opacity: 1;
+}
+
+.influ-favorite-title {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 다양한 크기 설정 */
+.influ-favorite-1x1 {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.influ-favorite-2x1 {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.influ-favorite-1x2 {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+.influ-favorite-2x2 {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -355,6 +431,11 @@
   .influ-main-content-grid {
     grid-template-columns: 1fr;
   }
+
+  .influ-favorites-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 180px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -375,6 +456,26 @@
 
   .influ-dashboard-title {
     font-size: 24px;
+  }
+
+  .influ-favorites-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 160px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .influ-favorites-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 200px;
+  }
+
+  .influ-favorite-2x1,
+  .influ-favorite-1x2,
+  .influ-favorite-2x2 {
+    grid-column: span 1;
+    grid-row: span 1;
   }
 }
 
