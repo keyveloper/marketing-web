@@ -9,6 +9,7 @@ import './config/cognito'
 // Pages
 import Home from './pages/Home.jsx'
 import Advertisement from './pages/Advertisement.jsx'
+import MainAdvertisements from './pages/MainAdvertisements.jsx'
 import Login from './pages/Login.jsx'
 import SignUp from './pages/SignUp.jsx'
 import VerifyEmail from './pages/VerifyEmail.jsx'
@@ -297,6 +298,7 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/advertisements" element={<MainAdvertisements />} />
           <Route path="/advertisement/:id" element={<Advertisement />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />

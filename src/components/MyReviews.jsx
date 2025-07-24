@@ -2,19 +2,8 @@ import { useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import AdCard from './AdCard.jsx'
 import './MyReviews.css'
-
-// 남은 일수 계산 함수
-const calculateDaysLeft = (recruitmentEndAt) => {
-  const now = Date.now()
-  const endTime = recruitmentEndAt
-  const diffMs = endTime - now
-  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
-
-  if (diffDays < 0) return '마감'
-  if (diffDays === 0) return '오늘 마감'
-  return `D-${diffDays}`
-}
 
 function MyReviews({ onAdClick }) {
   const [activeTab, setActiveTab] = useState('applied') // applied, ongoing, completed, calendar
@@ -94,42 +83,7 @@ function MyReviews({ onAdClick }) {
     return (
       <div className="my-reviews-grid">
         {reviews.map((review) => (
-          <div
-            key={review.id}
-            className="ad-card"
-            onClick={() => onAdClick && onAdClick(review.id)}
-          >
-            {/* 이미지 영역 */}
-            <div className="ad-card-image">
-              <img src={review.imageUrl} alt={review.title} />
-            </div>
-
-            {/* 정보 영역 */}
-            <div className="ad-card-info">
-              {/* channelType, reviewType */}
-              <div className="ad-card-badges">
-                <span className="badge badge-channel">{review.channelType}</span>
-                <span className="badge badge-review">{review.reviewType}</span>
-              </div>
-
-              {/* title */}
-              <h3 className="ad-card-title">{review.title}</h3>
-              <br />
-
-              {/* itemInfo */}
-              <p className="ad-card-item-info">{review.itemInfo}</p>
-
-              {/* 하단: 모집 정보 & 남은 일수 */}
-              <div className="ad-card-footer">
-                <span className="ad-card-recruitment">
-                  {review.currentApplicants}/{review.maxApplicants}
-                </span>
-                <span className="ad-card-deadline">
-                  {calculateDaysLeft(review.recruitmentEndAt)}
-                </span>
-              </div>
-            </div>
-          </div>
+          <AdCard key={review.id} adData={review} onClick={onAdClick} />
         ))}
       </div>
     )
