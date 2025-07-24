@@ -32,6 +32,7 @@ function App() {
   const [isDragging, setIsDragging] = useState(false)
   const [startAngle, setStartAngle] = useState(0)
   const [menuExpanded, setMenuExpanded] = useState(false)
+  const [isNotiOpen, setIsNotiOpen] = useState(false)
 
   // 인증 상태 확인
   useEffect(() => {
@@ -316,6 +317,69 @@ function App() {
       <footer className="footer-section">
         <p>Footer - 연락처 및 정보</p>
       </footer>
+
+      {/* ===== Notification Floating Button (Right Middle) ===== */}
+      <div
+        className="noti-floating-container"
+        onMouseEnter={() => setIsNotiOpen(true)}
+        onMouseLeave={() => setIsNotiOpen(false)}
+      >
+        <div className="noti-floating-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </div>
+
+        {/* Notification Panel */}
+        {isNotiOpen && (
+          <div className="noti-panel">
+            <div className="noti-header">
+              <h3>알림</h3>
+            </div>
+            <div className="noti-list">
+              <div className="noti-item">
+                <div className="noti-icon">📢</div>
+                <div className="noti-content">
+                  <p className="noti-title">새로운 광고 신청이 있습니다</p>
+                  <p className="noti-time">5분 전</p>
+                </div>
+              </div>
+              <div className="noti-item">
+                <div className="noti-icon">✅</div>
+                <div className="noti-content">
+                  <p className="noti-title">리뷰가 승인되었습니다</p>
+                  <p className="noti-time">1시간 전</p>
+                </div>
+              </div>
+              <div className="noti-item">
+                <div className="noti-icon">💬</div>
+                <div className="noti-content">
+                  <p className="noti-title">새로운 메시지가 도착했습니다</p>
+                  <p className="noti-time">3시간 전</p>
+                </div>
+              </div>
+              <div className="noti-item">
+                <div className="noti-icon">⭐</div>
+                <div className="noti-content">
+                  <p className="noti-title">광고가 마감되었습니다</p>
+                  <p className="noti-time">어제</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* ADVERTISER 사용자를 위한 Floating 버튼 */}
       {userType && userType.startsWith('ADVERTISER') && (

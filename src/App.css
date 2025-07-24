@@ -154,6 +154,147 @@
   min-height: auto;
 }
 
+/* ===== Notification Floating Button (Right Middle) ===== */
+.noti-floating-container {
+  position: fixed;
+  right: 0;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.noti-floating-container::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  width: 80px;
+  height: 120px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 60px 0 0 60px;
+  box-shadow: -4px 4px 16px rgba(102, 126, 234, 0.3);
+  z-index: -1;
+  transition: all 0.3s ease;
+}
+
+.noti-floating-container:hover::before {
+  width: 90px;
+  box-shadow: -6px 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.noti-floating-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  margin-right: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.noti-floating-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.noti-floating-btn svg {
+  color: #667eea;
+}
+
+.noti-panel {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 350px;
+  max-height: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.noti-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.noti-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+}
+
+.noti-list {
+  max-height: 440px;
+  overflow-y: auto;
+}
+
+.noti-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.noti-item:hover {
+  background-color: #f8f9fa;
+}
+
+.noti-item:last-child {
+  border-bottom: none;
+}
+
+.noti-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.noti-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.noti-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  line-height: 1.4;
+}
+
+.noti-time {
+  margin: 0;
+  font-size: 12px;
+  color: #95a5a6;
+}
+
 /* ===== Floating Button ===== */
 .floating-btn-container {
   position: fixed;
