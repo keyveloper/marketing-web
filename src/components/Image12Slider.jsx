@@ -5,7 +5,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import './Image12Slider.css'
 
-function Image12Slider({ imageUrls = [], adCards = [], onAdClick, spaceBetween = 20 }) {
+function Image12Slider({ imageUrls = [], adCards = [], onAdClick, likeApi, spaceBetween = 20 }) {
   console.log(`imageUrls: ${imageUrls}`)
   console.log('imageUrls:', Array.isArray(imageUrls), imageUrls)
   console.log('adCards:', adCards)
@@ -37,7 +37,7 @@ function Image12Slider({ imageUrls = [], adCards = [], onAdClick, spaceBetween =
 
             return (
               <SwiperSlide key={index}>
-                <AdCard adData={adData} onClick={onAdClick} />
+                <AdCard adData={adData} onClick={onAdClick} likeApi={likeApi} />
               </SwiperSlide>
             )
           })
@@ -56,6 +56,7 @@ function Image12Slider({ imageUrls = [], adCards = [], onAdClick, spaceBetween =
                   recruitNumber: 10,
                 }}
                 onClick={onAdClick}
+                likeApi={likeApi}
               />
             </SwiperSlide>
           ))
