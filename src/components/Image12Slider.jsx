@@ -25,16 +25,14 @@ function Image12Slider({ imageUrls = [], adCards = [], onAdClick, spaceBetween =
             const adData = adCard ? {
               ...adCard,
               imageUrl: url,
-              currentApplicants: 0,
-              maxApplicants: 10,
             } : {
               imageUrl: url,
               title: `이미지 ${index + 1}`,
               channelType: 'INSTAGRAM',
               reviewType: 'VISIT',
               itemInfo: '상품 정보 없음',
-              currentApplicants: 0,
-              maxApplicants: 10,
+              appliedCount: 0,
+              recruitNumber: 10,
             }
 
             return (
@@ -54,8 +52,8 @@ function Image12Slider({ imageUrls = [], adCards = [], onAdClick, spaceBetween =
                   reviewType: 'VISIT',
                   title: '샘플 제목',
                   itemInfo: '샘플 상품 정보',
-                  currentApplicants: 0,
-                  maxApplicants: 10,
+                  appliedCount: 0,
+                  recruitNumber: 10,
                 }}
                 onClick={onAdClick}
               />

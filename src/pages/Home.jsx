@@ -4,7 +4,8 @@ import Image12Slider from '../components/Image12Slider.jsx'
 import {
   getInitFreshAdvertisements,
   getInitDeadlineAdvertisements,
-} from '../api/advertisementApi.js'
+  getInitHotAdvertisements,
+} from '../api/advertisementInitApi.js'
 import './Home.css'
 
 function Home() {
@@ -13,10 +14,12 @@ function Home() {
   // main List: cut 12 items
   const [freshAdImageUrl, setFreshAdImageUrl] = useState([])
   const [deadlineAdImageUrl, setDeadlineAdImageUrl] = useState([])
+  const [hotAdImageUrl, setHotAdImageUrl] = useState([])
 
   // 광고 카드 전체 데이터 (ID 포함)
   const [freshAdCards, setFreshAdCards] = useState([])
   const [deadlineAdCards, setDeadlineAdCards] = useState([])
+  const [hotAdCards, setHotAdCards] = useState([])
 
   // 초기화 - Fresh & Deadline 광고 데이터 로드
   useEffect(() => {
@@ -46,6 +49,18 @@ function Home() {
           setDeadlineAdImageUrl(deadlineUrls)
         } else {
           console.error('❌ Deadline 광고 로드 실패:', deadlineRes.error)
+        }
+
+        // Hot 광고 데이터 로드
+        const hotRes = await getInitHotAdvertisements()
+        if (hotRes.success) {
+          const cards = hotRes.result?.thumbnailAdCards || []
+          setHotAdCards(cards)
+          const hotUrls = cards.map(card => card.presignedUrl)
+          console.log('✅ Hot 광고 URLs:', hotUrls)
+          setHotAdImageUrl(hotUrls)
+        } else {
+          console.error('❌ Hot 광고 로드 실패:', hotRes.error)
         }
       } catch (error) {
         console.error('❌ 초기화 데이터 로드 실패:', error)
@@ -95,8 +110,8 @@ function Home() {
           <div className="slider-container">
             <h2 className="slider-title">🔥 인기있는</h2>
             <Image12Slider
-              imageUrls={freshAdImageUrl}
-              adCards={freshAdCards}
+              imageUrls={hotAdImageUrl}
+              adCards={hotAdCards}
               onAdClick={handleAdClick}
             />
           </div>

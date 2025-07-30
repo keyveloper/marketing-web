@@ -23,6 +23,64 @@
   height: 200px;
   overflow: hidden;
   flex-shrink: 0;
+  position: relative;
+}
+
+/* ===== Heart 아이콘 버튼 ===== */
+.ad-card-heart-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.ad-card-heart-btn:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.ad-card-heart-btn:active {
+  transform: scale(0.95);
+}
+
+.heart-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.heart-outline {
+  stroke: #888;
+}
+
+.heart-filled {
+  fill: #e74c3c;
+  stroke: #e74c3c;
+  animation: heartPulse 0.3s ease;
+}
+
+@keyframes heartPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .ad-card-image img {
