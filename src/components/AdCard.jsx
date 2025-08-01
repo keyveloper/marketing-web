@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './AdCard.css'
 
 // 남은 일수 계산 함수
@@ -50,7 +50,13 @@ const HeartIcon = ({ isLiked, onClick }) => {
 
 function AdCard({ adData, onClick, onLikeToggle, likeApi }) {
   // isLiked 상태: adData.isLiked가 'LIKE'면 true (ThumbnailAdCardWithLikedInfo의 LikeStatus 참고)
+  console.log('🔥 AdCard adData:', adData.advertisementId, 'isLiked:', adData.isLiked)
   const [isLiked, setIsLiked] = useState(adData.isLiked === 'LIKE')
+
+  // adData.isLiked가 변경되면 상태 업데이트
+  useEffect(() => {
+    setIsLiked(adData.isLiked === 'LIKE')
+  }, [adData.isLiked])
 
   const handleLikeClick = async () => {
     if (likeApi) {

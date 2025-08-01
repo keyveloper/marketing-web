@@ -25,7 +25,7 @@ export const likeAdvertisement = async (advertisementId) => {
 
     // API 호출
     const response = await apiClient.post(
-      '/like/ad',
+      '/api/v1/like/ad',
       requestBody,
       {
         headers: {
@@ -79,7 +79,7 @@ export const unlikeAdvertisement = async (advertisementId) => {
 
     // API 호출
     const response = await apiClient.post(
-      '/like/ad/unlike',
+      '/api/v1/like/ad/unlike',
       requestBody,
       {
         headers: {
@@ -120,7 +120,7 @@ export const getLikedAdsByInfluencerId = async (influencerId) => {
     console.log(`✅ 좋아요한 광고 목록 조회 시작... influencerId: ${influencerId}`);
 
     // API 호출
-    const response = await apiClient.get(`/like/influencer/${influencerId}`);
+    const response = await apiClient.get(`/api/v1/like/influencer/${influencerId}`);
 
     console.log('✅ 좋아요한 광고 목록 조회 성공:', response);
 
@@ -154,7 +154,7 @@ export const getInfluencersByAdId = async (advertisementId) => {
     console.log(`✅ 좋아요한 인플루언서 목록 조회 시작... advertisementId: ${advertisementId}`);
 
     // API 호출
-    const response = await apiClient.get(`/like/advertisement/${advertisementId}`);
+    const response = await apiClient.get(`/api/v1/like/advertisement/${advertisementId}`);
 
     console.log('✅ 좋아요한 인플루언서 목록 조회 성공:', response);
 
