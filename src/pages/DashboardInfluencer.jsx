@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from 'aws-amplify/auth'
-import { issueInfluencerProfileDraft } from '../api/userProfileApi.js'
+import { issueInfluencerProfileDraft, getInfluencerProfile } from '../api/userProfileApi.js'
 import CreateProfileInfluencer from './CreateProfileInfluencer.jsx'
 import MyReviews from '../components/MyReviews.jsx'
 import TimelineInsta from '../components/TimelineInsta.jsx'
@@ -13,6 +13,9 @@ function DashboardInfluencer() {
   const [user, setUser] = useState(null)
   const [activeMenu, setActiveMenu] = useState('overview')
   const [profileDraft, setProfileDraft] = useState(null)
+  const [profileData, setProfileData] = useState(null)
+  const [profileLoading, setProfileLoading] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
 
   // Mock data - 실제로는 API로 가져와야 함
   const [dashboardData, setDashboardData] = useState({
@@ -132,7 +135,38 @@ function DashboardInfluencer() {
     { id: 'settings', label: '설정', icon: '⚙️' }
   ]
 
-  // 프로필 Draft 발급 핸들러
+  // 프로필 조회 핸들러
+  const fetchProfile = async () => {
+    try {
+      setProfileLoading(true)
+      console.log('🟦 Profile 조회 요청 중...')
+
+      // user.userId로 프로필 조회
+      const influencerId = user?.userId || userId
+      if (!influencerId) {
+        console.log('🟦 userId 없음')
+        setProfileData(null)
+        return
+      }
+
+      const result = await getInfluencerProfile(influencerId)
+
+      if (result.success && result.result) {
+        console.log('✅ Profile 조회 성공:', result.result)
+        setProfileData(result.result)
+      } else {
+        console.log('🟦 Profile 없음, 새로 만들기 필요')
+        setProfileData(null)
+      }
+    } catch (error) {
+      console.error('❌ Profile 조회 실패:', error)
+      setProfileData(null)
+    } finally {
+      setProfileLoading(false)
+    }
+  }
+
+  // 프로필 Draft 발급 핸들러 (새로 만들기 / 수정)
   const handleCreateProfile = async () => {
     try {
       console.log('🟦 Profile Draft 발급 요청 중...')
@@ -141,7 +175,7 @@ function DashboardInfluencer() {
       if (result.success) {
         console.log('✅ Profile Draft 발급 성공, draftId:', result.draftId)
         setProfileDraft(result.draft)
-        setActiveMenu('myprofile')
+        setIsEditMode(true)
       } else {
         console.error('❌ Profile Draft 발급 실패:', result.error)
         alert(`Profile Draft 발급 실패\n\n${result.error}`)
@@ -154,9 +188,11 @@ function DashboardInfluencer() {
 
   // 메뉴 클릭 핸들러
   const handleMenuClick = async (menuId) => {
-    if (menuId === 'myprofile' && !profileDraft) {
-      // 프로필 메뉴 클릭 시 Draft가 없으면 발급
-      await handleCreateProfile()
+    if (menuId === 'myprofile') {
+      // 프로필 메뉴 클릭 시 프로필 조회
+      setActiveMenu(menuId)
+      setIsEditMode(false)
+      await fetchProfile()
     } else {
       setActiveMenu(menuId)
     }
@@ -248,11 +284,43 @@ function DashboardInfluencer() {
       case 'myprofile':
         return (
           <div className="influ-dashboard-section">
-            {profileDraft ? (
-              <CreateProfileInfluencer draftId={profileDraft.id} draft={profileDraft} />
-            ) : (
+            {profileLoading ? (
               <div className="influ-content-card">
                 <p>프로필 정보를 불러오는 중...</p>
+              </div>
+            ) : isEditMode && profileDraft ? (
+              // 수정 모드: CreateProfileInfluencer에 기존 데이터 전달
+              <CreateProfileInfluencer
+                draftId={profileDraft.id}
+                draft={profileDraft}
+                existingData={profileData}
+              />
+            ) : profileData ? (
+              // 조회 모드: 데이터가 있으면 수정 가능한 상태로 CreateProfileInfluencer 표시
+              <CreateProfileInfluencer
+                draftId={profileData.profileApiResult?.userProfileDraftId}
+                draft={null}
+                existingData={profileData}
+              />
+            ) : (
+              // 프로필 없음: 새로 만들기 버튼 표시
+              <div className="influ-content-card influ-profile-empty">
+                <div className="influ-profile-empty-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="80" height="80">
+                    <path
+                      fill="#ccc"
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="influ-profile-empty-title">프로필이 없습니다</h3>
+                <p className="influ-profile-empty-desc">프로필을 생성하여 나를 소개해보세요!</p>
+                <button
+                  className="influ-profile-create-btn"
+                  onClick={handleCreateProfile}
+                >
+                  프로필 새로 만들기
+                </button>
               </div>
             )}
           </div>

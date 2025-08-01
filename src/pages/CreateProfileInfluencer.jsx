@@ -5,7 +5,7 @@ import { uploadInfluencerProfileInfo } from '../api/userProfileApi.js';
 import './ProfileAdvertiser.css';
 import './CreateProfileAdvertiser.css';
 
-export default function CreateProfileInfluencer({ draftId: propDraftId, draft: propDraft }) {
+export default function CreateProfileInfluencer({ draftId: propDraftId, draft: propDraft, existingData }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { draftId: stateDraftId, draft: stateDraft } = location.state || {};
@@ -33,15 +33,29 @@ export default function CreateProfileInfluencer({ draftId: propDraftId, draft: p
   });
 
   useEffect(() => {
-    // draftId가 없으면 임시 draft 생성 (개발용)
-    if (!draftId) {
+    // existingData가 있으면 폼에 데이터 채우기
+    if (existingData) {
+      console.log('✅ 기존 프로필 데이터로 폼 초기화:', existingData);
+      const profileInfo = existingData.profileApiResult;
+      const profileImageUrl = existingData.profileImage?.presignedUrl;
+      const backgroundImageUrl = existingData.backgroundImage?.presignedUrl;
+
+      setFormData(prev => ({
+        ...prev,
+        title: profileInfo?.job || '',
+        description: profileInfo?.introduction || '',
+        channelUrl: profileInfo?.channelUrl || '',
+        profileImagePreview: profileImageUrl || '',
+        backgroundImagePreview: backgroundImageUrl || '',
+      }));
+    } else if (!draftId) {
       console.log('⚠️ Draft가 없습니다. 임시 Draft를 생성합니다.');
       const tempDraftId = 'temp-draft-' + Date.now();
       console.log('✅ 임시 Draft ID:', tempDraftId);
     } else {
       console.log('✅ Draft 정보:', { draftId, draft });
     }
-  }, [draftId, draft]);
+  }, [draftId, draft, existingData]);
 
   // 입력 필드 변경 핸들러
   const handleInputChange = (e) => {
@@ -364,7 +378,7 @@ export default function CreateProfileInfluencer({ draftId: propDraftId, draft: p
               className="btn-submit"
               disabled={loading}
             >
-              {loading ? '저장 중...' : '프로필 생성'}
+              {loading ? '저장 중...' : '프로필 업데이트'}
             </button>
           </div>
         </form>

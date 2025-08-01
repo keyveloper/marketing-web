@@ -208,6 +208,50 @@ export const uploadAdvertiserProfileInfo = async (userProfileDraftId, serviceInf
  * @param {string|null} job - 직업 (선택)
  * @returns {Promise<{success: boolean, result?: object, error?: string}>}
  */
+/**
+ * 인플루언서 프로필 조회
+ * @param {string} influencerId - 인플루언서 ID
+ * @returns {Promise<{success: boolean, result?: object, error?: string}>}
+ */
+export const getInfluencerProfile = async (influencerId) => {
+  try {
+    console.log(`✅ Influencer Profile 조회 요청 시작... influencerId: ${influencerId}`);
+
+    // API 호출
+    const response = await apiClient.get(`/profile/info/influencer/${influencerId}`);
+
+    console.log('✅ Influencer Profile 조회 성공:', response);
+
+    const { result, httpStatus, msaServiceErrorCode, errorMessage } = response;
+
+    // NOT_FOUND인 경우 프로필 없음
+    if (httpStatus === 'NOT_FOUND' || msaServiceErrorCode === 'NOT_FOUND_INFLUENCER_PROFILE') {
+      return {
+        success: true,
+        result: null,
+      };
+    }
+
+    return {
+      success: true,
+      result: result,
+    };
+  } catch (error) {
+    console.error('❌ Influencer Profile 조회 실패:', error);
+    // 404인 경우 프로필 없음으로 처리
+    if (error.response?.status === 404) {
+      return {
+        success: true,
+        result: null,
+      };
+    }
+    return {
+      success: false,
+      error: error.response?.data?.errorMessage || error.message || 'Profile 조회 중 오류가 발생했습니다.',
+    };
+  }
+};
+
 export const uploadInfluencerProfileInfo = async (userProfileDraftId, introduction, job) => {
   try {
     // Cognito에서 idToken 가져오기

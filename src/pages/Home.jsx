@@ -6,6 +6,7 @@ import {
   getInitDeadlineAdvertisements,
   getInitHotAdvertisements,
 } from '../api/advertisementInitApi.js'
+import { likeAdvertisement, unlikeAdvertisement } from '../api/likeApi.js'
 import './Home.css'
 
 function Home() {
@@ -76,6 +77,27 @@ function Home() {
     navigate(`/advertisement/${advertisementId}`)
   }
 
+  // 좋아요/좋아요 취소 API 호출 핸들러
+  const handleLikeApi = async (advertisementId, isLiked) => {
+    console.log(`🟦 좋아요 API 호출 - ID: ${advertisementId}, isLiked: ${isLiked}`)
+
+    if (isLiked) {
+      // 좋아요 요청
+      const result = await likeAdvertisement(advertisementId)
+      if (!result.success) {
+        throw new Error(result.error)
+      }
+      return result
+    } else {
+      // 좋아요 취소 요청
+      const result = await unlikeAdvertisement(advertisementId)
+      if (!result.success) {
+        throw new Error(result.error)
+      }
+      return result
+    }
+  }
+
   return (
     <>
       <section className="banner-section">
@@ -104,6 +126,7 @@ function Home() {
               imageUrls={freshAdImageUrl}
               adCards={freshAdCards}
               onAdClick={handleAdClick}
+              likeApi={handleLikeApi}
             />
           </div>
 
@@ -113,6 +136,7 @@ function Home() {
               imageUrls={hotAdImageUrl}
               adCards={hotAdCards}
               onAdClick={handleAdClick}
+              likeApi={handleLikeApi}
             />
           </div>
 
@@ -122,6 +146,7 @@ function Home() {
               imageUrls={deadlineAdImageUrl}
               adCards={deadlineAdCards}
               onAdClick={handleAdClick}
+              likeApi={handleLikeApi}
             />
           </div>
         </div>
