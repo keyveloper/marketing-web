@@ -110,10 +110,10 @@ export const unlikeAdvertisement = async (advertisementId) => {
 };
 
 /**
- * 인플루언서가 좋아요한 광고 목록 조회
+ * 인플루언서가 좋아요한 광고 목록 조회 (썸네일 URL 포함)
  * GET /api/v1/like/influencer/{influencerId}
  * @param {string} influencerId - 인플루언서 UUID
- * @returns {Promise<{success: boolean, result?: {influencerId: string, advertisementIds: number[]}, error?: string}>}
+ * @returns {Promise<{success: boolean, result?: {likedAdvertisements: Array<{advertisementId: number, thumbnailUrl: string}>}, error?: string}>}
  */
 export const getLikedAdsByInfluencerId = async (influencerId) => {
   try {

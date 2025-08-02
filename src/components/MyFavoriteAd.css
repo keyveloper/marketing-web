@@ -1,0 +1,280 @@
+/* MyFavoriteAd - Lego Block Style Grid */
+.myfav-container {
+  width: 100%;
+  padding: 20px 0;
+}
+
+.myfav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 12px;
+}
+
+/* 카드 기본 스타일 */
+.myfav-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+
+.myfav-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* 레고 블럭 사이즈 - 1x1 정사각형 */
+.myfav-card-1x1 {
+  grid-column: span 1;
+  grid-row: span 1;
+  aspect-ratio: 1 / 1;
+}
+
+/* 레고 블럭 사이즈 - 가로 */
+.myfav-card-2x1 {
+  grid-column: span 2;
+  grid-row: span 1;
+  aspect-ratio: 2 / 1;
+}
+
+.myfav-card-3x1 {
+  grid-column: span 3;
+  grid-row: span 1;
+  aspect-ratio: 3 / 1;
+}
+
+/* 레고 블럭 사이즈 - 세로 */
+.myfav-card-1x2 {
+  grid-column: span 1;
+  grid-row: span 2;
+  aspect-ratio: 1 / 2;
+}
+
+.myfav-card-1x3 {
+  grid-column: span 1;
+  grid-row: span 3;
+  aspect-ratio: 1 / 3;
+}
+
+/* 레고 블럭 사이즈 - 큰 정사각형 */
+.myfav-card-2x2 {
+  grid-column: span 2;
+  grid-row: span 2;
+  aspect-ratio: 1 / 1;
+}
+
+/* 카드 이미지 */
+.myfav-card-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.myfav-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.myfav-card:hover .myfav-card-image img {
+  transform: scale(1.05);
+}
+
+.myfav-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  color: #bbb;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 오버레이 */
+.myfav-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.myfav-card:hover .myfav-card-overlay {
+  opacity: 1;
+}
+
+/* 배지 */
+.myfav-card-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.myfav-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.myfav-badge-channel {
+  background: rgba(102, 126, 234, 0.9);
+  color: white;
+}
+
+.myfav-badge-review {
+  background: rgba(118, 75, 162, 0.9);
+  color: white;
+}
+
+/* D-Day 배지 */
+.myfav-card-dday {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* 카드 정보 - 오버레이로 표시 */
+.myfav-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.myfav-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.myfav-card-item {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.myfav-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.myfav-card-recruit {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a5b4fc;
+}
+
+/* Empty State */
+.myfav-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.myfav-empty-icon {
+  margin-bottom: 24px;
+  opacity: 0.5;
+}
+
+.myfav-empty-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+}
+
+.myfav-empty-desc {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .myfav-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .myfav-card-3x1 {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 900px) {
+  .myfav-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .myfav-card-3x1 {
+    grid-column: span 2;
+    aspect-ratio: 2 / 1;
+  }
+
+  .myfav-card-1x3 {
+    grid-row: span 2;
+    aspect-ratio: 1 / 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .myfav-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .myfav-card-2x1,
+  .myfav-card-3x1 {
+    grid-column: span 2;
+    aspect-ratio: 2 / 1;
+  }
+
+  .myfav-card-2x2 {
+    grid-column: span 2;
+    aspect-ratio: 1 / 1;
+  }
+
+  .myfav-card-1x2,
+  .myfav-card-1x3 {
+    grid-row: span 2;
+    aspect-ratio: 1 / 2;
+  }
+}
