@@ -17,6 +17,17 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
+/* ===== 완료된 카드 (흑백 필터) ===== */
+.ad-card-completed {
+  filter: grayscale(100%);
+  opacity: 0.7;
+}
+
+.ad-card-completed:hover {
+  filter: grayscale(80%);
+  opacity: 0.85;
+}
+
 /* ===== 이미지 영역 (크기 유지) ===== */
 .ad-card-image {
   width: 200px;

@@ -48,7 +48,7 @@ const HeartIcon = ({ isLiked, onClick }) => {
   )
 }
 
-function AdCard({ adData, onClick, onLikeToggle, likeApi }) {
+function AdCard({ adData, onClick, onLikeToggle, likeApi, isCompleted = false }) {
   // isLiked 상태: adData.isLiked가 'LIKE'면 true (ThumbnailAdCardWithLikedInfo의 LikeStatus 참고)
   console.log('🔥 AdCard adData:', adData.advertisementId, 'isLiked:', adData.isLiked)
   const [isLiked, setIsLiked] = useState(adData.isLiked === 'LIKE')
@@ -77,7 +77,10 @@ function AdCard({ adData, onClick, onLikeToggle, likeApi }) {
   }
 
   return (
-    <div className="ad-card" onClick={() => onClick && onClick(adData.advertisementId || adData.id)}>
+    <div
+      className={`ad-card ${isCompleted ? 'ad-card-completed' : ''}`}
+      onClick={() => onClick && onClick(adData.advertisementId || adData.id)}
+    >
       {/* 이미지 영역 */}
       <div className="ad-card-image">
         {/* Heart 아이콘 - 우측 상단 */}
