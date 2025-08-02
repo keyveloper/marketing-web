@@ -634,3 +634,25 @@
 .ad-view-error-message {
   color: red;
 }
+
+/* 리뷰 신청 버튼 (INFLUENCER 전용) */
+.ad-view-review-apply-btn {
+  width: 100%;
+  padding: 16px 24px;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  background-color: #667eea;
+  color: #ffffff;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.ad-view-review-apply-btn:hover {
+  background-color: #5568d3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}

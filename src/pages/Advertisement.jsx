@@ -332,6 +332,15 @@ export default function Advertisement() {
               </div>
             )}
 
+            {/* INFLUENCER 전용: 리뷰 신청 버튼 */}
+            {userType === 'INFLUENCER' && (
+              <button
+                className="ad-view-review-apply-btn"
+                onClick={handleReviewButtonClick}
+              >
+                리뷰 신청하기
+              </button>
+            )}
 
           </section>
         </div>
