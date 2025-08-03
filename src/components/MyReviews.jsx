@@ -1,75 +1,81 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import AdCard from './AdCard.jsx'
+import { getMyApplications } from '../api/myApplicationApi.js'
 import './MyReviews.css'
 
 function MyReviews({ onAdClick }) {
   const [activeTab, setActiveTab] = useState('applied') // applied, ongoing, completed, calendar
-  const [calendarSubTab, setCalendarSubTab] = useState('start') // start, end
+  const [applications, setApplications] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  // Mock 데이터 - 실제로는 API로 가져와야 함
-  const mockReviews = {
-    applied: [
-      {
-        id: 1,
-        imageUrl: 'https://via.placeholder.com/300',
-        channelType: 'INSTAGRAM',
-        reviewType: 'VISIT',
-        title: '신청한 광고 1',
-        itemInfo: '상품 정보 예시',
-        recruitmentEndAt: Date.now() + 5 * 24 * 60 * 60 * 1000,
-        currentApplicants: 3,
-        maxApplicants: 10,
-      },
-      {
-        id: 2,
-        imageUrl: 'https://via.placeholder.com/300',
-        channelType: 'YOUTUBE',
-        reviewType: 'DELIVERY',
-        title: '신청한 광고 2',
-        itemInfo: '또 다른 상품 정보',
-        recruitmentEndAt: Date.now() + 3 * 24 * 60 * 60 * 1000,
-        currentApplicants: 7,
-        maxApplicants: 15,
-      },
-    ],
-    ongoing: [
-      {
-        id: 3,
-        imageUrl: 'https://via.placeholder.com/300',
-        channelType: 'BLOG',
-        reviewType: 'VISIT',
-        title: '진행 중인 리뷰 1',
-        itemInfo: '진행 중인 상품',
-        recruitmentEndAt: Date.now() + 10 * 24 * 60 * 60 * 1000,
-        currentApplicants: 5,
-        maxApplicants: 10,
-      },
-    ],
-    completed: [
-      {
-        id: 4,
-        imageUrl: 'https://via.placeholder.com/300',
-        channelType: 'INSTAGRAM',
-        reviewType: 'DELIVERY',
-        title: '완료된 리뷰 1',
-        itemInfo: '완료된 상품 정보',
-        recruitmentEndAt: Date.now() - 5 * 24 * 60 * 60 * 1000,
-        currentApplicants: 10,
-        maxApplicants: 10,
-      },
-    ],
+  // API로 신청 목록 조회
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        setLoading(true)
+        const result = await getMyApplications()
+        if (result.success && result.result?.thumbnailAdCardWithAppliedInfo) {
+          // 원본 API 응답을 그대로 저장
+          console.log('🔍 원본 API 응답:', result.result.thumbnailAdCardWithAppliedInfo)
+          setApplications(result.result.thumbnailAdCardWithAppliedInfo)
+        }
+      } catch (error) {
+        console.error('❌ 내 신청 목록 조회 실패:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchApplications()
+  }, [])
+
+  // 원본 데이터를 AdCard용으로 변환
+  const toAdCardData = (app) => {
+    const adInfo = app.thumbnailAdCardLikedInfo || {}
+    return {
+      advertisementId: adInfo.advertisementId,
+      imageUrl: adInfo.presignedUrl,
+      channelType: adInfo.channelType,
+      reviewType: adInfo.reviewType,
+      title: adInfo.title,
+      itemInfo: adInfo.itemInfo,
+      recruitmentEndAt: adInfo.recruitmentEndAt,
+      appliedCount: adInfo.appliedCount,
+      recruitNumber: adInfo.recruitNumber,
+      isLiked: adInfo.isLiked,
+      applyStatus: app.applicationReviewStatus,
+    }
   }
 
-  // 현재 탭의 리뷰 데이터
+  // 현재 탭의 리뷰 데이터 (applicationReviewStatus로 필터링)
   const getCurrentReviews = () => {
     if (activeTab === 'calendar') return []
-    return mockReviews[activeTab] || []
+
+    // ApplicationReviewStatus: PENDING(0), APPROVED(1), COMPLETED(2)
+    switch (activeTab) {
+      case 'applied':
+        return applications.filter(app => app.applicationReviewStatus === 'PENDING')
+      case 'ongoing':
+        return applications.filter(app => app.applicationReviewStatus === 'APPROVED')
+      case 'completed':
+        return applications.filter(app => app.applicationReviewStatus === 'COMPLETED')
+      default:
+        return applications
+    }
   }
 
   const renderCardGrid = () => {
+    if (loading) {
+      return (
+        <div className="my-reviews-empty">
+          <p>불러오는 중...</p>
+        </div>
+      )
+    }
+
     const reviews = getCurrentReviews()
 
     if (reviews.length === 0) {
@@ -82,97 +88,86 @@ function MyReviews({ onAdClick }) {
 
     return (
       <div className="my-reviews-grid">
-        {reviews.map((review) => (
-          <AdCard key={review.id} adData={review} onClick={onAdClick} />
-        ))}
+        {reviews.map((review) => {
+          const adData = toAdCardData(review)
+          return (
+            <AdCard
+              key={adData.advertisementId}
+              adData={adData}
+              onClick={onAdClick}
+              isCompleted={review.applicationReviewStatus === 'COMPLETED'}
+            />
+          )
+        })}
       </div>
     )
   }
 
   const renderCalendarView = () => {
-    // Mock 일정 데이터 - FullCalendar 형식
-    const events = [
-      {
-        id: '1',
-        title: '카페 리뷰 작성',
-        start: '2025-12-10',
-        end: '2025-12-15',
-        backgroundColor: '#667eea',
-        borderColor: '#667eea',
-        extendedProps: {
-          status: '진행중',
-        },
-      },
-      {
-        id: '2',
-        title: '뷰티 제품 체험',
-        start: '2025-12-12',
-        end: '2025-12-18',
-        backgroundColor: '#764ba2',
-        borderColor: '#764ba2',
-        extendedProps: {
-          status: '진행중',
-        },
-      },
-      {
-        id: '3',
-        title: '패션 의류 리뷰',
-        start: '2025-12-20',
-        end: '2025-12-25',
-        backgroundColor: '#10b981',
-        borderColor: '#10b981',
-        extendedProps: {
-          status: '완료',
-        },
-      },
-      {
-        id: '4',
-        title: '레스토랑 방문 리뷰',
-        start: '2025-12-22',
-        backgroundColor: '#f59e0b',
-        borderColor: '#f59e0b',
-        extendedProps: {
-          status: '신청',
-        },
-      },
-    ]
+    // 상태별 색상 매핑
+    const getStatusColor = (status) => {
+      switch (status) {
+        case 'APPROVED':
+          return { bg: '#667eea', border: '#667eea' } // 진행중 - 보라
+        case 'COMPLETED':
+          return { bg: '#9ca3af', border: '#9ca3af' } // 완료 - 회색
+        case 'PENDING':
+        default:
+          return { bg: '#f59e0b', border: '#f59e0b' } // 신청 - 주황
+      }
+    }
 
-    // 시작일/종료일 기준에 따라 이벤트 필터링 (여기서는 동일한 데이터 사용)
-    const filteredEvents = calendarSubTab === 'start' ? events : events
+    // timestamp를 YYYY-MM-DD 형식으로 변환
+    const formatDate = (timestamp) => {
+      if (!timestamp) return null
+      const date = new Date(timestamp)
+      return date.toISOString().split('T')[0]
+    }
+
+    // 원본 applications 데이터를 FullCalendar 이벤트로 변환
+    const events = applications
+      .filter(app => app.reviewStartAt && app.reviewEndAt) // 리뷰 일정이 있는 것만
+      .map(app => {
+        const adInfo = app.thumbnailAdCardLikedInfo || {}
+        const colors = getStatusColor(app.applicationReviewStatus)
+        // FullCalendar에서 end는 exclusive이므로 하루 추가
+        const endDate = new Date(app.reviewEndAt)
+        endDate.setDate(endDate.getDate() + 1)
+
+        return {
+          id: String(adInfo.advertisementId),
+          title: adInfo.title,
+          start: formatDate(app.reviewStartAt),
+          end: endDate.toISOString().split('T')[0],
+          backgroundColor: colors.bg,
+          borderColor: colors.border,
+          extendedProps: {
+            status: app.applicationReviewStatus,
+            advertisementId: adInfo.advertisementId,
+          },
+        }
+      })
 
     const handleEventClick = (info) => {
-      alert(`일정: ${info.event.title}\n상태: ${info.event.extendedProps.status}`)
+      const adId = info.event.extendedProps.advertisementId
+      if (onAdClick) {
+        onAdClick(adId)
+      }
     }
 
     return (
       <div className="my-reviews-calendar">
-        {/* 달력 서브 네비게이션 */}
-        <div className="calendar-sub-nav">
-          <button
-            className={`calendar-sub-tab ${calendarSubTab === 'start' ? 'active' : ''}`}
-            onClick={() => setCalendarSubTab('start')}
-          >
-            시작일 기준
-          </button>
-          <button
-            className={`calendar-sub-tab ${calendarSubTab === 'end' ? 'active' : ''}`}
-            onClick={() => setCalendarSubTab('end')}
-          >
-            종료일 기준
-          </button>
-        </div>
-
         {/* FullCalendar */}
         <div className="fullcalendar-wrapper">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
-            events={filteredEvents}
+            events={events}
             eventClick={handleEventClick}
             headerToolbar={{
               left: 'prev,next today',
               center: 'title',
-              right: 'dayGridMonth,dayGridWeek',
+              right: 'dayGridMonth',
             }}
             locale="ko"
             height="auto"

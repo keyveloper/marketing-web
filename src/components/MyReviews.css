@@ -199,37 +199,6 @@
   min-height: 400px;
 }
 
-/* 달력 서브 네비게이션 */
-.calendar-sub-nav {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-  justify-content: center;
-}
-
-.calendar-sub-tab {
-  padding: 10px 24px;
-  background: transparent;
-  border: 2px solid #e0e0e0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #7f8c8d;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-}
-
-.calendar-sub-tab:hover {
-  border-color: #667eea;
-  color: #667eea;
-}
-
-.calendar-sub-tab.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-color: #667eea;
-}
-
 /* FullCalendar 래퍼 */
 .fullcalendar-wrapper {
   background: white;
@@ -266,6 +235,15 @@
   transform: translateY(-2px);
 }
 
+/* prev, next 버튼 간격 */
+.fullcalendar-wrapper .fc-prev-button {
+  margin-right: 8px !important;
+}
+
+.fullcalendar-wrapper .fc-next-button {
+  margin-left: 8px !important;
+}
+
 .fullcalendar-wrapper .fc-button:disabled {
   opacity: 0.5;
   background: #ccc;
@@ -297,18 +275,12 @@
 }
 
 .fullcalendar-wrapper .fc-day-today {
-  background: rgba(102, 126, 234, 0.1) !important;
+  background: rgba(102, 126, 234, 0.15) !important;
 }
 
 .fullcalendar-wrapper .fc-day-today .fc-daygrid-day-number {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #667eea;
+  font-weight: 700;
 }
 
 .fullcalendar-wrapper .fc-event {

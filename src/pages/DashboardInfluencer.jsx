@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from 'aws-amplify/auth'
+import { logoutUser } from '../services/auth.js'
 import { issueInfluencerProfileDraft, getInfluencerProfile } from '../api/userProfileApi.js'
+import { getLikedAdsByInfluencerId } from '../api/likeApi.js'
 import CreateProfileInfluencer from './CreateProfileInfluencer.jsx'
+import MyFavoriteAd from '../components/MyFavoriteAd.jsx'
 import MyReviews from '../components/MyReviews.jsx'
 import TimelineInsta from '../components/TimelineInsta.jsx'
 import './DashboardInfluencer.css'
@@ -16,6 +19,8 @@ function DashboardInfluencer() {
   const [profileData, setProfileData] = useState(null)
   const [profileLoading, setProfileLoading] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
+  const [likedAds, setLikedAds] = useState([])
+  const [likedAdsLoading, setLikedAdsLoading] = useState(false)
 
   // Mock data - 실제로는 API로 가져와야 함
   const [dashboardData, setDashboardData] = useState({
@@ -135,6 +140,44 @@ function DashboardInfluencer() {
     { id: 'settings', label: '설정', icon: '⚙️' }
   ]
 
+  // 좋아요한 광고 목록 조회 핸들러
+  const fetchLikedAds = async () => {
+    try {
+      setLikedAdsLoading(true)
+      console.log('🟦 좋아요한 광고 목록 조회 중...')
+
+      const influencerId = user?.userId || userId
+      if (!influencerId) {
+        console.log('🟦 userId 없음')
+        setLikedAds([])
+        return
+      }
+
+      // 좋아요한 광고 목록 조회 (썸네일 URL 포함)
+      const likeResult = await getLikedAdsByInfluencerId(influencerId)
+
+      if (!likeResult.success || !likeResult.result?.likedAdvertisements?.length) {
+        console.log('🟦 좋아요한 광고 없음')
+        setLikedAds([])
+        return
+      }
+
+      // thumbnailAdCards 형태로 변환
+      const likedAdsData = likeResult.result.likedAdvertisements.map(ad => ({
+        advertisementId: ad.advertisementId,
+        presignedUrl: ad.thumbnailUrl,
+      }))
+
+      console.log('✅ 좋아요한 광고:', likedAdsData)
+      setLikedAds(likedAdsData)
+    } catch (error) {
+      console.error('❌ 좋아요한 광고 조회 실패:', error)
+      setLikedAds([])
+    } finally {
+      setLikedAdsLoading(false)
+    }
+  }
+
   // 프로필 조회 핸들러
   const fetchProfile = async () => {
     try {
@@ -193,6 +236,10 @@ function DashboardInfluencer() {
       setActiveMenu(menuId)
       setIsEditMode(false)
       await fetchProfile()
+    } else if (menuId === 'favorites') {
+      // 좋아요 메뉴 클릭 시 좋아요한 광고 조회
+      setActiveMenu(menuId)
+      await fetchLikedAds()
     } else {
       setActiveMenu(menuId)
     }
@@ -347,20 +394,13 @@ function DashboardInfluencer() {
         return (
           <div className="influ-dashboard-section">
             <h2 className="influ-dashboard-title">좋아요</h2>
-            <div className="influ-favorites-grid">
-              {favoritesData.map((item) => (
-                <div
-                  key={item.id}
-                  className={`influ-favorite-item influ-favorite-${item.size}`}
-                  onClick={() => navigate(`/advertisement/${item.id}`)}
-                >
-                  <img src={item.imageUrl} alt={item.title} />
-                  <div className="influ-favorite-overlay">
-                    <span className="influ-favorite-title">{item.title}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {likedAdsLoading ? (
+              <div className="influ-content-card">
+                <p>좋아요한 광고를 불러오는 중...</p>
+              </div>
+            ) : (
+              <MyFavoriteAd thumbnailAdCards={likedAds} />
+            )}
           </div>
         )
 
@@ -405,8 +445,14 @@ function DashboardInfluencer() {
       {/* Sidebar */}
       <aside className="influ-dashboard-sidebar">
         <div className="influ-sidebar-header">
-          <button className="influ-back-btn" onClick={() => navigate('/')}>
-            ← 홈으로
+          <button
+            className="influ-logout-btn"
+            onClick={async () => {
+              await logoutUser()
+              navigate('/login')
+            }}
+          >
+            로그아웃
           </button>
           <div className="influ-user-profile">
             <div className="influ-user-avatar">{user?.username?.[0]?.toUpperCase() || 'U'}</div>
