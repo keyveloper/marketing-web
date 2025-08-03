@@ -199,6 +199,37 @@
   min-height: 400px;
 }
 
+/* 달력 모드 탭 (시작일/종료일 기준) */
+.calendar-mode-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.calendar-mode-tab {
+  padding: 10px 24px;
+  background: transparent;
+  border: 2px solid #e0e0e0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.calendar-mode-tab:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.calendar-mode-tab.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+
 /* FullCalendar 래퍼 */
 .fullcalendar-wrapper {
   background: white;
