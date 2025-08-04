@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { uploadAdvertiserProfileImage } from '../api/userProfileImageApi.js';
-import { uploadAdvertiserProfileInfo } from '../api/userProfileApi.js';
+import { uploadAdvertiserProfileImage } from '../api/advertiserProfileImageApi.js';
+import { uploadAdvertiserProfileInfo } from '../api/advertiserProfileApi.js';
 import './ProfileAdvertiser.css';
 import './CreateProfileAdvertiser.css';
 

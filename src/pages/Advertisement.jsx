@@ -8,6 +8,7 @@ import 'swiper/css/pagination';
 import "./Advertisement.css";
 import { getAdvertisementById } from '../api/advertisementApi.js';
 import { applyReview, getReviewApplicationsByAdvertisementId } from '../api/reviewApplicationApi.js';
+import { getAdvertiserProfileByAdvertisementId } from '../api/summaryApi.js';
 
 export default function Advertisement() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function Advertisement() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [applications, setApplications] = useState([]);
   const [activeTab, setActiveTab] = useState('detail'); // 'detail', 'applications', 'reviews'
+  const [advertiserProfile, setAdvertiserProfile] = useState(null);
 
   // 사용자 타입 확인
   useEffect(() => {
@@ -98,6 +100,29 @@ export default function Advertisement() {
     };
 
     fetchApplications();
+  }, [id]);
+
+  // 광고주 프로필 요약 조회
+  useEffect(() => {
+    const fetchAdvertiserProfile = async () => {
+      if (!id) return;
+
+      try {
+        console.log(`🟦 광고주 프로필 조회 중... 광고 ID: ${id}`);
+        const result = await getAdvertiserProfileByAdvertisementId(Number(id));
+
+        if (result.success) {
+          console.log('✅ 광고주 프로필:', result.result);
+          setAdvertiserProfile(result.result);
+        } else {
+          console.error('❌ 광고주 프로필 조회 실패:', result.error);
+        }
+      } catch (err) {
+        console.error('❌ 광고주 프로필 조회 중 오류:', err);
+      }
+    };
+
+    fetchAdvertiserProfile();
   }, [id]);
 
   // 리뷰 신청 폼 열기
@@ -223,6 +248,31 @@ export default function Advertisement() {
   return (
     <div className="ad-view-page">
       <div className="ad-view-container">
+        {/* 광고주 프로필 카드 */}
+        <div
+          className="ad-view-advertiser-card"
+          onClick={() => {
+            if (advertiserProfile?.advertiserId) {
+              navigate(`/profile-advertiser/${advertiserProfile.advertiserId}`);
+            }
+          }}
+        >
+          <div className="ad-view-advertiser-avatar">
+            {advertiserProfile?.profileImageUrl ? (
+              <img src={advertiserProfile.profileImageUrl} alt="프로필" />
+            ) : (
+              <svg viewBox="0 0 24 24" fill="currentColor" className="ad-view-advertiser-default-icon">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+              </svg>
+            )}
+          </div>
+          <div className="ad-view-advertiser-info">
+            <span className="ad-view-advertiser-name">{advertiserProfile?.advertiserName || '광고주 이름'}</span>
+            <span className="ad-view-advertiser-service">{advertiserProfile?.serviceInfo || '서비스 정보'}</span>
+            <span className="ad-view-advertiser-location">{advertiserProfile?.locationBrief || '대한민국 어딘가'}</span>
+          </div>
+        </div>
+
         <div className="ad-view-content">
           {/* 왼쪽: 이미지 영역 */}
           <section className="ad-view-section-left">

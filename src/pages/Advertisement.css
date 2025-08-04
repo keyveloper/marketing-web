@@ -37,6 +37,79 @@
   border-bottom: 2px solid #e0e0e0;
 }
 
+/* 광고주 프로필 카드 */
+.ad-view-advertiser-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  background: #fafafa;
+  border-radius: 12px;
+  border: 1px solid #e8e8e8 !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ad-view-advertiser-card:hover {
+  background: #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ad-view-advertiser-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ad-view-advertiser-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ad-view-advertiser-avatar span {
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.ad-view-advertiser-default-icon {
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.ad-view-advertiser-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ad-view-advertiser-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.ad-view-advertiser-service {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+}
+
+.ad-view-advertiser-location {
+  font-size: 13px;
+  font-weight: 400;
+  color: #888;
+}
+
 /* 서브 네비게이션 */
 .ad-view-sub-nav {
   display: flex;

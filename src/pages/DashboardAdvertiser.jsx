@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from 'aws-amplify/auth'
-import { issueAdvertiserProfileDraft } from '../api/userProfileApi.js'
+import { issueAdvertiserProfileDraft } from '../api/advertiserProfileApi.js'
 import CreateProfileAdvertiser from './CreateProfileAdvertiser.jsx'
 import './DashboardAdvertiser.css'
 
