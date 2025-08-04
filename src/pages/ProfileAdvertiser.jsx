@@ -1,62 +1,64 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getAdvertiserProfile } from '../api/advertiserProfileApi.js';
 import './ProfileAdvertiser.css';
 
 export default function ProfileAdvertiser() {
   const navigate = useNavigate();
-  const { id } = useParams(); // URL에서 광고주 ID 가져오기 (선택사항)
+  const { userId } = useParams(); // URL에서 광고주 ID 가져오기
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [advertiserData, setAdvertiserData] = useState(null);
-
-  // 샘플 데이터 (추후 API 연동)
-  const sampleData = {
-    advertiserId: 'ADV12345',
-    name: '스마트 마케팅',
-    title: '디지털 마케팅 전문 기업',
-    backgroundImage: 'https://via.placeholder.com/1400x220/667eea/FFFFFF?text=Company+Banner',
-    profileImage: 'https://via.placeholder.com/200x200/667eea/FFFFFF?text=Logo',
-    companyInfo: {
-      industry: '마케팅 및 광고',
-      location: '서울특별시 강남구',
-      website: 'https://smartmarketing.example.com',
-      email: 'contact@smartmarketing.com',
-    },
-    stats: {
-      totalCampaigns: 127,
-      activeReviewers: 1542,
-      successRate: 98,
-    },
-    description: `
-      스마트 마케팅은 데이터 기반의 효율적인 마케팅 솔루션을 제공하는 전문 기업입니다.
-      10년 이상의 경험을 바탕으로 다양한 업종의 고객사와 함께 성공적인 캠페인을 진행해왔습니다.
-      인플루언서 마케팅부터 디지털 광고까지, 통합적인 마케팅 전략을 제공합니다.
-    `,
-  };
+  const [profileData, setProfileData] = useState(null);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
+  const [backgroundImageUrl, setBackgroundImageUrl] = useState(null);
 
   useEffect(() => {
-    // TODO: 실제 API 호출로 광고주 데이터 가져오기
-    // const fetchAdvertiserData = async () => {
-    //   try {
-    //     setLoading(true);
-    //     const result = await getAdvertiserById(id);
-    //     if (result.success) {
-    //       setAdvertiserData(result.data);
-    //     } else {
-    //       setError(result.error);
-    //     }
-    //   } catch (err) {
-    //     setError('광고주 정보를 불러오는 중 오류가 발생했습니다.');
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    // fetchAdvertiserData();
+    const fetchAdvertiserData = async () => {
+      if (!userId) {
+        setError('광고주 ID가 없습니다.');
+        setLoading(false);
+        return;
+      }
 
-    // 현재는 샘플 데이터 사용
-    setAdvertiserData(sampleData);
-  }, [id]);
+      try {
+        setLoading(true);
+
+        // 프로필 정보 조회
+        const result = await getAdvertiserProfile(userId);
+
+        if (result.success && result.result) {
+          const { profileApiResult, profileImage, backgroundImage } = result.result;
+
+          // 프로필 정보 설정
+          if (profileApiResult) {
+            setProfileData(profileApiResult);
+          }
+
+          // 프로필 이미지 설정
+          if (profileImage?.presignedUrl) {
+            setProfileImageUrl(profileImage.presignedUrl);
+          }
+
+          // 배경 이미지 설정
+          if (backgroundImage?.presignedUrl) {
+            setBackgroundImageUrl(backgroundImage.presignedUrl);
+          }
+        } else if (!result.success) {
+          setError(result.error || '프로필을 찾을 수 없습니다.');
+        } else {
+          setError('프로필을 찾을 수 없습니다.');
+        }
+      } catch (err) {
+        console.error('광고주 정보 로딩 오류:', err);
+        setError('광고주 정보를 불러오는 중 오류가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdvertiserData();
+  }, [userId]);
 
   if (loading) {
     return (
@@ -74,8 +76,12 @@ export default function ProfileAdvertiser() {
     );
   }
 
-  if (!advertiserData) {
-    return null;
+  if (!profileData) {
+    return (
+      <div className="profile-advertiser-container">
+        <div className="error-message">프로필 정보가 없습니다.</div>
+      </div>
+    );
   }
 
   return (
@@ -83,7 +89,11 @@ export default function ProfileAdvertiser() {
       <div className="profile-advertiser-card">
         {/* 백그라운드 이미지 영역 */}
         <div className="background-section">
-          <img src={advertiserData.backgroundImage} alt="Company Background" className="background-image" />
+          {backgroundImageUrl ? (
+            <img src={backgroundImageUrl} alt="배경 이미지" className="background-image" />
+          ) : (
+            <div className="background-image background-placeholder"></div>
+          )}
           <div className="company-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
               <path
@@ -98,13 +108,24 @@ export default function ProfileAdvertiser() {
         <div className="profile-advertiser-content">
           {/* 프로필 이미지 */}
           <div className="profile-advertiser-image">
-            <img src={advertiserData.profileImage} alt="Company Logo" />
+            {profileImageUrl ? (
+              <img src={profileImageUrl} alt="프로필 이미지" />
+            ) : (
+              <div className="profile-image-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+                  <path
+                    fill="#9ca3af"
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  />
+                </svg>
+              </div>
+            )}
           </div>
 
           {/* 기본 정보 */}
           <div className="profile-advertiser-info">
-            <h1 className="advertiser-name">{advertiserData.name}</h1>
-            <p className="advertiser-title">{advertiserData.title}</p>
+            <h1 className="advertiser-name">{profileData.advertiserName}</h1>
+            <p className="advertiser-title">{profileData.serviceInfo}</p>
 
             {/* 인증 배지 */}
             <div className="verified-badge">
@@ -120,43 +141,11 @@ export default function ProfileAdvertiser() {
             {/* 회사 정보 */}
             <div className="company-info">
               <p>
-                <strong>업종:</strong> {advertiserData.companyInfo.industry}
+                <strong>위치:</strong> {profileData.locationBrief}
               </p>
               <p>
-                <strong>위치:</strong> {advertiserData.companyInfo.location}
+                <strong>서비스:</strong> {profileData.serviceInfo}
               </p>
-              <p>
-                <strong>이메일:</strong>{' '}
-                <a href={`mailto:${advertiserData.companyInfo.email}`} className="contact-link">
-                  {advertiserData.companyInfo.email}
-                </a>
-              </p>
-              <a
-                href={advertiserData.companyInfo.website}
-                className="website-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {advertiserData.companyInfo.website}
-              </a>
-            </div>
-
-            {/* 통계 정보 */}
-            <div className="stats-section">
-              <div className="stat-item">
-                <span className="stat-value">{advertiserData.stats.totalCampaigns}</span>
-                <span className="stat-label">총 캠페인</span>
-              </div>
-              <div className="stat-divider"></div>
-              <div className="stat-item">
-                <span className="stat-value">{advertiserData.stats.activeReviewers.toLocaleString()}</span>
-                <span className="stat-label">활성 리뷰어</span>
-              </div>
-              <div className="stat-divider"></div>
-              <div className="stat-item">
-                <span className="stat-value">{advertiserData.stats.successRate}%</span>
-                <span className="stat-label">성공률</span>
-              </div>
             </div>
 
             {/* 액션 버튼들 */}
@@ -192,10 +181,12 @@ export default function ProfileAdvertiser() {
         </div>
 
         {/* 회사 소개 섹션 */}
-        <div className="about-section">
-          <h2 className="section-title">회사 소개</h2>
-          <p className="about-description">{advertiserData.description}</p>
-        </div>
+        {profileData.introduction && (
+          <div className="about-section">
+            <h2 className="section-title">회사 소개</h2>
+            <p className="about-description">{profileData.introduction}</p>
+          </div>
+        )}
       </div>
     </div>
   );

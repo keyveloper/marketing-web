@@ -115,3 +115,48 @@ export const uploadAdvertiserProfileInfo = async (userProfileDraftId, serviceInf
     };
   }
 };
+
+/**
+ * 광고주 프로필 정보 조회
+ * @param {string} advertiserId - 광고주 UUID
+ * @returns {Promise<{success: boolean, result?: object, error?: string}>}
+ * result: { id, advertiserId, advertiserName, userProfileDraftId, serviceInfo, locationBrief, introduction, createdAt, updatedAt }
+ */
+export const getAdvertiserProfile = async (advertiserId) => {
+  try {
+    console.log(`✅ Advertiser Profile 조회 요청 시작... advertiserId: ${advertiserId}`);
+
+    // API 호출
+    const response = await apiClient.get(`/profile/info/advertiser/${advertiserId}`);
+
+    console.log('✅ Advertiser Profile 조회 성공:', response);
+
+    const { result, httpStatus, msaServiceErrorCode, errorMessage } = response;
+
+    // NOT_FOUND인 경우 프로필 없음
+    if (httpStatus === 'NOT_FOUND' || msaServiceErrorCode === 'NOT_FOUND_ADVERTISER_PROFILE') {
+      return {
+        success: true,
+        result: null,
+      };
+    }
+
+    return {
+      success: true,
+      result: result,
+    };
+  } catch (error) {
+    console.error('❌ Advertiser Profile 조회 실패:', error);
+    // 404인 경우 프로필 없음으로 처리
+    if (error.response?.status === 404) {
+      return {
+        success: true,
+        result: null,
+      };
+    }
+    return {
+      success: false,
+      error: error.response?.data?.errorMessage || error.message || 'Profile 조회 중 오류가 발생했습니다.',
+    };
+  }
+};
