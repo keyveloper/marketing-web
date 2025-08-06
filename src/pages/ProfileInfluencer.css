@@ -1,0 +1,299 @@
+.profile-influencer-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f3f2ef;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  position: relative;
+}
+
+.profile-influencer-card {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  position: relative;
+  margin-top: 0;
+}
+
+/* 로딩 및 에러 메시지 */
+.profile-influencer-container .loading-message,
+.profile-influencer-container .error-message {
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: #666666;
+}
+
+.profile-influencer-container .error-message {
+  color: #dc3545;
+}
+
+/* 백그라운드 이미지 영역 */
+.profile-influencer-card .background-section {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
+}
+
+.profile-influencer-card .background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.influencer-icon {
+  position: absolute;
+  bottom: 16px;
+  right: 24px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 프로필 콘텐츠 영역 */
+.profile-influencer-content {
+  position: relative;
+  padding: 0 24px 24px;
+  z-index: 1;
+}
+
+/* 프로필 이미지 */
+.profile-influencer-image {
+  position: relative;
+  margin-top: -80px;
+  width: 160px;
+  height: 160px;
+  margin-left: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.profile-influencer-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 프로필 이미지 placeholder */
+.profile-influencer-card .profile-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 배경 이미지 placeholder */
+.profile-influencer-card .background-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 프로필 정보 */
+.profile-influencer-info {
+  margin-top: 16px;
+  padding: 0 24px;
+}
+
+.influencer-name {
+  font-size: 32px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.influencer-job {
+  font-size: 18px;
+  font-weight: 400;
+  color: #666666;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+  max-width: 600px;
+}
+
+/* 인증 배지 */
+.profile-influencer-card .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #d1fae5;
+  border: 1px solid #86efac;
+  border-radius: 16px;
+  padding: 6px 12px;
+  margin-bottom: 16px;
+}
+
+.profile-influencer-card .verified-badge span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #059669;
+}
+
+/* 액션 버튼들 */
+.profile-influencer-card .action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.profile-influencer-card .action-buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 24px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: inherit;
+}
+
+.profile-influencer-card .btn-secondary {
+  background-color: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.profile-influencer-card .btn-secondary:hover {
+  background-color: #f0f3ff;
+  border-color: #5568d3;
+  color: #5568d3;
+}
+
+.profile-influencer-card .btn-more {
+  background-color: transparent;
+  border: 2px solid #d1d5db;
+  color: #6b7280;
+  padding: 12px 16px;
+  min-width: 48px;
+}
+
+.profile-influencer-card .btn-more:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+/* 자기 소개 섹션 */
+.profile-influencer-card .about-section {
+  padding: 32px 48px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #fafafa;
+  position: relative;
+  z-index: 1;
+}
+
+.profile-influencer-card .section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 16px 0;
+}
+
+.profile-influencer-card .about-description {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-line;
+}
+
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .profile-influencer-container {
+    padding: 20px 0;
+  }
+
+  .profile-influencer-card {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .profile-influencer-card .background-section {
+    height: 160px;
+  }
+
+  .profile-influencer-image {
+    width: 120px;
+    height: 120px;
+    margin-top: -60px;
+    margin-left: 12px;
+  }
+
+  .profile-influencer-info {
+    padding: 0 12px;
+  }
+
+  .influencer-name {
+    font-size: 24px;
+  }
+
+  .influencer-job {
+    font-size: 16px;
+  }
+
+  .profile-influencer-card .action-buttons {
+    flex-direction: column;
+  }
+
+  .profile-influencer-card .action-buttons button {
+    width: 100%;
+  }
+
+  .profile-influencer-card .btn-more {
+    width: auto;
+    align-self: flex-start;
+  }
+
+  .profile-influencer-card .about-section {
+    padding: 24px 20px;
+  }
+
+  .profile-influencer-card .section-title {
+    font-size: 18px;
+  }
+
+  .profile-influencer-card .about-description {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-influencer-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .influencer-name {
+    font-size: 20px;
+  }
+
+  .influencer-job {
+    font-size: 14px;
+  }
+
+  .profile-influencer-card .about-section {
+    padding: 20px 16px;
+  }
+}

@@ -19,6 +19,7 @@ import DashboardInfluencer from './pages/DashboardInfluencer.jsx'
 import CreateProfileAdvertiser from './pages/CreateProfileAdvertiser.jsx'
 import CreateProfileInfluencer from './pages/CreateProfileInfluencer.jsx'
 import ProfileAdvertiser from './pages/ProfileAdvertiser.jsx'
+import ProfileInfluencer from './pages/ProfileInfluencer.jsx'
 
 function App() {
   const navigate = useNavigate()
@@ -309,6 +310,7 @@ function App() {
           <Route path="/create-profile-advertiser" element={<CreateProfileAdvertiser />} />
           <Route path="/create-profile-influencer" element={<CreateProfileInfluencer />} />
           <Route path="/profile-advertiser/:userId" element={<ProfileAdvertiser />} />
+          <Route path="/profile-influencer/:userId" element={<ProfileInfluencer />} />
         </Routes>
       </main>
 
