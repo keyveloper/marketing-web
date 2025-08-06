@@ -91,14 +91,34 @@ function DashboardAdvertiser() {
     try {
       setFollowersLoading(true)
       const advertiserId = user?.userId || userId
+      console.log('🟦 팔로워 조회 시작, advertiserId:', advertiserId)
+
       if (!advertiserId) {
+        console.log('🟦 advertiserId 없음')
         setFollowers([])
         return
       }
 
       const result = await getFollowerInfluencers(advertiserId)
+      console.log('🟦 팔로워 API 응답:', result)
+
       if (result.success && result.result) {
-        setFollowers(result.result)
+        // result.result 구조 확인
+        console.log('🟦 result.result 타입:', typeof result.result)
+        console.log('🟦 result.result:', result.result)
+
+        // 배열인 경우 직접 사용, 아니면 followers 필드 확인
+        let followerList = []
+        if (Array.isArray(result.result)) {
+          followerList = result.result
+        } else if (result.result.followers) {
+          followerList = result.result.followers
+        } else if (result.result.influencers) {
+          followerList = result.result.influencers
+        }
+
+        console.log('✅ 팔로워 목록:', followerList)
+        setFollowers(followerList)
       } else {
         setFollowers([])
       }
