@@ -1,6 +1,6 @@
 .ad-dashboard-container {
   display: flex;
-  min-height: auto;
+  min-height: calc(100vh - 140px); /* 헤더 + 푸터 높이 제외 */
   background: transparent;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   position: relative;
@@ -14,10 +14,19 @@
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  position: relative;
-  min-height: 100%;
+  position: sticky;
+  top: 70px; /* 헤더 높이 */
+  height: calc(100vh - 140px); /* 헤더 + 푸터 높이 제외 */
   overflow-y: auto;
   z-index: 100;
+}
+
+/* Main Content */
+.ad-dashboard-main {
+  flex: 1;
+  padding: 40px;
+  min-height: calc(100vh - 140px); /* 헤더 + 푸터 높이 제외 */
+  overflow-y: auto;
 }
 
 .ad-sidebar-header {
@@ -126,13 +135,6 @@
 
 .ad-menu-label {
   flex: 1;
-}
-
-/* Main Content */
-.ad-dashboard-main {
-  flex: 1;
-  padding: 40px;
-  overflow-y: visible;
 }
 
 .ad-dashboard-content {
@@ -510,4 +512,192 @@
 .ad-profile-create-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* My Ads Grid */
+.ad-myads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.ad-myad-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ad-myad-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+}
+
+.ad-myad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ad-myad-status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ad-myad-status-live {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.ad-myad-status-closed {
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+}
+
+.ad-myad-type {
+  font-size: 12px;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.ad-myad-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ad-myad-item {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.ad-myad-info {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ad-myad-channel,
+.ad-myad-recruitment {
+  font-size: 13px;
+  color: #4b5563;
+  background: rgba(102, 126, 234, 0.08);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.ad-myad-dates {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* Applications Grid */
+.ad-applications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.ad-application-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.ad-application-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.ad-application-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ad-application-status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ad-application-status-pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.ad-application-status-approved {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.ad-application-status-rejected {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.ad-application-date {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.ad-application-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.ad-application-influencer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 8px;
+}
+
+.ad-application-username {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.ad-application-email {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.ad-application-memo {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+.ad-application-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #6b7280;
 }

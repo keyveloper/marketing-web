@@ -1,0 +1,204 @@
+/* My Ad Card */
+.my-ad-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.my-ad-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+}
+
+/* Thumbnail */
+.my-ad-card-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+}
+
+.my-ad-card-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.my-ad-card:hover .my-ad-card-thumbnail img {
+  transform: scale(1.05);
+}
+
+.my-ad-card-thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.my-ad-card-thumbnail-placeholder span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Status Badge */
+.my-ad-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+}
+
+.my-ad-card-badge-recruiting {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+}
+
+.my-ad-card-badge-reviewing {
+  background: rgba(245, 158, 11, 0.9);
+  color: white;
+}
+
+.my-ad-card-badge-closed {
+  background: rgba(107, 114, 128, 0.9);
+  color: white;
+}
+
+/* D-Day Badge */
+.my-ad-card-dday {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 10px;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+}
+
+/* Content */
+.my-ad-card-content {
+  padding: 20px;
+}
+
+/* Tags */
+.my-ad-card-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.my-ad-card-tag {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.my-ad-card-tag-review {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.my-ad-card-tag-channel {
+  background: rgba(118, 75, 162, 0.1);
+  color: #764ba2;
+}
+
+/* Title */
+.my-ad-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* Item */
+.my-ad-card-item {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Recruitment */
+.my-ad-card-recruitment {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  border-radius: 10px;
+}
+
+.my-ad-card-recruitment-icon {
+  font-size: 16px;
+}
+
+.my-ad-card-recruitment-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* Schedule */
+.my-ad-card-schedule {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 12px;
+}
+
+.my-ad-card-schedule-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.my-ad-card-schedule-label {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.my-ad-card-schedule-value {
+  font-size: 13px;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .my-ad-card-thumbnail {
+    height: 160px;
+  }
+
+  .my-ad-card-content {
+    padding: 16px;
+  }
+
+  .my-ad-card-title {
+    font-size: 15px;
+  }
+}

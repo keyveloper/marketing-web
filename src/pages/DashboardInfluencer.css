@@ -1,6 +1,6 @@
 .influ-dashboard-container {
   display: flex;
-  min-height: auto;
+  min-height: calc(100vh - 140px); /* 헤더 + 푸터 높이 제외 */
   background: transparent;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   position: relative;
@@ -14,8 +14,9 @@
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  position: relative;
-  min-height: 100%;
+  position: sticky;
+  top: 70px; /* 헤더 높이 */
+  height: calc(100vh - 140px); /* 헤더 + 푸터 높이 제외 */
   overflow-y: auto;
   z-index: 100;
 }
@@ -151,7 +152,8 @@
 .influ-dashboard-main {
   flex: 1;
   padding: 40px;
-  overflow-y: visible;
+  min-height: calc(100vh - 140px); /* 헤더 + 푸터 높이 제외 */
+  overflow-y: auto;
 }
 
 .influ-dashboard-content {

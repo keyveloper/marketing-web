@@ -1,0 +1,255 @@
+/* MyAds Container */
+.myads-container {
+  animation: fadeIn 0.5s ease;
+}
+
+.myads-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #2c3e50;
+  margin-bottom: 24px;
+}
+
+/* Tabs */
+.myads-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 0;
+}
+
+.myads-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: -2px;
+}
+
+.myads-tab:hover {
+  color: #667eea;
+}
+
+.myads-tab-active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.myads-tab-icon {
+  font-size: 18px;
+}
+
+.myads-tab-label {
+  font-weight: 600;
+}
+
+.myads-tab-count {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.myads-tab-active .myads-tab-count {
+  background: #667eea;
+  color: white;
+}
+
+/* Content */
+.myads-content {
+  min-height: 300px;
+}
+
+.myads-loading,
+.myads-empty {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 60px 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.myads-loading p,
+.myads-empty p {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* Grid */
+.myads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Card */
+.myads-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.myads-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+/* Card Header */
+.myads-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.myads-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.myads-status-recruiting {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%);
+  color: #059669;
+}
+
+.myads-status-reviewing {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%);
+  color: #d97706;
+}
+
+.myads-status-closed {
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.15) 0%, rgba(75, 85, 99, 0.15) 100%);
+  color: #4b5563;
+}
+
+.myads-review-type {
+  font-size: 12px;
+  color: #667eea;
+  font-weight: 600;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* Card Content */
+.myads-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.myads-card-item {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Card Info */
+.myads-card-info {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.myads-channel,
+.myads-recruitment {
+  font-size: 13px;
+  color: #4b5563;
+  background: rgba(102, 126, 234, 0.08);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Card Dates */
+.myads-card-dates {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 12px;
+}
+
+.myads-date-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.myads-date-label {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.myads-date-value {
+  font-size: 13px;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .myads-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .myads-tabs {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .myads-tab {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .myads-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .myads-card {
+    padding: 20px;
+  }
+}

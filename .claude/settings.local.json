@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(del \"C:\\Users\\dideh\\Desktop\\marketing\\marekting-web\\src\\components\\MyAdvertisementList.jsx\" \"C:\\Users\\dideh\\Desktop\\marketing\\marekting-web\\src\\components\\MyAdvertisementList.css\")"
     ],
     "deny": [],
     "ask": []

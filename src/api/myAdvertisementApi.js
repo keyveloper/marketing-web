@@ -67,18 +67,17 @@ export const getMyAdvertisements = async () => {
  * 받은 신청 목록 조회 (광고주 전용)
  * @returns {Promise<{success: boolean, result?: object, error?: string}>}
  * result: {
- *   offeredApplicationInfos: [{
- *     // Advertisement fields
- *     advertisementId, title, reviewType, channelType, recruitmentNumber,
- *     itemName, recruitmentStartAt, recruitmentEndAt, announcementAt,
- *     reviewStartAt, reviewEndAt, endAt, advertisementReviewStatus,
- *     siteUrl, itemInfo, draftId, advertisementCreatedAt, advertisementUpdatedAt,
- *     // ReviewApplication fields
- *     applicationId, influencerId, influencerUsername, influencerEmail,
- *     influencerMobile, applicationReviewStatus, applyMemo,
- *     applicationCreatedAt, applicationUpdatedAt,
- *     // Aggregated field
- *     appliedCount
+ *   offeredAdvertisements: [{
+ *     offeredAdvertisementSummary: {
+ *       advertisementId, title, reviewType, channelType, recruitmentNumber,
+ *       itemName, thumbnailUrl, recruitmentStartAt, recruitmentEndAt,
+ *       reviewStartAt, reviewEndAt, ...
+ *     },
+ *     offeredApplicationInfos: [{
+ *       applicationId, influencerId, influencerUsername, influencerEmail,
+ *       influencerMobile, applicationReviewStatus, applyMemo,
+ *       applicationCreatedAt, applicationUpdatedAt
+ *     }]
  *   }]
  * }
  */

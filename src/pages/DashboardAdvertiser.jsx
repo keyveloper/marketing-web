@@ -3,10 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from 'aws-amplify/auth'
 import { issueAdvertiserProfileDraft, getAdvertiserProfile } from '../api/advertiserProfileApi.js'
 import { getFollowerInfluencers } from '../api/profileSummaryApi.js'
-import { getMyAdvertisements, getOfferedApplications } from '../api/myAdvertisementApi.js'
 import CreateProfileAdvertiser from './CreateProfileAdvertiser.jsx'
 import UpdateAdvertiserProfile from './UpdateAdvertiserProfile.jsx'
 import InfluencerSummaryCard from '../components/InfluencerSummaryCard.jsx'
+import MyAds from '../components/MyAds.jsx'
+import OfferedApplications from '../components/OfferedApplications.jsx'
 import './DashboardAdvertiser.css'
 
 function DashboardAdvertiser() {
@@ -20,10 +21,6 @@ function DashboardAdvertiser() {
   const [isEditMode, setIsEditMode] = useState(false)
   const [followers, setFollowers] = useState([])
   const [followersLoading, setFollowersLoading] = useState(false)
-  const [myAds, setMyAds] = useState([])
-  const [myAdsLoading, setMyAdsLoading] = useState(false)
-  const [offeredApplications, setOfferedApplications] = useState([])
-  const [offeredApplicationsLoading, setOfferedApplicationsLoading] = useState(false)
 
   // Mock data - 실제로는 API로 가져와야 함
   const [dashboardData, setDashboardData] = useState({
@@ -272,24 +269,10 @@ function DashboardAdvertiser() {
         )
 
       case 'myads':
-        return (
-          <div className="ad-dashboard-section">
-            <h2 className="ad-dashboard-title">내 광고 관리</h2>
-            <div className="ad-content-card">
-              <p>내 광고 목록이 여기에 표시됩니다.</p>
-            </div>
-          </div>
-        )
+        return <MyAds />
 
       case 'reviews':
-        return (
-          <div className="ad-dashboard-section">
-            <h2 className="ad-dashboard-title">리뷰 신청</h2>
-            <div className="ad-content-card">
-              <p>리뷰 신청 목록이 여기에 표시됩니다.</p>
-            </div>
-          </div>
-        )
+        return <OfferedApplications />
 
       case 'followers':
         return (
