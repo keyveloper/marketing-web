@@ -8,7 +8,7 @@ import 'swiper/css/pagination';
 import "./Advertisement.css";
 import { getAdvertisementById } from '../api/advertisementApi.js';
 import { applyReview, getReviewApplicationsByAdvertisementId } from '../api/reviewApplicationApi.js';
-import { getAdvertiserProfileByAdvertisementId } from '../api/summaryApi.js';
+import { getAdvertiserProfileByAdvertisementId } from '../api/profileSummaryApi.js';
 
 export default function Advertisement() {
   const navigate = useNavigate();

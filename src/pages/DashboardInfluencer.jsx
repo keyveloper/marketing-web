@@ -4,10 +4,12 @@ import { getCurrentUser } from 'aws-amplify/auth'
 import { logoutUser } from '../services/auth.js'
 import { issueInfluencerProfileDraft, getInfluencerProfile } from '../api/influencerProfileApi.js'
 import { getLikedAdsByInfluencerId } from '../api/likeApi.js'
+import { getFollowingAdvertisers } from '../api/profileSummaryApi.js'
 import CreateProfileInfluencer from './CreateProfileInfluencer.jsx'
 import MyFavoriteAd from '../components/MyFavoriteAd.jsx'
 import MyReviews from '../components/MyReviews.jsx'
 import TimelineInsta from '../components/TimelineInsta.jsx'
+import AdvertiserSummaryCard from '../components/AdvertiserSummaryCard.jsx'
 import './DashboardInfluencer.css'
 
 function DashboardInfluencer() {
@@ -21,6 +23,8 @@ function DashboardInfluencer() {
   const [isEditMode, setIsEditMode] = useState(false)
   const [likedAds, setLikedAds] = useState([])
   const [likedAdsLoading, setLikedAdsLoading] = useState(false)
+  const [following, setFollowing] = useState([])
+  const [followingLoading, setFollowingLoading] = useState(false)
 
   // Mock data - 실제로는 API로 가져와야 함
   const [dashboardData, setDashboardData] = useState({
@@ -135,10 +139,37 @@ function DashboardInfluencer() {
     { id: 'myprofile', label: '내 프로필', icon: '👤' },
     { id: 'applications', label: '나의 리뷰', icon: '📋' },
     { id: 'favorites', label: '좋아요', icon: '❤️' },
+    { id: 'following', label: 'Following 보기', icon: '👥' },
     { id: 'timeline', label: '타임라인', icon: '⏰' },
     { id: 'messages', label: 'DM 메시지', icon: '💬' },
     { id: 'settings', label: '설정', icon: '⚙️' }
   ]
+
+  // 팔로잉 목록 조회
+  const fetchFollowing = async () => {
+    try {
+      setFollowingLoading(true)
+      const influencerId = user?.userId || userId
+      if (!influencerId) {
+        setFollowing([])
+        return
+      }
+
+      const result = await getFollowingAdvertisers(influencerId)
+      if (result.success && result.result) {
+        // 서버 응답: { result: [...] } - 배열 형태
+        const advertisers = Array.isArray(result.result) ? result.result : [result.result]
+        setFollowing(advertisers)
+      } else {
+        setFollowing([])
+      }
+    } catch (error) {
+      console.error('팔로잉 조회 실패:', error)
+      setFollowing([])
+    } finally {
+      setFollowingLoading(false)
+    }
+  }
 
   // 좋아요한 광고 목록 조회 핸들러
   const fetchLikedAds = async () => {
@@ -240,6 +271,10 @@ function DashboardInfluencer() {
       // 좋아요 메뉴 클릭 시 좋아요한 광고 조회
       setActiveMenu(menuId)
       await fetchLikedAds()
+    } else if (menuId === 'following') {
+      // 팔로잉 메뉴 클릭 시 팔로잉 목록 조회
+      setActiveMenu(menuId)
+      await fetchFollowing()
     } else {
       setActiveMenu(menuId)
     }
@@ -400,6 +435,32 @@ function DashboardInfluencer() {
               </div>
             ) : (
               <MyFavoriteAd thumbnailAdCards={likedAds} />
+            )}
+          </div>
+        )
+
+      case 'following':
+        return (
+          <div className="influ-dashboard-section">
+            <h2 className="influ-dashboard-title">Following 보기</h2>
+            {followingLoading ? (
+              <div className="influ-content-card">
+                <p>팔로잉 목록을 불러오는 중...</p>
+              </div>
+            ) : following.length > 0 ? (
+              <div className="influ-following-grid">
+                {following.map((advertiser, index) => (
+                  <AdvertiserSummaryCard
+                    key={advertiser.advertiserId || index}
+                    advertiser={advertiser}
+                    onClick={(advertiserId) => navigate(`/profile-advertiser/${advertiserId}`)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="influ-content-card">
+                <p>아직 팔로우하는 광고주가 없습니다.</p>
+              </div>
             )}
           </div>
         )

@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from 'aws-amplify/auth'
 import { issueAdvertiserProfileDraft } from '../api/advertiserProfileApi.js'
+import { getFollowerInfluencers } from '../api/profileSummaryApi.js'
 import CreateProfileAdvertiser from './CreateProfileAdvertiser.jsx'
+import InfluencerSummaryCard from '../components/InfluencerSummaryCard.jsx'
 import './DashboardAdvertiser.css'
 
 function DashboardAdvertiser() {
@@ -11,6 +13,8 @@ function DashboardAdvertiser() {
   const [user, setUser] = useState(null)
   const [activeMenu, setActiveMenu] = useState('overview')
   const [profileDraft, setProfileDraft] = useState(null)
+  const [followers, setFollowers] = useState([])
+  const [followersLoading, setFollowersLoading] = useState(false)
 
   // Mock data - 실제로는 API로 가져와야 함
   const [dashboardData, setDashboardData] = useState({
@@ -40,10 +44,35 @@ function DashboardAdvertiser() {
     { id: 'myprofile', label: '내 프로필', icon: '👤' },
     { id: 'myads', label: '내 광고 관리', icon: '📝' },
     { id: 'reviews', label: '리뷰 신청', icon: '⭐' },
+    { id: 'followers', label: 'Follower 보기', icon: '👥' },
     { id: 'messages', label: 'DM 메시지', icon: '💬' },
     { id: 'analytics', label: '통계 분석', icon: '📈' },
     { id: 'settings', label: '설정', icon: '⚙️' }
   ]
+
+  // 팔로워 목록 조회
+  const fetchFollowers = async () => {
+    try {
+      setFollowersLoading(true)
+      const advertiserId = user?.userId || userId
+      if (!advertiserId) {
+        setFollowers([])
+        return
+      }
+
+      const result = await getFollowerInfluencers(advertiserId)
+      if (result.success && result.result) {
+        setFollowers(result.result)
+      } else {
+        setFollowers([])
+      }
+    } catch (error) {
+      console.error('팔로워 조회 실패:', error)
+      setFollowers([])
+    } finally {
+      setFollowersLoading(false)
+    }
+  }
 
   // 프로필 Draft 발급 핸들러
   const handleCreateProfile = async () => {
@@ -70,6 +99,9 @@ function DashboardAdvertiser() {
     if (menuId === 'myprofile' && !profileDraft) {
       // 프로필 메뉴 클릭 시 Draft가 없으면 발급
       await handleCreateProfile()
+    } else if (menuId === 'followers') {
+      setActiveMenu(menuId)
+      await fetchFollowers()
     } else {
       setActiveMenu(menuId)
     }
@@ -188,6 +220,32 @@ function DashboardAdvertiser() {
             <div className="ad-content-card">
               <p>리뷰 신청 목록이 여기에 표시됩니다.</p>
             </div>
+          </div>
+        )
+
+      case 'followers':
+        return (
+          <div className="ad-dashboard-section">
+            <h2 className="ad-dashboard-title">Follower 보기</h2>
+            {followersLoading ? (
+              <div className="ad-content-card">
+                <p>팔로워 목록을 불러오는 중...</p>
+              </div>
+            ) : followers.length > 0 ? (
+              <div className="ad-followers-grid">
+                {followers.map((follower, index) => (
+                  <InfluencerSummaryCard
+                    key={follower.influencerId || index}
+                    influencer={follower}
+                    onClick={(influencerId) => navigate(`/profile-influencer/${influencerId}`)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="ad-content-card">
+                <p>아직 팔로워가 없습니다.</p>
+              </div>
+            )}
           </div>
         )
 

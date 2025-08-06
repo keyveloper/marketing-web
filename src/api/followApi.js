@@ -72,7 +72,7 @@ export const unfollowAdvertiser = async (advertiserId) => {
     console.log(`✅ Unfollow 요청 시작... advertiserId: ${advertiserId}`);
 
     const response = await apiClient.post(
-      '/follow/unfollow',
+      '/unfollow',
       { advertiserId },
       {
         headers: {

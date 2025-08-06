@@ -258,6 +258,25 @@
   box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
 }
 
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-following {
+  background-color: #e5e7eb;
+  color: #374151;
+  cursor: default;
+}
+
+.btn-following:hover {
+  background-color: #e5e7eb;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-secondary {
   background-color: transparent;
   color: #667eea;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getAdvertiserProfile } from '../api/advertiserProfileApi.js';
+import { followAdvertiser } from '../api/followApi.js';
 import './ProfileAdvertiser.css';
 
 export default function ProfileAdvertiser() {
@@ -12,6 +13,8 @@ export default function ProfileAdvertiser() {
   const [profileData, setProfileData] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [backgroundImageUrl, setBackgroundImageUrl] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => {
     const fetchAdvertiserData = async () => {
@@ -59,6 +62,28 @@ export default function ProfileAdvertiser() {
 
     fetchAdvertiserData();
   }, [userId]);
+
+  // 팔로우 버튼 클릭 핸들러
+  const handleFollowClick = async () => {
+    if (followLoading || !userId) return;
+
+    try {
+      setFollowLoading(true);
+      const result = await followAdvertiser(userId);
+
+      if (result.success) {
+        setIsFollowing(true);
+        console.log('✅ 팔로우 성공:', result.result);
+      } else {
+        alert(result.error || '팔로우에 실패했습니다.');
+      }
+    } catch (err) {
+      console.error('팔로우 오류:', err);
+      alert('팔로우 중 오류가 발생했습니다.');
+    } finally {
+      setFollowLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -150,14 +175,32 @@ export default function ProfileAdvertiser() {
 
             {/* 액션 버튼들 */}
             <div className="action-buttons">
-              <button className="btn-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                  <path
-                    fill="currentColor"
-                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"
-                  />
-                </svg>
-                팔로우
+              <button
+                className={isFollowing ? 'btn-following' : 'btn-primary'}
+                onClick={handleFollowClick}
+                disabled={followLoading || isFollowing}
+              >
+                {isFollowing ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                      <path
+                        fill="currentColor"
+                        d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"
+                      />
+                    </svg>
+                    팔로우중
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                      <path
+                        fill="currentColor"
+                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"
+                      />
+                    </svg>
+                    {followLoading ? '처리중...' : '팔로우'}
+                  </>
+                )}
               </button>
               <button className="btn-secondary">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">

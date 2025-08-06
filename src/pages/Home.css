@@ -61,14 +61,12 @@
 .hero-section {
   min-height: auto;
   padding: 40px 86px;
-  overflow: hidden;
 }
 
 .hero-content {
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  overflow: hidden;
 }
 
 .hero-content > h1 {
@@ -116,14 +114,13 @@
   width: 100%;
   height: 100%;
   max-width: 100%;
-  overflow: hidden !important;
+  overflow: visible;
   margin: 0 auto;
   padding: 0;
 }
 
 .hero-swiper .swiper-wrapper {
   padding: 0;
-  overflow: hidden;
   flex-shrink: 0;
   height: 100%;
 }
