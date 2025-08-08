@@ -41,8 +41,8 @@ export default function Login() {
         // 로그인 성공
         alert("로그인 성공!");
 
-        // 메인 페이지로 이동
-        navigate("/");
+        // 전체 페이지 새로고침으로 App 상태 갱신
+        window.location.href = "/";
       } else {
         // 로그인 실패
         const errorMsg = getErrorMessage(result.code);

@@ -2,10 +2,17 @@ import apiClient from '../config/client.js';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 /**
- * Cognito에서 idToken 가져오기 (로그인 안 된 경우 null 반환)
+ * Cognito에서 idToken 가져오기 (Influencer인 경우만, 그 외는 null 반환)
  */
 const getIdToken = async () => {
   try {
+    // userType이 INFLUENCER인 경우만 토큰 반환
+    const userType = localStorage.getItem('userType');
+    if (!userType || !userType.startsWith('INFLUENCER')) {
+      console.log('🟦 비로그인 또는 Influencer가 아님 - Authorization 없이 호출');
+      return null;
+    }
+
     const session = await fetchAuthSession();
     return session.tokens?.idToken?.toString() || null;
   } catch (error) {

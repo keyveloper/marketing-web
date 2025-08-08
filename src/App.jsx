@@ -69,10 +69,9 @@ function App() {
     try {
       const result = await logoutUser()
       if (result.success) {
-        setIsAuthenticated(false)
-        setUser(null)
-        setUserType(null)
         alert('로그아웃되었습니다.')
+        // 전체 페이지 새로고침으로 광고 데이터 갱신
+        window.location.href = '/'
       }
     } catch (error) {
       console.error('로그아웃 실패:', error)
