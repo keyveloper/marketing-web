@@ -405,44 +405,279 @@
 }
 
 /* Responsive */
+
+/* 태블릿 (1024px 이하) */
 @media (max-width: 1024px) {
   .ad-dashboard-sidebar {
-    width: 240px;
+    width: 220px;
   }
 
   .ad-dashboard-main {
-    margin-left: 240px;
     padding: 24px;
   }
 
+  .ad-sidebar-header {
+    padding: 16px;
+  }
+
+  .ad-user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .ad-user-name {
+    font-size: 14px;
+  }
+
+  .ad-menu-item {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .ad-menu-icon {
+    font-size: 18px;
+  }
+
   .ad-stats-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+  }
+
+  .ad-stat-card {
+    padding: 20px;
+  }
+
+  .ad-stat-icon {
+    font-size: 36px;
+  }
+
+  .ad-stat-value {
+    font-size: 28px;
   }
 
   .ad-main-content-grid {
     grid-template-columns: 1fr;
   }
+
+  .ad-content-card {
+    padding: 24px;
+  }
+
+  .ad-followers-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
 }
 
+/* 모바일 (768px 이하) */
 @media (max-width: 768px) {
+  .ad-dashboard-container {
+    flex-direction: column;
+    min-height: auto;
+  }
+
   .ad-dashboard-sidebar {
     width: 100%;
     position: relative;
+    top: 0;
     height: auto;
+    max-height: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
 
-  .ad-dashboard-main {
-    margin-left: 0;
+  .ad-sidebar-header {
     padding: 16px;
   }
 
-  .ad-stats-grid {
-    grid-template-columns: 1fr;
+  .ad-sidebar-menu {
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ad-menu-item {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 10px 14px;
+    margin-bottom: 0;
+    font-size: 13px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .ad-menu-item:hover {
+    transform: none;
+  }
+
+  .ad-menu-item.ad-active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .ad-menu-label {
+    display: none;
+  }
+
+  .ad-menu-icon {
+    font-size: 20px;
+    width: auto;
+  }
+
+  .ad-dashboard-main {
+    padding: 16px;
+    min-height: auto;
   }
 
   .ad-dashboard-title {
     font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .ad-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .ad-stat-card {
+    padding: 16px;
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .ad-stat-icon {
+    font-size: 32px;
+  }
+
+  .ad-stat-label {
+    font-size: 12px;
+  }
+
+  .ad-stat-value {
+    font-size: 24px;
+  }
+
+  .ad-content-card {
+    padding: 20px;
+  }
+
+  .ad-content-card h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .ad-performance-item {
+    padding: 12px;
+  }
+
+  .ad-performance-label {
+    font-size: 13px;
+  }
+
+  .ad-performance-value {
+    font-size: 20px;
+  }
+
+  .ad-activity-item {
+    padding: 12px;
+  }
+
+  .ad-followers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ad-profile-empty {
+    padding: 40px 20px;
+    min-height: 300px;
+  }
+
+  .ad-profile-empty-title {
+    font-size: 20px;
+  }
+
+  .ad-profile-empty-desc {
+    font-size: 14px;
+  }
+
+  .ad-profile-create-btn {
+    padding: 14px 24px;
+    font-size: 14px;
+  }
+}
+
+/* 작은 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  .ad-sidebar-header {
+    padding: 12px;
+  }
+
+  .ad-user-profile {
+    gap: 8px;
+  }
+
+  .ad-user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .ad-user-name {
+    font-size: 13px;
+  }
+
+  .ad-user-type {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+
+  .ad-sidebar-menu {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .ad-menu-item {
+    padding: 8px 12px;
+  }
+
+  .ad-menu-icon {
+    font-size: 18px;
+  }
+
+  .ad-dashboard-main {
+    padding: 12px;
+  }
+
+  .ad-dashboard-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .ad-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .ad-stat-card {
+    flex-direction: row;
+    text-align: left;
+    padding: 14px;
+  }
+
+  .ad-stat-icon {
+    font-size: 28px;
+  }
+
+  .ad-stat-value {
+    font-size: 22px;
+  }
+
+  .ad-content-card {
+    padding: 16px;
+  }
+
+  .ad-content-card h3 {
+    font-size: 16px;
   }
 }
 

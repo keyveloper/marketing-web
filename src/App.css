@@ -348,18 +348,56 @@
 }
 
 .floating-btn.logout-mode {
-  background: linear-gradient(135deg, #ffb3ba 0%, #ff8a94 100%);
-  box-shadow: 0 4px 12px rgba(255, 138, 148, 0.4);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  animation: logoutPulse 1s ease-in-out infinite;
 }
 
 .floating-btn.logout-mode:hover {
-  background: linear-gradient(135deg, #ff8a94 0%, #ff6b7a 100%);
-  box-shadow: 0 6px 16px rgba(255, 107, 122, 0.6);
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.6);
+}
+
+@keyframes logoutPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .floating-btn svg {
   width: 24px;
   height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.floating-btn .logout-icon {
+  animation: logoutIconBounce 0.5s ease;
+}
+
+@keyframes logoutIconBounce {
+  0% {
+    transform: scale(0.5) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* 프로그레스 링 */
+.logout-progress-ring {
+  position: absolute;
+  bottom: -12px;
+  right: -12px;
+  z-index: 1000;
+  pointer-events: none;
 }
 
 /* Floating Menu */
@@ -439,23 +477,166 @@
 }
 
 /* ===== Media Queries ===== */
+
+/* 태블릿 (1024px 이하) */
+@media (max-width: 1024px) {
+  .Header-container {
+    padding: 0 24px;
+  }
+
+  .search-container:hover {
+    width: 220px;
+  }
+
+  .search-container:hover .search-input {
+    width: 180px;
+  }
+
+  .noti-panel {
+    width: 300px;
+    right: 50px;
+  }
+}
+
+/* 모바일 (768px 이하) */
 @media (max-width: 768px) {
+  .Header-container {
+    padding: 0 16px;
+    height: 56px;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .search-container {
+    width: 36px;
+    padding: 6px 10px;
+  }
+
+  .search-container:hover {
+    width: 180px;
+  }
+
+  .search-container:hover .search-input {
+    width: 140px;
+  }
+
+  .auth-buttons {
+    gap: 8px;
+  }
+
+  .login-btn,
+  .signup-btn,
+  .logout-btn,
+  .my-service-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .my-service-btn {
+    padding: 6px 10px;
+  }
+
+  .my-service-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Notification */
+  .noti-floating-container {
+    top: auto;
+    bottom: 100px;
+    transform: none;
+  }
+
+  .noti-floating-container::before {
+    width: 60px;
+    height: 56px;
+  }
+
+  .noti-floating-btn {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+
+  .noti-panel {
+    position: fixed;
+    right: 10px;
+    left: 10px;
+    top: auto;
+    bottom: 160px;
+    width: auto;
+    max-height: 400px;
+    transform: none;
+  }
+
+  .noti-header {
+    padding: 12px 16px;
+  }
+
+  .noti-item {
+    padding: 12px 16px;
+  }
+
+  /* Floating Button */
   .floating-btn-container {
     bottom: 20px;
     right: 20px;
   }
 
   .floating-btn {
+    width: 52px;
+    height: 52px;
+  }
+
+  .floating-menu-item {
     width: 56px;
     height: 56px;
   }
 
-  .floating-menu-item {
-    width: 60px;
-    height: 60px;
-  }
-
   .menu-item-label {
     font-size: 9px;
+  }
+
+  .footer-section {
+    padding: 24px 16px;
+  }
+}
+
+/* 작은 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  .Header-container {
+    padding: 0 12px;
+    height: 52px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .search-container {
+    display: none;
+  }
+
+  .auth-buttons {
+    gap: 6px;
+  }
+
+  .login-btn,
+  .signup-btn,
+  .logout-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .my-service-btn span:not(.my-service-btn svg) {
+    display: none;
+  }
+
+  .my-service-btn {
+    padding: 6px;
+    gap: 0;
   }
 }

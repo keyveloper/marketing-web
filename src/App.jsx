@@ -34,6 +34,8 @@ function App() {
   const [startAngle, setStartAngle] = useState(0)
   const [menuExpanded, setMenuExpanded] = useState(false)
   const [isNotiOpen, setIsNotiOpen] = useState(false)
+  const [isLogoutMode, setIsLogoutMode] = useState(false)
+  const [logoutProgress, setLogoutProgress] = useState(0)
 
   // 인증 상태 확인
   useEffect(() => {
@@ -194,6 +196,39 @@ function App() {
       setMenuExpanded(false)
     }
   }, [isMenuOpen])
+
+  // 3초 호버시 로그아웃 모드 전환
+  useEffect(() => {
+    let progressInterval = null
+    let logoutTimer = null
+
+    if (isMenuOpen && !isLogoutMode) {
+      // 프로그레스 애니메이션 (1.75초 동안 0 -> 100)
+      const startTime = Date.now()
+      const duration = 1750 // 1.75초
+
+      progressInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime
+        const progress = Math.min((elapsed / duration) * 100, 100)
+        setLogoutProgress(progress)
+      }, 50)
+
+      // 3초 후 로그아웃 모드로 전환
+      logoutTimer = setTimeout(() => {
+        setIsLogoutMode(true)
+        setLogoutProgress(100)
+      }, duration)
+    } else if (!isMenuOpen) {
+      // 메뉴 닫히면 리셋
+      setIsLogoutMode(false)
+      setLogoutProgress(0)
+    }
+
+    return () => {
+      if (progressInterval) clearInterval(progressInterval)
+      if (logoutTimer) clearTimeout(logoutTimer)
+    }
+  }, [isMenuOpen, isLogoutMode])
 
   // 글쓰기 버튼 핸들러
   const handleWriteClick = async () => {
@@ -389,12 +424,49 @@ function App() {
           onMouseEnter={() => setIsMenuOpen(true)}
           onMouseLeave={() => setIsMenuOpen(false)}
         >
+          {/* 프로그레스 링 */}
+          {isMenuOpen && (
+            <svg
+              className="logout-progress-ring"
+              width="84"
+              height="84"
+              viewBox="0 0 84 84"
+            >
+              <circle
+                className="logout-progress-bg"
+                cx="42"
+                cy="42"
+                r="36"
+                fill="none"
+                stroke="rgba(255,180,180,0.6)"
+                strokeWidth="12"
+              />
+              <circle
+                className="logout-progress-bar"
+                cx="42"
+                cy="42"
+                r="36"
+                fill="none"
+                stroke={isLogoutMode ? "#ef4444" : "#f87171"}
+                strokeWidth="12"
+                strokeLinecap="round"
+                strokeDasharray={`${2 * Math.PI * 36}`}
+                strokeDashoffset={`${2 * Math.PI * 36 * (1 - logoutProgress / 100)}`}
+                style={{
+                  transition: 'stroke 0.3s ease, stroke-dashoffset 0.05s linear',
+                  transform: 'rotate(-90deg)',
+                  transformOrigin: 'center'
+                }}
+              />
+            </svg>
+          )}
+
           <button
-            className={`floating-btn ${isMenuOpen ? 'logout-mode' : ''}`}
-            onClick={isMenuOpen ? handleLogout : () => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? "로그아웃" : "메뉴"}
+            className={`floating-btn ${isLogoutMode ? 'logout-mode' : ''}`}
+            onClick={isLogoutMode ? handleLogout : () => {}}
+            aria-label={isLogoutMode ? "로그아웃" : "메뉴"}
           >
-            {isMenuOpen ? (
+            {isLogoutMode ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -405,6 +477,7 @@ function App() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="logout-icon"
               >
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                 <polyline points="16 17 21 12 16 7"></polyline>

@@ -1,7 +1,7 @@
 /* ===== Ad Card ===== */
 .ad-card {
   width: 200px;
-  height: 320px;
+  height: 365px;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -31,7 +31,7 @@
 /* ===== 이미지 영역 (크기 유지) ===== */
 .ad-card-image {
   width: 200px;
-  height: 200px;
+  height: 160px;
   overflow: hidden;
   flex-shrink: 0;
   position: relative;
@@ -119,6 +119,7 @@
   flex-direction: column;
   gap: 2px;
   background-color: white;
+  flex: 1;
 }
 
 /* ===== 배지 (channelType, reviewType) ===== */
@@ -148,10 +149,10 @@
 
 /* ===== 제목 ===== */
 .ad-card-title {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
   color: #2c3e50;
-  margin: 0;
+  margin: 4px 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -177,7 +178,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 3px;
+  margin-top: auto;
   padding-top: 6px;
   border-top: 1px solid #ecf0f1;
 }
@@ -199,12 +200,16 @@
 
 /* ===== 반응형 ===== */
 @media (max-width: 768px) {
+  .ad-card {
+    height: 325px;
+  }
+
   .ad-card-image {
-    height: 180px;
+    height: 140px;
   }
 
   .ad-card-title {
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .ad-card-item-info {

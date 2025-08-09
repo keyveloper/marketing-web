@@ -105,7 +105,6 @@ function AdCard({ adData, onClick, onLikeToggle, likeApi, isCompleted = false })
 
         {/* title */}
         <h3 className="ad-card-title">{adData.title || '제목 없음'}</h3>
-        <br />
 
         {/* itemInfo */}
         <p className="ad-card-item-info">{adData.itemInfo || '상품 정보 없음'}</p>

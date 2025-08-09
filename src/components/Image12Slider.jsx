@@ -5,7 +5,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import './Image12Slider.css'
 
-function Image12Slider({ imageUrls = [], adCards = [], onAdClick, likeApi, spaceBetween = 20 }) {
+function Image12Slider({ imageUrls = [], adCards = [], onAdClick, likeApi, spaceBetween = 12 }) {
   console.log(`imageUrls: ${imageUrls}`)
   console.log('imageUrls:', Array.isArray(imageUrls), imageUrls)
   console.log('adCards:', adCards)

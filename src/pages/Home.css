@@ -175,9 +175,67 @@
   }
 }
 
-@media (max-width: 768px) {
+/* 태블릿 (1024px 이하) */
+@media (max-width: 1024px) {
+  .banner-section {
+    height: 180px;
+  }
+
+  .banner-item span {
+    font-size: 16px;
+  }
+
   .hero-section {
-    padding: 30px 20px;
+    padding: 30px 40px;
+  }
+
+  .image-slider-container {
+    height: 380px;
+  }
+}
+
+/* 모바일 (768px 이하) */
+@media (max-width: 768px) {
+  .banner-section {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .banner-item {
+    flex: none !important;
+    height: 60px;
+    width: 100%;
+  }
+
+  .banner-item-1 {
+    flex: none !important;
+  }
+
+  .banner-section:has(.banner-item:hover) .banner-item {
+    flex: none !important;
+    height: 60px;
+  }
+
+  .banner-section:has(.banner-item:hover) .banner-item:hover {
+    flex: none !important;
+    height: 120px;
+  }
+
+  .banner-item span {
+    font-size: 14px;
+  }
+
+  .hero-section {
+    padding: 24px 16px;
+  }
+
+  .hero-content > h1 {
+    font-size: 24px;
+  }
+
+  .hero-content > p {
+    font-size: 14px;
+    margin-bottom: 24px;
   }
 
   .slider-container {
@@ -185,7 +243,43 @@
   }
 
   .slider-title {
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 15px;
+    padding-left: 4px;
+  }
+
+  .image-slider-container {
+    height: 320px;
+  }
+
+  .swiper-slide {
+    width: 200px !important;
+  }
+}
+
+/* 작은 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  .banner-section {
+    display: none;
+  }
+
+  .hero-section {
+    padding: 20px 12px;
+  }
+
+  .hero-content > h1 {
+    font-size: 20px;
+  }
+
+  .slider-title {
+    font-size: 16px;
+  }
+
+  .image-slider-container {
+    height: 280px;
+  }
+
+  .swiper-slide {
+    width: 160px !important;
   }
 }

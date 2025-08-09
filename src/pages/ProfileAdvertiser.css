@@ -329,18 +329,50 @@
 
 
 /* 반응형 디자인 */
+
+/* 태블릿 (1024px 이하) */
+@media (max-width: 1024px) {
+  .profile-advertiser-content {
+    padding: 0 20px 20px;
+  }
+
+  .profile-advertiser-image {
+    width: 140px;
+    height: 140px;
+    margin-top: -70px;
+    margin-left: 20px;
+  }
+
+  .profile-advertiser-info {
+    padding: 0 20px;
+  }
+
+  .advertiser-name {
+    font-size: 28px;
+  }
+
+  .about-section {
+    padding: 28px 36px;
+  }
+}
+
+/* 모바일 (768px 이하) */
 @media (max-width: 768px) {
   .profile-advertiser-container {
-    padding: 20px 0;
+    padding: 0;
   }
 
   .profile-advertiser-card {
-    width: 100px;
+    width: 100%;
     border-radius: 0;
   }
 
   .background-section {
     height: 160px;
+  }
+
+  .profile-advertiser-content {
+    padding: 0 16px 16px;
   }
 
   .profile-advertiser-image {
@@ -400,10 +432,25 @@
   }
 }
 
+/* 작은 모바일 (480px 이하) */
 @media (max-width: 480px) {
+  .background-section {
+    height: 140px;
+  }
+
+  .profile-advertiser-content {
+    padding: 0 12px 12px;
+  }
+
   .profile-advertiser-image {
     width: 100px;
     height: 100px;
+    margin-top: -50px;
+    margin-left: 8px;
+  }
+
+  .profile-advertiser-info {
+    padding: 0 8px;
   }
 
   .advertiser-name {

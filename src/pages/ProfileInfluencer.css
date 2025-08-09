@@ -220,9 +220,37 @@
 
 
 /* 반응형 디자인 */
+
+/* 태블릿 (1024px 이하) */
+@media (max-width: 1024px) {
+  .profile-influencer-content {
+    padding: 0 20px 20px;
+  }
+
+  .profile-influencer-image {
+    width: 140px;
+    height: 140px;
+    margin-top: -70px;
+    margin-left: 20px;
+  }
+
+  .profile-influencer-info {
+    padding: 0 20px;
+  }
+
+  .influencer-name {
+    font-size: 28px;
+  }
+
+  .profile-influencer-card .about-section {
+    padding: 28px 36px;
+  }
+}
+
+/* 모바일 (768px 이하) */
 @media (max-width: 768px) {
   .profile-influencer-container {
-    padding: 20px 0;
+    padding: 0;
   }
 
   .profile-influencer-card {
@@ -232,6 +260,10 @@
 
   .profile-influencer-card .background-section {
     height: 160px;
+  }
+
+  .profile-influencer-content {
+    padding: 0 16px 16px;
   }
 
   .profile-influencer-image {
@@ -279,10 +311,25 @@
   }
 }
 
+/* 작은 모바일 (480px 이하) */
 @media (max-width: 480px) {
+  .profile-influencer-card .background-section {
+    height: 140px;
+  }
+
+  .profile-influencer-content {
+    padding: 0 12px 12px;
+  }
+
   .profile-influencer-image {
     width: 100px;
     height: 100px;
+    margin-top: -50px;
+    margin-left: 8px;
+  }
+
+  .profile-influencer-info {
+    padding: 0 8px;
   }
 
   .influencer-name {
