@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "vite build && aws s3 sync dist/ s3://marketing-web-app --delete && aws cloudfront create-invalidation --distribution-id E1ZTDEQRUOYZ2 --paths \"/*\""
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.19",

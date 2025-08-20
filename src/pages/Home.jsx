@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Image12Slider from '../components/Image12Slider.jsx'
+import Image12MobileSlider from '../components/Image12MobileSlider.jsx'
 import {
   getInitFreshAdvertisements,
   getInitDeadlineAdvertisements,
@@ -11,6 +12,18 @@ import './Home.css'
 
 function Home() {
   const navigate = useNavigate()
+
+  // 화면 크기 감지 (768px 이하면 모바일)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // main List: cut 12 items
   const [freshAdImageUrl, setFreshAdImageUrl] = useState([])
@@ -122,32 +135,59 @@ function Home() {
         <div className="hero-content">
           <div className="slider-container">
             <h2 className="slider-title">🆕 최신 등록된</h2>
-            <Image12Slider
-              imageUrls={freshAdImageUrl}
-              adCards={freshAdCards}
-              onAdClick={handleAdClick}
-              likeApi={handleLikeApi}
-            />
+            {isMobile ? (
+              <Image12MobileSlider
+                imageUrls={freshAdImageUrl}
+                adCards={freshAdCards}
+                onAdClick={handleAdClick}
+                likeApi={handleLikeApi}
+              />
+            ) : (
+              <Image12Slider
+                imageUrls={freshAdImageUrl}
+                adCards={freshAdCards}
+                onAdClick={handleAdClick}
+                likeApi={handleLikeApi}
+              />
+            )}
           </div>
 
           <div className="slider-container">
             <h2 className="slider-title">🔥 인기있는</h2>
-            <Image12Slider
-              imageUrls={hotAdImageUrl}
-              adCards={hotAdCards}
-              onAdClick={handleAdClick}
-              likeApi={handleLikeApi}
-            />
+            {isMobile ? (
+              <Image12MobileSlider
+                imageUrls={hotAdImageUrl}
+                adCards={hotAdCards}
+                onAdClick={handleAdClick}
+                likeApi={handleLikeApi}
+              />
+            ) : (
+              <Image12Slider
+                imageUrls={hotAdImageUrl}
+                adCards={hotAdCards}
+                onAdClick={handleAdClick}
+                likeApi={handleLikeApi}
+              />
+            )}
           </div>
 
           <div className="slider-container">
             <h2 className="slider-title">⌛ 마감임박</h2>
-            <Image12Slider
-              imageUrls={deadlineAdImageUrl}
-              adCards={deadlineAdCards}
-              onAdClick={handleAdClick}
-              likeApi={handleLikeApi}
-            />
+            {isMobile ? (
+              <Image12MobileSlider
+                imageUrls={deadlineAdImageUrl}
+                adCards={deadlineAdCards}
+                onAdClick={handleAdClick}
+                likeApi={handleLikeApi}
+              />
+            ) : (
+              <Image12Slider
+                imageUrls={deadlineAdImageUrl}
+                adCards={deadlineAdCards}
+                onAdClick={handleAdClick}
+                likeApi={handleLikeApi}
+              />
+            )}
           </div>
         </div>
       </section>

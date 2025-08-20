@@ -197,15 +197,15 @@ function App() {
     }
   }, [isMenuOpen])
 
-  // 3초 호버시 로그아웃 모드 전환
+  // 1.4초 호버시 로그아웃 모드 전환
   useEffect(() => {
     let progressInterval = null
     let logoutTimer = null
 
     if (isMenuOpen && !isLogoutMode) {
-      // 프로그레스 애니메이션 (1.75초 동안 0 -> 100)
+      // 프로그레스 애니메이션 (1.4초 동안 0 -> 100)
       const startTime = Date.now()
-      const duration = 1750 // 1.75초
+      const duration = 1400 // 1.4초
 
       progressInterval = setInterval(() => {
         const elapsed = Date.now() - startTime
@@ -213,7 +213,7 @@ function App() {
         setLogoutProgress(progress)
       }, 50)
 
-      // 3초 후 로그아웃 모드로 전환
+      // 1.4초 후 로그아웃 모드로 전환
       logoutTimer = setTimeout(() => {
         setIsLogoutMode(true)
         setLogoutProgress(100)
@@ -284,39 +284,63 @@ function App() {
         </div>
         <div className="auth-buttons">
           {isAuthenticated ? (
-            <button
-              className="my-service-btn"
-              onClick={() => {
-                const userId = user?.userId || localStorage.getItem('userId')
-                if (userId) {
-                  if (userType && userType.startsWith('ADVERTISER')) {
-                    navigate(`/dashboard-advertiser/${userId}`)
-                  } else if (userType && userType.startsWith('INFLUENCER')) {
-                    navigate(`/dashboard-influencer/${userId}`)
-                  } else if (userType && userType.startsWith('SERVICER')) {
-                    navigate(`/profile-servicer/${userId}`)
+            <>
+              <button
+                className="my-service-btn"
+                onClick={() => {
+                  const userId = user?.userId || localStorage.getItem('userId')
+                  if (userId) {
+                    if (userType && userType.startsWith('ADVERTISER')) {
+                      navigate(`/dashboard-advertiser/${userId}`)
+                    } else if (userType && userType.startsWith('INFLUENCER')) {
+                      navigate(`/dashboard-influencer/${userId}`)
+                    } else if (userType && userType.startsWith('SERVICER')) {
+                      navigate(`/profile-servicer/${userId}`)
+                    }
                   }
-                }
-              }}
-              aria-label="내 서비스"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                }}
+                aria-label="내 서비스"
               >
-                <circle cx="12" cy="12" r="10"></circle>
-                <circle cx="12" cy="9" r="3"></circle>
-                <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
-              </svg>
-              <span>내 서비스</span>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="9" r="3"></circle>
+                  <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
+                </svg>
+                <span>내 서비스</span>
+              </button>
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+                aria-label="로그아웃"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>로그아웃</span>
+              </button>
+            </>
           ) : (
             <>
               <button className="login-btn" onClick={() => navigate('/login')}>
@@ -354,13 +378,13 @@ function App() {
         <p>Footer - 연락처 및 정보</p>
       </footer>
 
-      {/* ===== Notification Floating Button (Right Middle) ===== */}
-      <div
-        className="noti-floating-container"
-        onMouseEnter={() => setIsNotiOpen(true)}
-        onMouseLeave={() => setIsNotiOpen(false)}
-      >
-        <div className="noti-floating-btn">
+      {/* ===== Notification Floating Button (Right Middle) - 로그인 시에만 표시 ===== */}
+      {isAuthenticated && (
+      <div className="noti-floating-container">
+        <div
+          className="noti-floating-btn"
+          onClick={() => setIsNotiOpen(!isNotiOpen)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -416,6 +440,7 @@ function App() {
           </div>
         )}
       </div>
+      )}
 
       {/* ADVERTISER 사용자를 위한 Floating 버튼 */}
       {userType && userType.startsWith('ADVERTISER') && (

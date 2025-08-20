@@ -115,16 +115,31 @@
 
 .signup-btn {
   color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .signup-btn:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #653a91 100%);
 }
 
 .logout-btn {
-  color: white;
+  color: #ef4444;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
 }
 
 .logout-btn:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.logout-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 .my-service-btn {
@@ -543,22 +558,28 @@
     height: 18px;
   }
 
-  /* Notification */
+  /* Notification - 모바일에서 왼쪽 배치 */
   .noti-floating-container {
     top: auto;
-    bottom: 100px;
+    bottom: 40px;
+    right: auto;
+    left: 0;
     transform: none;
   }
 
   .noti-floating-container::before {
     width: 60px;
     height: 56px;
+    right: auto;
+    left: 0;
+    border-radius: 0 30px 30px 0;
   }
 
   .noti-floating-btn {
     width: 40px;
     height: 40px;
-    margin-right: 10px;
+    margin-right: 0;
+    margin-left: 16px;
   }
 
   .noti-panel {
@@ -566,7 +587,7 @@
     right: 10px;
     left: 10px;
     top: auto;
-    bottom: 160px;
+    bottom: 100px;
     width: auto;
     max-height: 400px;
     transform: none;
@@ -631,11 +652,13 @@
     font-size: 12px;
   }
 
-  .my-service-btn span:not(.my-service-btn svg) {
+  .my-service-btn span,
+  .logout-btn span {
     display: none;
   }
 
-  .my-service-btn {
+  .my-service-btn,
+  .logout-btn {
     padding: 6px;
     gap: 0;
   }

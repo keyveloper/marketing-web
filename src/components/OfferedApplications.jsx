@@ -24,26 +24,30 @@ function OfferedApplications() {
       console.log('🟦 result.result:', result.result)
 
       if (result.success && result.result) {
-        // result.result가 배열인 경우 (offeredAdvertisements가 직접 배열로 옴)
-        const offeredAds = Array.isArray(result.result)
-          ? result.result
-          : result.result.offeredAdvertisements || []
+        // 실제 API 구조: result.result.offeredApplicationInfos 배열
+        const offeredApps = result.result.offeredApplicationInfos || []
 
-        console.log('✅ 받은 신청 목록:', offeredAds)
+        console.log('✅ 받은 신청 목록:', offeredApps)
 
-        // 모든 신청을 flat하게 펼치고 applicationCreatedAt 순으로 정렬
-        const flatApplications = []
-        offeredAds.forEach(item => {
-          const adSummary = item.offeredAdvertisementSummary
-          item.offeredApplicationInfos?.forEach(app => {
-            flatApplications.push({
-              ...app,
-              advertisement: adSummary
-            })
-          })
-        })
+        // 광고 정보가 각 객체에 직접 포함되어 있으므로 advertisement 객체로 매핑
+        const flatApplications = offeredApps.map(app => ({
+          ...app,
+          advertisement: {
+            advertisementId: app.advertisementId,
+            title: app.title,
+            thumbnailUrl: app.thumbnailUrl,
+            reviewType: app.reviewType,
+            channelType: app.channelType,
+            itemName: app.itemName,
+            recruitmentNumber: app.recruitmentNumber,
+            recruitmentStartAt: app.recruitmentStartAt,
+            recruitmentEndAt: app.recruitmentEndAt,
+            reviewStartAt: app.reviewStartAt,
+            reviewEndAt: app.reviewEndAt,
+          }
+        }))
 
-        console.log('✅ 펼친 신청 목록:', flatApplications)
+        console.log('✅ 매핑된 신청 목록:', flatApplications)
 
         // applicationCreatedAt 기준 내림차순 정렬 (최신순)
         flatApplications.sort((a, b) => b.applicationCreatedAt - a.applicationCreatedAt)

@@ -1,0 +1,50 @@
+/* ===== Mobile Slider Container ===== */
+.mobile-slider-container {
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ===== Mobile Swiper ===== */
+.mobile-swiper {
+  width: 100%;
+  padding-bottom: 36px; /* pagination 공간 */
+}
+
+.mobile-swiper .swiper-wrapper {
+  padding: 4px 0;
+}
+
+/* ===== Mobile Slide ===== */
+.mobile-slide {
+  width: 100% !important;
+  display: flex;
+  justify-content: center;
+}
+
+/* ===== Pagination 스타일 ===== */
+.mobile-swiper .swiper-pagination {
+  bottom: 0 !important;
+}
+
+.mobile-swiper .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  background: #bdc3c7;
+  opacity: 1;
+  margin: 0 3px !important;
+  transition: all 0.2s ease;
+}
+
+.mobile-swiper .swiper-pagination-bullet-active {
+  background: #3498db;
+  width: 18px;
+  border-radius: 3px;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 480px) {
+  .mobile-swiper {
+    padding-bottom: 32px;
+  }
+}
