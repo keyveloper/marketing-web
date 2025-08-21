@@ -23,6 +23,20 @@ function Home() {
   // 배너 상태 추적 (마지막으로 호버된 배너 인덱스)
   const [activeBanner, setActiveBanner] = useState(0)
 
+  // 샘플 카드 데이터 생성 함수 (fetch 실패 시 사용)
+  const generateSampleCards = (count = 4) => {
+    return Array.from({ length: count }, (_, index) => ({
+      advertisementId: `sample-${index}`,
+      imageUrl: null,
+      channelType: index % 3 === 0 ? 'YOUTUBE' : index % 2 === 0 ? 'BLOGGER' : 'INSTAGRAM',
+      reviewType: index % 3 === 0 ? 'BUY' : index % 2 === 0 ? 'DELIVERY' : 'VISIT',
+      title: `샘플 광고 제목 ${index + 1}`,
+      itemInfo: '샘플 상품 정보입니다',
+      appliedCount: Math.floor(Math.random() * 10),
+      recruitNumber: 10,
+    }))
+  }
+
   // 배너 데이터 (캠페인 이미지 - Unsplash 상업용)
   const bannerItems = [
     { id: 1, label: '신규 캠페인', image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=300&fit=crop' },
@@ -174,12 +188,12 @@ function Home() {
             <h2 className="slider-title">🆕 최신 등록된</h2>
             {isMobile ? (
               <div className="mobile-card-list">
-                {freshAdCards.map((card, index) => (
+                {(freshAdCards.length > 0 ? freshAdCards : generateSampleCards()).map((card, index) => (
                   <AdRowCard
                     key={card.advertisementId || index}
                     adData={{
                       ...card,
-                      imageUrl: freshAdImageUrl[index],
+                      imageUrl: freshAdImageUrl[index] || card.imageUrl,
                     }}
                     onClick={handleAdClick}
                     likeApi={handleLikeApi}
@@ -200,12 +214,12 @@ function Home() {
             <h2 className="slider-title">🔥 인기있는</h2>
             {isMobile ? (
               <div className="mobile-card-list">
-                {hotAdCards.map((card, index) => (
+                {(hotAdCards.length > 0 ? hotAdCards : generateSampleCards()).map((card, index) => (
                   <AdRowCard
                     key={card.advertisementId || index}
                     adData={{
                       ...card,
-                      imageUrl: hotAdImageUrl[index],
+                      imageUrl: hotAdImageUrl[index] || card.imageUrl,
                     }}
                     onClick={handleAdClick}
                     likeApi={handleLikeApi}
@@ -226,12 +240,12 @@ function Home() {
             <h2 className="slider-title">⌛ 마감임박</h2>
             {isMobile ? (
               <div className="mobile-card-list">
-                {deadlineAdCards.map((card, index) => (
+                {(deadlineAdCards.length > 0 ? deadlineAdCards : generateSampleCards()).map((card, index) => (
                   <AdRowCard
                     key={card.advertisementId || index}
                     adData={{
                       ...card,
-                      imageUrl: deadlineAdImageUrl[index],
+                      imageUrl: deadlineAdImageUrl[index] || card.imageUrl,
                     }}
                     onClick={handleAdClick}
                     likeApi={handleLikeApi}
