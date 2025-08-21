@@ -101,9 +101,12 @@
 .image-slider-container {
   position: relative;
   width: 100%;
-  height: 740px; /* 2행 x 340px + gap + pagination */
+  height: 445px;
   margin: 0 auto;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ===== Swiper Styles ===== */
@@ -122,8 +125,9 @@
   height: 100%;
 }
 
-/* Grid 슬라이더에서는 swiper-slide 크기를 자동으로 계산 */
 .swiper-slide {
+  width: 250px !important;
+  height: 100%;
   box-sizing: border-box;
 }
 
@@ -186,7 +190,7 @@
   }
 
   .image-slider-container {
-    height: 680px; /* 2행 x 320px + gap + pagination */
+    height: 380px;
   }
 }
 
@@ -244,9 +248,12 @@
     padding-left: 4px;
   }
 
-  /* 모바일에서는 Row형 슬라이더 사용 - 높이 자동 */
   .image-slider-container {
-    height: auto;
+    height: 320px;
+  }
+
+  .swiper-slide {
+    width: 200px !important;
   }
 }
 
@@ -268,8 +275,11 @@
     font-size: 16px;
   }
 
-  /* 모바일에서는 Row형 슬라이더 사용 - 높이 자동 */
   .image-slider-container {
-    height: auto;
+    height: 280px;
+  }
+
+  .swiper-slide {
+    width: 160px !important;
   }
 }

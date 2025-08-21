@@ -7,7 +7,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import "./Advertisement.css";
 import { getAdvertisementById } from '../api/advertisementApi.js';
-import { applyReview, getReviewApplicationsByAdvertisementId } from '../api/reviewApplicationApi.js';
+import { applyReview, getReviewApplicationsByAdvertisementId, getReviewApplicationsWithOwnership } from '../api/reviewApplicationApi.js';
 import { getAdvertiserProfileByAdvertisementId } from '../api/profileSummaryApi.js';
 
 export default function Advertisement() {
@@ -79,14 +79,22 @@ export default function Advertisement() {
     fetchAdvertisement();
   }, [id]);
 
-  // 리뷰 신청 목록 로드
+  // 리뷰 신청 목록 로드 (userType에 따라 다른 API 호출)
   useEffect(() => {
     const fetchApplications = async () => {
       if (!id) return;
 
       try {
-        console.log(`🟦 리뷰 신청 목록 조회 중... 광고 ID: ${id}`);
-        const result = await getReviewApplicationsByAdvertisementId(Number(id));
+        console.log(`🟦 리뷰 신청 목록 조회 중... 광고 ID: ${id}, userType: ${userType}`);
+
+        let result;
+        if (userType === 'INFLUENCER') {
+          // INFLUENCER인 경우 소유권 정보 포함 API 호출
+          result = await getReviewApplicationsWithOwnership(Number(id));
+        } else {
+          // 그 외 (ADVERTISER 또는 비로그인)는 open API 호출
+          result = await getReviewApplicationsByAdvertisementId(Number(id));
+        }
 
         if (result.success) {
           console.log('✅ 리뷰 신청 목록:', result.applications);
@@ -100,7 +108,7 @@ export default function Advertisement() {
     };
 
     fetchApplications();
-  }, [id]);
+  }, [id, userType]);
 
   // 광고주 프로필 요약 조회
   useEffect(() => {
@@ -434,7 +442,7 @@ export default function Advertisement() {
                   <h2 className="ad-view-section-title">리뷰 신청 목록 ({applications.length})</h2>
                   <div className="ad-view-review-applications-list">
                     {applications.map((app) => (
-                      <div key={app.id} className="ad-view-review-application-item">
+                      <div key={app.id} className={`ad-view-review-application-item ${app.isOwner ? 'ad-view-review-application-mine' : ''}`}>
                         {/* 프로필 이미지 플레이스홀더 */}
                         <div className="ad-view-review-application-avatar">
                           {app.influencerUsername?.[0]?.toUpperCase() || 'U'}
@@ -444,6 +452,7 @@ export default function Advertisement() {
                         <div className="ad-view-review-application-content">
                           <p className="ad-view-review-application-username">
                             {app.influencerUsername}
+                            {app.isOwner && <span className="ad-view-review-application-mine-badge">내 신청</span>}
                           </p>
                           <p className="ad-view-review-application-memo">
                             {app.applyMemo}
@@ -452,6 +461,15 @@ export default function Advertisement() {
                         <span className="ad-view-review-application-date">
                           {formatKoreanDate(app.createdAt)}
                         </span>
+                        {/* isOwner인 경우 수정 아이콘 표시 */}
+                        {app.isOwner && (
+                          <button className="ad-view-review-application-edit-btn" title="수정">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>

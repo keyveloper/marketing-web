@@ -583,6 +583,44 @@
   -webkit-box-orient: vertical;
 }
 
+/* 내 신청 스타일 */
+.ad-view-review-application-mine {
+  background-color: #f0f9ff !important;
+  border: 1px solid #0ea5e9 !important;
+}
+
+.ad-view-review-application-mine-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #0369a1;
+  background-color: #e0f2fe;
+  border-radius: 12px;
+}
+
+.ad-view-review-application-edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: #6b7280;
+  background-color: transparent;
+  border: none !important;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ad-view-review-application-edit-btn:hover {
+  color: #3b82f6;
+  background-color: #f0f9ff;
+}
+
 /* 모달 스타일 */
 .ad-view-modal-overlay {
   position: fixed;

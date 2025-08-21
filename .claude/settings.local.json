@@ -4,7 +4,8 @@
       "Bash(npm install:*)",
       "Bash(cat:*)",
       "Bash(del \"C:\\Users\\dideh\\Desktop\\marketing\\marekting-web\\src\\components\\MyAdvertisementList.jsx\" \"C:\\Users\\dideh\\Desktop\\marketing\\marekting-web\\src\\components\\MyAdvertisementList.css\")",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

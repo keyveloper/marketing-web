@@ -96,3 +96,53 @@ export const getReviewApplicationsByAdvertisementId = async (advertisementId) =>
     };
   }
 };
+
+/**
+ * 광고별 리뷰 신청 목록 조회 (소유권 정보 포함 - 인증 필요)
+ * @param {number} advertisementId - 광고 ID
+ * @returns {Promise<{success: boolean, applications?: Array, error?: string}>}
+ */
+export const getReviewApplicationsWithOwnership = async (advertisementId) => {
+  try {
+    // Cognito에서 idToken 가져오기
+    const session = await fetchAuthSession();
+    const idToken = session.tokens?.idToken?.toString();
+
+    if (!idToken) {
+      throw new Error('인증 토큰을 찾을 수 없습니다. 다시 로그인해주세요.');
+    }
+
+    console.log(`✅ 광고 ID ${advertisementId}의 리뷰 신청 목록 (소유권 포함) 조회 시작...`);
+
+    // API 호출 (인증 필요)
+    const response = await apiClient.get(
+      `/review-applications/${advertisementId}/with-ownership`,
+      {
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+        },
+      }
+    );
+
+    console.log('✅ 리뷰 신청 목록 (소유권 포함) 조회 성공:', response);
+
+    // response는 이미 data만 추출된 상태 (interceptor 때문)
+    const { frontErrorCode, errorMessage, applications } = response;
+
+    // frontErrorCode 20000이 성공 코드
+    if (frontErrorCode !== 20000) {
+      throw new Error(errorMessage || '리뷰 신청 목록 조회에 실패했습니다.');
+    }
+
+    return {
+      success: true,
+      applications: applications,
+    };
+  } catch (error) {
+    console.error('❌ 리뷰 신청 목록 (소유권 포함) 조회 실패:', error);
+    return {
+      success: false,
+      error: error.response?.data?.errorMessage || error.message || '리뷰 신청 목록 조회 중 오류가 발생했습니다.',
+    };
+  }
+};
