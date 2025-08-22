@@ -1,30 +1,52 @@
 /* ===== Mobile Slider Container ===== */
 .mobile-slider-container {
-  width: 100%;
-  padding: 0;
+  width: 100vw !important;
+  margin-left: calc(-50vw + 50%) !important;
+  margin-right: calc(-50vw + 50%) !important;
+  padding: 0 !important;
   overflow: hidden;
 }
 
 /* ===== Mobile Swiper ===== */
 .mobile-swiper {
-  width: 100%;
-  padding-bottom: 36px; /* pagination 공간 */
+  width: 100% !important;
+  padding: 0 0 36px 0 !important; /* pagination 공간 */
 }
 
 .mobile-swiper .swiper-wrapper {
-  padding: 4px 0;
+  padding: 0 !important;
 }
 
 /* ===== Mobile Slide ===== */
 .mobile-slide {
   width: 100% !important;
-  display: flex;
-  justify-content: center;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 슬라이드 내부 카드가 전체 너비 차지 */
+.mobile-slide .ad-row-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 140px !important;
+  border-radius: 0 !important;
+  border-left: none !important;
+  border-right: none !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border-top: 1px solid #e5e5e5 !important;
+  border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.mobile-slide .ad-row-card-thumbnail {
+  width: 140px !important;
+  height: 140px !important;
 }
 
 /* ===== Pagination 스타일 ===== */
 .mobile-swiper .swiper-pagination {
-  bottom: 0 !important;
+  bottom: 8px !important;
 }
 
 .mobile-swiper .swiper-pagination-bullet {
@@ -46,5 +68,14 @@
 @media (max-width: 480px) {
   .mobile-swiper {
     padding-bottom: 32px;
+  }
+
+  .mobile-slide .ad-row-card {
+    height: 130px !important;
+  }
+
+  .mobile-slide .ad-row-card-thumbnail {
+    width: 130px !important;
+    height: 130px !important;
   }
 }

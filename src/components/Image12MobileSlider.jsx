@@ -45,9 +45,8 @@ function Image12MobileSlider({ imageUrls = [], adCards = [], onAdClick, likeApi 
     <div className="mobile-slider-container">
       <Swiper
         modules={[Pagination]}
-        spaceBetween={16}
+        spaceBetween={0}
         slidesPerView={1}
-        centeredSlides={true}
         pagination={{
           clickable: true,
         }}

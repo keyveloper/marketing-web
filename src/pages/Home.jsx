@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination, Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
 import Image12Slider from '../components/Image12Slider.jsx'
-import Image12MobileSlider from '../components/Image12MobileSlider.jsx'
+import AdRowCard from '../components/AdRowCard.jsx'
 import {
   getInitFreshAdvertisements,
   getInitDeadlineAdvertisements,
@@ -15,6 +19,18 @@ function Home() {
 
   // 화면 크기 감지 (768px 이하면 모바일)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  // 배너 상태 추적 (마지막으로 호버된 배너 인덱스)
+  const [activeBanner, setActiveBanner] = useState(0)
+
+  // 배너 데이터
+  const bannerItems = [
+    { id: 1, label: 'Item 1', color: '#FFB3BA' },
+    { id: 2, label: 'Item 2', color: '#FFDFBA' },
+    { id: 3, label: 'Item 3', color: '#FFFFBA' },
+    { id: 4, label: 'Item 4', color: '#BAFFC9' },
+    { id: 5, label: 'Item 5', color: '#BAE1FF' },
+  ]
 
   useEffect(() => {
     const handleResize = () => {
@@ -113,35 +129,64 @@ function Home() {
 
   return (
     <>
-      <section className="banner-section">
-        <div className="banner-item banner-item-1">
-          <span>Item 1</span>
-        </div>
-        <div className="banner-item banner-item-2">
-          <span>Item 2</span>
-        </div>
-        <div className="banner-item banner-item-3">
-          <span>Item 3</span>
-        </div>
-        <div className="banner-item banner-item-4">
-          <span>Item 4</span>
-        </div>
-        <div className="banner-item banner-item-5">
-          <span>Item 5</span>
-        </div>
-      </section>
+      {isMobile ? (
+        /* 모바일: Swiper 슬라이더 */
+        <section className="banner-section-mobile">
+          <Swiper
+            modules={[Pagination, Autoplay]}
+            spaceBetween={0}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 3000, disableOnInteraction: false }}
+            loop={true}
+            className="banner-swiper"
+          >
+            {bannerItems.map((item) => (
+              <SwiperSlide key={item.id}>
+                <div
+                  className="banner-slide"
+                  style={{ backgroundColor: item.color }}
+                >
+                  <span>{item.label}</span>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </section>
+      ) : (
+        /* 데스크톱: 상태 기반 호버 효과 */
+        <section className="banner-section">
+          {bannerItems.map((item, index) => (
+            <div
+              key={item.id}
+              className={`banner-item ${activeBanner === index ? 'banner-active' : ''}`}
+              style={{ backgroundColor: item.color }}
+              onMouseEnter={() => setActiveBanner(index)}
+            >
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </section>
+      )}
 
       <section className="hero-section">
         <div className="hero-content">
           <div className="slider-container">
             <h2 className="slider-title">🆕 최신 등록된</h2>
             {isMobile ? (
-              <Image12MobileSlider
-                imageUrls={freshAdImageUrl}
-                adCards={freshAdCards}
-                onAdClick={handleAdClick}
-                likeApi={handleLikeApi}
-              />
+              <div className="mobile-card-list">
+                {freshAdCards.map((card, index) => (
+                  <AdRowCard
+                    key={card.advertisementId || index}
+                    adData={{
+                      ...card,
+                      imageUrl: freshAdImageUrl[index],
+                    }}
+                    onClick={handleAdClick}
+                    likeApi={handleLikeApi}
+                  />
+                ))}
+              </div>
             ) : (
               <Image12Slider
                 imageUrls={freshAdImageUrl}
@@ -155,12 +200,19 @@ function Home() {
           <div className="slider-container">
             <h2 className="slider-title">🔥 인기있는</h2>
             {isMobile ? (
-              <Image12MobileSlider
-                imageUrls={hotAdImageUrl}
-                adCards={hotAdCards}
-                onAdClick={handleAdClick}
-                likeApi={handleLikeApi}
-              />
+              <div className="mobile-card-list">
+                {hotAdCards.map((card, index) => (
+                  <AdRowCard
+                    key={card.advertisementId || index}
+                    adData={{
+                      ...card,
+                      imageUrl: hotAdImageUrl[index],
+                    }}
+                    onClick={handleAdClick}
+                    likeApi={handleLikeApi}
+                  />
+                ))}
+              </div>
             ) : (
               <Image12Slider
                 imageUrls={hotAdImageUrl}
@@ -174,12 +226,19 @@ function Home() {
           <div className="slider-container">
             <h2 className="slider-title">⌛ 마감임박</h2>
             {isMobile ? (
-              <Image12MobileSlider
-                imageUrls={deadlineAdImageUrl}
-                adCards={deadlineAdCards}
-                onAdClick={handleAdClick}
-                likeApi={handleLikeApi}
-              />
+              <div className="mobile-card-list">
+                {deadlineAdCards.map((card, index) => (
+                  <AdRowCard
+                    key={card.advertisementId || index}
+                    adData={{
+                      ...card,
+                      imageUrl: deadlineAdImageUrl[index],
+                    }}
+                    onClick={handleAdClick}
+                    likeApi={handleLikeApi}
+                  />
+                ))}
+              </div>
             ) : (
               <Image12Slider
                 imageUrls={deadlineAdImageUrl}

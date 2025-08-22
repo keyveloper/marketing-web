@@ -1,4 +1,4 @@
-/* ===== Banner Section ===== */
+/* ===== Banner Section (Desktop) ===== */
 .banner-section {
   height: 225px;
   min-height: 180px;
@@ -21,25 +21,9 @@
   position: relative;
 }
 
-.banner-item-1 {
+/* 상태 기반 활성 배너 */
+.banner-item.banner-active {
   flex: 4;
-  background-color: #FFB3BA; /* 파스텔 핑크 */
-}
-
-.banner-item-2 {
-  background-color: #FFDFBA; /* 파스텔 오렌지 */
-}
-
-.banner-item-3 {
-  background-color: #FFFFBA; /* 파스텔 옐로우 */
-}
-
-.banner-item-4 {
-  background-color: #BAFFC9; /* 파스텔 그린 */
-}
-
-.banner-item-5 {
-  background-color: #BAE1FF; /* 파스텔 블루 */
 }
 
 .banner-item span {
@@ -49,12 +33,48 @@
   z-index: 1;
 }
 
-.banner-section:has(.banner-item:hover) .banner-item {
-  flex: 0.25;
+/* ===== Banner Section (Mobile) ===== */
+.banner-section-mobile {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
 }
 
-.banner-section:has(.banner-item:hover) .banner-item:hover {
-  flex: 4;
+.banner-swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.banner-slide {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-slide span {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.banner-swiper .swiper-pagination {
+  bottom: 10px !important;
+}
+
+.banner-swiper .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+.banner-swiper .swiper-pagination-bullet-active {
+  background: white;
+  width: 20px;
+  border-radius: 4px;
 }
 
 /* ===== Hero Section ===== */
@@ -98,6 +118,19 @@
   text-align: left;
 }
 
+/* ===== Mobile Card List ===== */
+.mobile-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.mobile-card-list .ad-row-card {
+  width: 100%;
+  border-radius: 8px;
+}
+
 .image-slider-container {
   position: relative;
   width: 100%;
@@ -107,6 +140,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* ===== Mobile Slider Container ===== */
+.mobile-slider-container {
+  width: 100%;
+  height: auto;
+  padding: 0;
 }
 
 /* ===== Swiper Styles ===== */
@@ -196,33 +236,13 @@
 
 /* 모바일 (768px 이하) */
 @media (max-width: 768px) {
-  .banner-section {
-    height: auto;
-    flex-direction: column;
+  /* 모바일에서는 .banner-section-mobile 사용 */
+  .banner-section-mobile {
+    height: 160px;
   }
 
-  .banner-item {
-    flex: none !important;
-    height: 60px;
-    width: 100%;
-  }
-
-  .banner-item-1 {
-    flex: none !important;
-  }
-
-  .banner-section:has(.banner-item:hover) .banner-item {
-    flex: none !important;
-    height: 60px;
-  }
-
-  .banner-section:has(.banner-item:hover) .banner-item:hover {
-    flex: none !important;
-    height: 120px;
-  }
-
-  .banner-item span {
-    font-size: 14px;
+  .banner-slide {
+    height: 160px;
   }
 
   .hero-section {
@@ -259,8 +279,16 @@
 
 /* 작은 모바일 (480px 이하) */
 @media (max-width: 480px) {
-  .banner-section {
-    display: none;
+  .banner-section-mobile {
+    height: 140px;
+  }
+
+  .banner-slide {
+    height: 140px;
+  }
+
+  .banner-slide span {
+    font-size: 20px;
   }
 
   .hero-section {

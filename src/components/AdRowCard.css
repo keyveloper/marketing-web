@@ -4,10 +4,10 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  height: 120px;
+  height: 140px;
   background: white;
   border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -110,8 +110,8 @@
 /* ===== 우측: 썸네일 이미지 ===== */
 .ad-row-card-thumbnail {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -182,12 +182,41 @@
 @media (max-width: 480px) {
   .ad-row-card {
     max-width: 100%;
-    height: 110px;
+    height: 130px;
   }
 
   .ad-row-card-info {
-    padding: 10px 12px;
-    gap: 4px;
+    padding: 12px 14px;
+    gap: 5px;
+  }
+
+  .ad-row-card-title {
+    font-size: 15px;
+  }
+
+  .ad-row-card-item-info {
+    font-size: 12px;
+  }
+
+  .ad-row-card-thumbnail {
+    width: 130px;
+    height: 130px;
+  }
+
+  .row-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .ad-row-card {
+    height: 120px;
+  }
+
+  .ad-row-card-thumbnail {
+    width: 120px;
+    height: 120px;
   }
 
   .ad-row-card-title {
@@ -196,34 +225,5 @@
 
   .ad-row-card-item-info {
     font-size: 11px;
-  }
-
-  .ad-row-card-thumbnail {
-    width: 110px;
-    height: 110px;
-  }
-
-  .row-badge {
-    font-size: 9px;
-    padding: 2px 5px;
-  }
-}
-
-@media (max-width: 360px) {
-  .ad-row-card {
-    height: 100px;
-  }
-
-  .ad-row-card-thumbnail {
-    width: 100px;
-    height: 100px;
-  }
-
-  .ad-row-card-title {
-    font-size: 13px;
-  }
-
-  .ad-row-card-item-info {
-    font-size: 10px;
   }
 }
