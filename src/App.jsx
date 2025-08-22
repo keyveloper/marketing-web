@@ -375,7 +375,49 @@ function App() {
 
       {/* ===== Footer (전체 페이지 공용) ===== */}
       <footer className="footer-section">
-        <p>Footer - 연락처 및 정보</p>
+        <div className="footer-content">
+          <div className="footer-top">
+            <div className="footer-company">
+              <h3 className="footer-logo">BRAND NAME</h3>
+              <p className="footer-slogan">브랜드와 인플루언서를 연결합니다</p>
+            </div>
+            <div className="footer-links">
+              <div className="footer-link-group">
+                <h4>서비스</h4>
+                <a href="#">광고 등록</a>
+                <a href="#">인플루언서 찾기</a>
+                <a href="#">캠페인 관리</a>
+              </div>
+              <div className="footer-link-group">
+                <h4>고객지원</h4>
+                <a href="#">자주 묻는 질문</a>
+                <a href="#">1:1 문의</a>
+                <a href="#">공지사항</a>
+              </div>
+              <div className="footer-link-group">
+                <h4>회사</h4>
+                <a href="#">회사 소개</a>
+                <a href="#">채용</a>
+                <a href="#">블로그</a>
+              </div>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <div className="footer-info">
+              <p>(주)브랜드 이름 | 대표: 000 | 사업자등록번호: 000-00-00000</p>
+              <p>서울특별시 강남구 테헤란로 000, 000000</p>
+              <p>고객센터: 010-0000-0000 | 이메일: didehdrb21@naver.com</p>
+            </div>
+            <div className="footer-legal">
+              <a href="#">이용약관</a>
+              <span>|</span>
+              <a href="#">개인정보처리방침</a>
+              <span>|</span>
+              <a href="#">광고 정책</a>
+            </div>
+            <p className="footer-copyright">© 2024 ReviewMatch. All rights reserved.</p>
+          </div>
+        </div>
       </footer>
 
       {/* ===== Notification Floating Button (Right Middle) - 로그인 시에만 표시 ===== */}

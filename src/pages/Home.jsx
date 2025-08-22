@@ -23,13 +23,13 @@ function Home() {
   // 배너 상태 추적 (마지막으로 호버된 배너 인덱스)
   const [activeBanner, setActiveBanner] = useState(0)
 
-  // 배너 데이터
+  // 배너 데이터 (캠페인 이미지 - Unsplash 상업용)
   const bannerItems = [
-    { id: 1, label: 'Item 1', color: '#FFB3BA' },
-    { id: 2, label: 'Item 2', color: '#FFDFBA' },
-    { id: 3, label: 'Item 3', color: '#FFFFBA' },
-    { id: 4, label: 'Item 4', color: '#BAFFC9' },
-    { id: 5, label: 'Item 5', color: '#BAE1FF' },
+    { id: 1, label: '신규 캠페인', image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=300&fit=crop' },
+    { id: 2, label: '인기 브랜드', image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=300&fit=crop' },
+    { id: 3, label: '특별 프로모션', image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&h=300&fit=crop' },
+    { id: 4, label: '신규 인플루언서', image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&h=300&fit=crop' },
+    { id: 5, label: '이벤트 안내', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=300&fit=crop' },
   ]
 
   useEffect(() => {
@@ -137,17 +137,16 @@ function Home() {
             spaceBetween={0}
             slidesPerView={1}
             pagination={{ clickable: true }}
-            autoplay={{ delay: 3000, disableOnInteraction: false }}
+            autoplay={{ delay: 6000, disableOnInteraction: false }}
+            speed={800}
             loop={true}
             className="banner-swiper"
           >
             {bannerItems.map((item) => (
               <SwiperSlide key={item.id}>
-                <div
-                  className="banner-slide"
-                  style={{ backgroundColor: item.color }}
-                >
-                  <span>{item.label}</span>
+                <div className="banner-slide">
+                  <img src={item.image} alt={item.label} className="banner-image" />
+                  <span className="banner-label">{item.label}</span>
                 </div>
               </SwiperSlide>
             ))}
@@ -160,10 +159,10 @@ function Home() {
             <div
               key={item.id}
               className={`banner-item ${activeBanner === index ? 'banner-active' : ''}`}
-              style={{ backgroundColor: item.color }}
               onMouseEnter={() => setActiveBanner(index)}
             >
-              <span>{item.label}</span>
+              <img src={item.image} alt={item.label} className="banner-image" />
+              <span className="banner-label">{item.label}</span>
             </div>
           ))}
         </section>

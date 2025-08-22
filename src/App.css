@@ -163,10 +163,124 @@
 
 
 .footer-section {
-  color: white;
-  padding: 40px;
-  text-align: center;
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+  padding: 0;
   min-height: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 12px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #2d2d44;
+  margin-bottom: 10px;
+}
+
+.footer-company {
+  max-width: 240px;
+}
+
+.footer-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+}
+
+.footer-slogan {
+  font-size: 11px;
+  color: #9ca3af;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.footer-links {
+  display: flex;
+  gap: 48px;
+}
+
+.footer-link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-link-group h4 {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+}
+
+.footer-link-group a {
+  font-size: 10px;
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-link-group a:hover {
+  color: #ffffff;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px 12px;
+}
+
+.footer-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 8px;
+  margin: 0;
+}
+
+.footer-info p {
+  font-size: 9px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.footer-legal {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.footer-legal a {
+  font-size: 9px;
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-legal a:hover {
+  color: #ffffff;
+}
+
+.footer-legal span {
+  color: #4b5563;
+  font-size: 9px;
+}
+
+.footer-copyright {
+  font-size: 9px;
+  color: #6b7280;
+  margin: 0;
 }
 
 /* ===== Notification Floating Button (Right Middle) ===== */
@@ -621,8 +735,54 @@
     font-size: 9px;
   }
 
-  .footer-section {
-    padding: 24px 16px;
+  .footer-content {
+    padding: 24px 16px 10px;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 12px;
+  }
+
+  .footer-logo {
+    font-size: 16px;
+  }
+
+  .footer-slogan {
+    font-size: 10px;
+  }
+
+  .footer-links {
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .footer-link-group {
+    min-width: 70px;
+    gap: 4px;
+  }
+
+  .footer-link-group h4 {
+    font-size: 10px;
+  }
+
+  .footer-link-group a {
+    font-size: 9px;
+  }
+
+  .footer-bottom {
+    gap: 4px 8px;
+  }
+
+  .footer-info p {
+    font-size: 8px;
+  }
+
+  .footer-legal a,
+  .footer-legal span,
+  .footer-copyright {
+    font-size: 8px;
   }
 }
 
@@ -661,5 +821,50 @@
   .logout-btn {
     padding: 6px;
     gap: 0;
+  }
+
+  .footer-content {
+    padding: 20px 12px 8px;
+  }
+
+  .footer-top {
+    gap: 12px;
+    padding-bottom: 10px;
+  }
+
+  .footer-logo {
+    font-size: 14px;
+  }
+
+  .footer-slogan {
+    font-size: 9px;
+  }
+
+  .footer-links {
+    gap: 16px;
+  }
+
+  .footer-link-group {
+    min-width: 60px;
+    gap: 3px;
+  }
+
+  .footer-link-group h4 {
+    font-size: 9px;
+  }
+
+  .footer-link-group a {
+    font-size: 8px;
+  }
+
+  .footer-info p,
+  .footer-legal a,
+  .footer-legal span,
+  .footer-copyright {
+    font-size: 7px;
+  }
+
+  .footer-legal {
+    gap: 4px;
   }
 }
