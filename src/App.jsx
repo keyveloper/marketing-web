@@ -1,11 +1,32 @@
 import './App.css'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
+import Image12Slider from './components/Image12Slider.jsx'
+import {useEffect, useState} from 'react'
+import {
+  getImageUrlsByAdId
+} from './api/imageApis.js'
 
 function App() {
+  // main List: cut 12 items
+  const [freshAdImageUrl , setFreshAdImageUrl] = useState([])
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        console.log('🟦 getImageUrlsByAdId 호출 중...')
+        const res = await getImageUrlsByAdId(249)
+
+        // ✅ presignedUrl만 추출
+        const urls = res?.result?.map(item => item.presignedUrl) || []
+
+        console.log('✅ 추출된 presignedUrl 리스트:', urls)
+        setFreshAdImageUrl(urls)
+      } catch (error) {
+        console.error('❌ 이미지 로드 실패:', error)
+      }
+    }
+
+    fetchImages()
+  }, [])
 
   return (
     <>
@@ -46,40 +67,7 @@ function App() {
           <div className="hero-content">
             <h1>Hero Section</h1>
             <p>메인 히어로 섹션입니다</p>
-            <div className="hero-grid-container">
-              <Swiper
-                modules={[Pagination]}
-                spaceBetween={20}
-                slidesPerView={'auto'}
-                pagination={{ clickable: true }}
-                className="hero-swiper"
-              >
-                <SwiperSlide>
-                  <div className="hero-grid-item">1</div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="hero-grid-item">2</div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="hero-grid-item">3</div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="hero-grid-item">4</div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="hero-grid-item">5</div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="hero-grid-item">6</div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="hero-grid-item">7</div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="hero-grid-item">8</div>
-                </SwiperSlide>
-              </Swiper>
-            </div>
+            <Image12Slider imageUrls={freshAdImageUrl} />
           </div>
         </section>
 
