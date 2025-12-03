@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from 'aws-amplify/auth'
+import { issueAdvertiserProfileDraft } from '../api/userProfileApi.js'
+import CreateProfileAdvertiser from './CreateProfileAdvertiser.jsx'
 import './DashboardAdvertiser.css'
 
 function DashboardAdvertiser() {
@@ -8,6 +10,7 @@ function DashboardAdvertiser() {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
   const [activeMenu, setActiveMenu] = useState('overview')
+  const [profileDraft, setProfileDraft] = useState(null)
 
   // Mock data - 실제로는 API로 가져와야 함
   const [dashboardData, setDashboardData] = useState({
@@ -34,12 +37,43 @@ function DashboardAdvertiser() {
 
   const menuItems = [
     { id: 'overview', label: '대시보드 개요', icon: '📊' },
+    { id: 'myprofile', label: '내 프로필', icon: '👤' },
     { id: 'myads', label: '내 광고 관리', icon: '📝' },
     { id: 'reviews', label: '리뷰 신청', icon: '⭐' },
     { id: 'messages', label: 'DM 메시지', icon: '💬' },
     { id: 'analytics', label: '통계 분석', icon: '📈' },
     { id: 'settings', label: '설정', icon: '⚙️' }
   ]
+
+  // 프로필 Draft 발급 핸들러
+  const handleCreateProfile = async () => {
+    try {
+      console.log('🟦 Profile Draft 발급 요청 중...')
+      const result = await issueAdvertiserProfileDraft()
+
+      if (result.success) {
+        console.log('✅ Profile Draft 발급 성공, draftId:', result.draftId)
+        setProfileDraft(result.draft)
+        setActiveMenu('myprofile')
+      } else {
+        console.error('❌ Profile Draft 발급 실패:', result.error)
+        alert(`Profile Draft 발급 실패\n\n${result.error}`)
+      }
+    } catch (error) {
+      console.error('❌ 예상치 못한 오류:', error)
+      alert('Profile Draft 발급 중 오류가 발생했습니다.')
+    }
+  }
+
+  // 메뉴 클릭 핸들러
+  const handleMenuClick = async (menuId) => {
+    if (menuId === 'myprofile' && !profileDraft) {
+      // 프로필 메뉴 클릭 시 Draft가 없으면 발급
+      await handleCreateProfile()
+    } else {
+      setActiveMenu(menuId)
+    }
+  }
 
   const renderContent = () => {
     switch (activeMenu) {
@@ -124,6 +158,19 @@ function DashboardAdvertiser() {
           </div>
         )
 
+      case 'myprofile':
+        return (
+          <div className="dashboard-section">
+            {profileDraft ? (
+              <CreateProfileAdvertiser draftId={profileDraft.id} draft={profileDraft} />
+            ) : (
+              <div className="content-card">
+                <p>프로필 정보를 불러오는 중...</p>
+              </div>
+            )}
+          </div>
+        )
+
       case 'myads':
         return (
           <div className="dashboard-section">
@@ -201,7 +248,7 @@ function DashboardAdvertiser() {
             <button
               key={item.id}
               className={`menu-item ${activeMenu === item.id ? 'active' : ''}`}
-              onClick={() => setActiveMenu(item.id)}
+              onClick={() => handleMenuClick(item.id)}
             >
               <span className="menu-icon">{item.icon}</span>
               <span className="menu-label">{item.label}</span>
